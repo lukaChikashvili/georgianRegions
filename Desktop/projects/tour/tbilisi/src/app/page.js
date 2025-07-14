@@ -13,11 +13,7 @@ export default function Home() {
   <ambientLight intensity={1.5} />
   <OrbitControls
     enableDamping
-    dampingFactor={0.05}
-    maxPolarAngle={Math.PI / 2.1}
-    minPolarAngle={Math.PI / 3}
-    enablePan={false}
-    rotateSpeed={0.6}
+    
   />
   <Experience />
 </Canvas>
