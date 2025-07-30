@@ -8,7 +8,7 @@ export default function Home() {
   return (
    <>
 <Canvas
-  camera={{ position: [4, 2, 6], fov: 50, near: 0.1, far: 100 }}
+  camera={{ position: [-1.5, 0.4, 2.5], fov: 50, near: 0.1, far: 100 }}
 >
   <ambientLight intensity={1.5} />
   <OrbitControls
