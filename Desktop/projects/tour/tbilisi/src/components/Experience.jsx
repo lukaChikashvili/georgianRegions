@@ -19,8 +19,10 @@ const Experience = () => {
   //  models
   const boat = useGLTF('./wooden_boat.glb');
 
+  const boatGroup = useRef();
+
   useFrame((state) => {
-    const boatObj = boat.scene;
+    const boatObj = boatGroup.current;
   
     if (boatObj) {
       const time = uniforms.current.uTime.value;
@@ -143,20 +145,22 @@ const Experience = () => {
       />
     </mesh>
 
-    {/* flag  */}
-    <mesh position={[0.74, 0.5, 0.01]}>
-      <planeGeometry args={[0.5, 0.2, 100, 100]}  />
-    </mesh>
+    <group ref={boatGroup} position={[0, 4, 0]}>
+  {/* Boat model */}
+  <primitive object={boat.scene} />
 
-        {/* pole  */}
-        <mesh position={[0.5, 0, 0]}>
-          <cylinderGeometry args ={[0.005, 0.005]} />
-          <meshBasicMaterial color = "black" />
-        </mesh>
-   
+  {/* Pole */}
+  <mesh position={[0.5, 0.3, 0]} >
+    <cylinderGeometry args={[0.005, 0.005, 1]}  />
+    <meshBasicMaterial color="black"  />
+  </mesh>
 
-    <primitive object={boat.scene} position = {[0, 4, 0]} />
-    
+  {/* Flag */}
+  <mesh position={[0.74, 0.7, 0]}>
+    <planeGeometry args={[0.5, 0.2, 100, 100]} />
+    <meshBasicMaterial color="red" side = {THREE.DoubleSide}/>
+  </mesh>
+</group>
     
     </>
   )
