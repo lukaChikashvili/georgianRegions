@@ -3,12 +3,13 @@ varying vec2 vUv;
 varying float vElevation;
 
    void main() {
-    vec3 lowGrass = vec3(0.1, 0.4, 0.1);
-    vec3 highGrass = vec3(0.2, 0.6, 0.2);
+    vec3 grassLow = vec3(0.1, 0.4, 0.1);
+  vec3 grassHigh = vec3(0.3, 0.7, 0.3);
 
-    vec3 color = mix(lowGrass, highGrass, vElevation * 0.5 + 0.5);
+  float blendFactor = smoothstep(0.0, 2.5, vElevation);
+  vec3 color = mix(grassLow, grassHigh, blendFactor);
 
-     gl_FragColor = vec4(color, 1.0);
+  gl_FragColor = vec4(color, 1.0);
 
    }
 `;
