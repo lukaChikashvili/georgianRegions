@@ -7,7 +7,7 @@ import * as THREE from "three"
 export default function Home() {
   return (
     <>
-      <Canvas camera={{ position: [0, 10, 15], fov: 60, near: 0.1, far: 1000 }}
+      <Canvas camera={{ position: [0, 10, 15], fov: 70, near: 0.1, far: 10000 }}
       shadows gl={{ physicallyCorrectLights: true }}
       onCreated={({ scene }) => {
         scene.fog = new THREE.FogExp2(0xcce0ff, 0.002) 

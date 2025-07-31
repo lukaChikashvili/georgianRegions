@@ -12,6 +12,7 @@ const Experience = () => {
     
     // model
     const tower = useGLTF('./tower.glb');
+    const lamp = useGLTF('./lamp.glb');
 
     const sunPosition = useRef(new THREE.Vector3(0, 1, 0))
 
@@ -41,7 +42,8 @@ const Experience = () => {
     const shaderRef = useRef();
     
     const grassUniforms = useRef({
-        uTime: { value: 0}
+        uTime: { value: 0},
+        uSeason: { value: 5.4}
     });
 
     
@@ -49,7 +51,7 @@ const Experience = () => {
     // clone towers
     const towerClones = useMemo(() => {
       const instances = [];
-      const count = 12; 
+      const count = 20; 
       for (let i = 0; i < count; i++) {
         const x = THREE.MathUtils.randFloatSpread(200) ;
         const z = THREE.MathUtils.randFloatSpread(200);
@@ -114,6 +116,14 @@ const Experience = () => {
           scale={data.scale}
         />
       ))}
+
+  {/* lamp  */}
+  
+    <primitive object={lamp.scene} scale = {2} position = {[-10, 18, 40]} />
+    <mesh>
+      <cylinderGeometry />
+
+    </mesh>
 
 
        
