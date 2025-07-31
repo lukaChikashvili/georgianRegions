@@ -9,34 +9,32 @@ import Rope from './Rope';
 
 
 
+
 const Experience = () => {
+    
+  const lampRef = useRef();
+
+
+
     
     // model
     const tower = useGLTF('./tower.glb');
     const lamp = useGLTF('./lamp.glb');
 
-    const sunPosition = useRef(new THREE.Vector3(0, 1, 0))
+  
 
 
 
-    const [sunPosArray, setSunPosArray] = useState(sunPosition.current.toArray());
 
     useFrame((state) => {
       const elapsed = state.clock.getElapsedTime();
-  
-      const radius = 5;
-      const speed = 0.025; 
-      const angle = elapsed * speed;
-  
-      const x = Math.sin(angle) * radius;
-      const y = Math.cos(angle) * radius * 0.5;
-      const z = Math.cos(angle) * radius;
-  
-      sunPosition.current.set(x, y, z);
+
       grassUniforms.current.uTime.value += 0.025;
-  
-   
-      setSunPosArray(sunPosition.current.toArray());
+
+      if (lampRef.current) {
+        lampRef.current.rotation.z = Math.sin(elapsed * 1.5) * 0.2; 
+        lampRef.current.rotation.x = Math.cos(elapsed * 1.5) * 0.03; 
+      }
     });
   
 
@@ -44,7 +42,7 @@ const Experience = () => {
     
     const grassUniforms = useRef({
         uTime: { value: 0},
-        uSeason: { value: 2.4}
+        uSeason: { value: 5.4}
     });
 
     
@@ -63,6 +61,8 @@ const Experience = () => {
       }
       return instances
     }, []);
+
+    const lampLightPosition = [-10, 18, 40];
 
 
 
@@ -87,7 +87,7 @@ const Experience = () => {
 
       <Sky
         distance={45000}
-        sunPosition={sunPosArray}
+      sunPosition={[1, 1, 1]}
         inclination={0.49}
         azimuth={0.25}
         mieCoefficient={0.05}
@@ -120,7 +120,9 @@ const Experience = () => {
 
   {/* lamp  */}
   
-    <primitive object={lamp.scene} scale = {2} position = {[-10, 18, 40]} />
+    <primitive object={lamp.scene} ref ={lampRef}  scale = {2} position = {[-10, 18, 40]} />
+
+  
   
     <Rope />
 
