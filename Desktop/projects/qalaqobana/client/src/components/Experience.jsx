@@ -4,6 +4,7 @@ import { OrbitControls, Sky, Stars, useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber';
 import React, { useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
+import Rope from './Rope';
 
 
 
@@ -43,7 +44,7 @@ const Experience = () => {
     
     const grassUniforms = useRef({
         uTime: { value: 0},
-        uSeason: { value: 5.4}
+        uSeason: { value: 2.4}
     });
 
     
@@ -120,10 +121,8 @@ const Experience = () => {
   {/* lamp  */}
   
     <primitive object={lamp.scene} scale = {2} position = {[-10, 18, 40]} />
-    <mesh>
-      <cylinderGeometry />
-
-    </mesh>
+  
+    <Rope />
 
 
        
