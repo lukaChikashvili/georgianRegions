@@ -1,10 +1,12 @@
 import { grassFragment } from '@/shaders/grass/fragment';
 import { grassVertex } from '@/shaders/grass/vertex';
-import { OrbitControls, Sky, Stars, useGLTF } from '@react-three/drei'
+import { OrbitControls, Sky, Stars, useGLTF, useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber';
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 import Rope from './Rope';
+import { clothVertex } from '@/shaders/cloth/vertex';
+import { clothFragment } from '@/shaders/cloth/fragment';
 
 
 
@@ -20,8 +22,25 @@ const Experience = () => {
     // model
     const tower = useGLTF('./tower.glb');
     const lamp = useGLTF('./lamp.glb');
+    const board = useGLTF('./board.glb');
+
+    const boardTexture = useTexture('./menu.png');
+
 
   
+
+  
+    // textures
+    const clothTexture = useTexture('./texture.webp');
+
+    // cloth uniforms
+    const clothUniforms = useRef({
+      uTime: {value: 0},
+       uAmplitude: { value: 0.25},
+       uWaveLength: { value: 2.0},
+       uTexture: { value: clothTexture}
+    });
+
 
 
 
@@ -30,6 +49,7 @@ const Experience = () => {
       const elapsed = state.clock.getElapsedTime();
 
       grassUniforms.current.uTime.value += 0.025;
+      clothUniforms.current.uTime.value += 0.025;
 
       if (lampRef.current) {
         lampRef.current.rotation.z = Math.sin(elapsed * 1.5) * 0.2; 
@@ -42,7 +62,7 @@ const Experience = () => {
     
     const grassUniforms = useRef({
         uTime: { value: 0},
-        uSeason: { value: 2.3}
+        uSeason: { value: 1.3}
     });
 
     
@@ -50,7 +70,7 @@ const Experience = () => {
     // clone towers
     const towerClones = useMemo(() => {
       const instances = [];
-      const count = 20; 
+      const count = 10; 
       for (let i = 0; i < count; i++) {
         const x = THREE.MathUtils.randFloatSpread(200) ;
         const z = THREE.MathUtils.randFloatSpread(200);
@@ -118,19 +138,25 @@ const Experience = () => {
         />
       ))}
 
-  {/* lamp  */}
+  {/* Lamp  */}
   
     <primitive object={lamp.scene} ref ={lampRef}  scale = {2} position = {[-10, 18, 40]} />
     <Rope />
 
-  {/* board  */}
+  {/* Cloth  */}
    <mesh position = {[3, 18, 40]} >
-     <boxGeometry args = {[5, 3, 0.3]} />
-    
+   <planeGeometry args={[2, 3, 100, 500]} />
+     <shaderMaterial vertexShader={clothVertex} 
+     fragmentShader={clothFragment} uniforms={clothUniforms.current} />
    </mesh>
 
 
+ {/* Board  */}
        
+       <primitive position = {[23, 5, 30]} rotation = {[0, -4, 0]}
+       object={board.scene} scale = {12} />
+
+
     </>
   )
 }
