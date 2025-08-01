@@ -41,6 +41,12 @@ const Experience = () => {
        uTexture: { value: clothTexture}
     });
 
+  // grass
+    const grassUniforms = useRef({
+      uTime: { value: 0},
+      uSeason: { value: 1.3}
+  });
+
 
 
 
@@ -49,7 +55,9 @@ const Experience = () => {
       const elapsed = state.clock.getElapsedTime();
 
       grassUniforms.current.uTime.value += 0.025;
+     
       clothUniforms.current.uTime.value += 0.025;
+
 
       if (lampRef.current) {
         lampRef.current.rotation.z = Math.sin(elapsed * 1.5) * 0.2; 
@@ -59,11 +67,8 @@ const Experience = () => {
   
 
     const shaderRef = useRef();
-    
-    const grassUniforms = useRef({
-        uTime: { value: 0},
-        uSeason: { value: 1.3}
-    });
+  
+
 
     
 

@@ -1,5 +1,6 @@
 "use client"
 import Experience from "@/components/Experience";
+import Header from "@/components/Header";
 import Lights from "@/components/Lights";
 import { PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
@@ -21,6 +22,11 @@ export default function Home() {
         <Lights />
           <Experience />
       </Canvas>
+
+
+      <div className="w-full absolute top-0 left-0">
+        <Header />
+      </div>
     </>
   );
 }
