@@ -22,7 +22,7 @@ const Lights = () => {
        <directionalLight
         ref={sun}
         castShadow
-        intensity={5}
+        intensity={10}
         color = "#E67514"
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
