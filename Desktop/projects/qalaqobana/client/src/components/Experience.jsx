@@ -12,7 +12,7 @@ import { clothFragment } from '@/shaders/cloth/fragment';
 
 
 
-const Experience = () => {
+const Experience = ({season}) => {
     
   const lampRef = useRef();
 
@@ -57,6 +57,12 @@ const Experience = () => {
       grassUniforms.current.uTime.value += 0.025;
      
       clothUniforms.current.uTime.value += 0.025;
+
+      grassUniforms.current.uSeason.value = THREE.MathUtils.lerp(
+        grassUniforms.current.uSeason.value,
+        season,
+        0.2
+      );
 
 
       if (lampRef.current) {

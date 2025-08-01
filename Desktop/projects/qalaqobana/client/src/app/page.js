@@ -4,8 +4,12 @@ import Header from "@/components/Header";
 import Lights from "@/components/Lights";
 import { PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import { useState } from "react";
 import * as THREE from "three"
 export default function Home() {
+
+  const [season, setSeason] = useState(0.5);
+
   return (
     <>
       <Canvas camera={{ position: [0, 10, 15], fov: 70, near: 0.1, far: 10000 }}
@@ -20,12 +24,12 @@ export default function Home() {
         fov={70}
       />
         <Lights />
-          <Experience />
+          <Experience season={season} />
       </Canvas>
 
 
       <div className="w-full absolute top-0 left-0">
-        <Header />
+        <Header setSeason={setSeason}/>
       </div>
     </>
   );

@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import Modal from './Modal';
 
-const Header = () => {
+const Header = ({ setSeason }) => {
    
-     const [modal, setModal] = useState(false); 
+     const [modal, setModal] = useState(false);
+     const [selectedTitle, setSelectedTitle] = useState(''); 
 
   return (
     <div className='w-full flex items-center justify-between px-12 py-4'>
@@ -13,11 +14,11 @@ const Header = () => {
         </div>
 
        <div className=''>
-         <button className='text-xl cursor-pointer' onClick={() => setModal(!modal)} >Seasons</button>
+         <button className='text-xl cursor-pointer text-white font-bold' onClick={() => setModal(!modal)} >{selectedTitle ? selectedTitle : "Seasons"}</button>
 
        </div>
 
-       {modal && <Modal />}
+       {modal && <Modal setModal = {setModal} setSelectedTitle={setSelectedTitle}  setSeason={setSeason} />}
     </div>
   )
 }
