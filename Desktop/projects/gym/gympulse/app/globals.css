@@ -1,2 +1,13 @@
+@import url("//cdn.web-fonts.ge/fonts/bpg-algeti-compact/css/bpg-algeti-compact.min.css");
+
 @import "tailwindcss";
 
+
+body {
+    font-family: "BPG Algeti Compact", sans-serif;
+}
+
+
+
+  
+  
