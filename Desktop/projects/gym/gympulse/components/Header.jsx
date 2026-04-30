@@ -4,6 +4,7 @@ import { useConvexAuth } from 'convex/react';
 import Image from 'next/image';
 import logo from '../public/logo.png'
 import { User } from 'lucide-react';
+import Link from 'next/link';
 
 
 const Header = () => {
@@ -16,7 +17,7 @@ const Header = () => {
 
 
     const links = [
-        {id: 1, link: "/learn", title: "მთავარი"},
+        {id: 1, link: "/", title: "მთავარი"},
         {id: 2, link: "/", title: "ჩვენს შესახებ"},
         {id: 3, link: "/", title: "ფიტნეს დარბაზისთვის"},
         {id: 4, link: "/", title: "წევრებისთვის"},
@@ -27,14 +28,14 @@ const Header = () => {
   return (
     <div className='w-full flex items-center justify-between px-12 py-4 border-b border-gray-300'>
     <div >
-        <Image width = {170}  src = {logo} alt ="logo" />
+       <Link href="/"><Image width = {170}  src = {logo} alt ="logo" /></Link> 
     </div>
     <div className='flex items-center gap-8'>
     {links.map((value) => (
   <div key={value.id} className="relative group cursor-pointer">
-    <h2 className="font-semibold text-gray-600 transition-colors duration-300 group-hover:text-black">
+    <Link href = {value.link}  className="font-semibold text-gray-600 transition-colors duration-300 group-hover:text-black">
       {value.title}
-    </h2>
+    </Link>
 
    
     <span className="absolute left-0 -bottom-1 w-0 h-[0.5] bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
@@ -66,7 +67,7 @@ const Header = () => {
   
        {isAuthenticated && !isLoading && (
           <>
-           <h1 className='text-[#008BFF] font-bold'>გამარჯობა, {user?.firstName}</h1>
+           <h1 className='text-purple-600 font-bold'>გამარჯობა, {user?.firstName}</h1>
            <UserButton afterSwitchSessionUrl='/'/>
           </>
          
