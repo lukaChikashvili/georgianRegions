@@ -79,8 +79,8 @@ const AllBlogs = async () => {
                   </div>
                   
                  
-                  <Link href={`/blogs/${value._id}`} className="text-sm font-semibold text-[#7C3AED] flex items-center gap-2 group-hover:gap-3 transition-all">
-                      Read full story
+                  <Link href={`/blog/${value._id}`} className="text-sm font-semibold text-[#7C3AED] flex items-center gap-2 group-hover:gap-3 transition-all">
+                      იხილეთ სრულად
                      <ArrowRight size = {15} />
                   </Link>
               </div>

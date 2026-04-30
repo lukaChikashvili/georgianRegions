@@ -8,7 +8,14 @@ export default defineSchema({
         title: v.string(),
         body: v.string(),
         category: v.string(),
-        authorName: v.optional(),  
+        authorName: v.optional(v.string()), 
         authorId: v.string(),
+    }),
+
+    comments: defineTable({
+         postId: v.id("posts"),
+         body: v.string(),
+         authorId: v.string(),
+         authorName: v.string(),
     })
 });
