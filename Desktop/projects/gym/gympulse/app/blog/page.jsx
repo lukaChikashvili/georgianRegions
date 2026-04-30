@@ -1,12 +1,22 @@
+
+
 import React from 'react'
 import Link from 'next/link' 
 import { fetchQuery } from 'convex/nextjs'
 import { api } from "@/convex/_generated/api";
 import { ArrowRight, Plus } from 'lucide-react';
 
+
+
+
+
 const AllBlogs = async () => {
     
     const allPosts = await fetchQuery(api.posts.getPosts);
+
+
+
+ 
 
 
 
@@ -42,7 +52,7 @@ const AllBlogs = async () => {
               <div className="space-y-4">
                  
                   <div className="flex items-center gap-4 text-sm text-gray-500">
-                      <span className="text-[#9333EA] font-semibold">Community</span>
+                      <span className="text-[#9333EA] font-semibold">{value.category}</span>
                       <span>·</span>
                       <time dateTime={value._creationTime ? new Date(value._creationTime).toISOString() : new Date().toISOString()}>
                           {value._creationTime ? new Date(value._creationTime).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric'}) : 'Recently'}
@@ -64,8 +74,8 @@ const AllBlogs = async () => {
               <div className="mt-8 flex items-center justify-between pt-6 border-t border-gray-100">
                   <div className="flex items-center gap-3">
                     
-                      <img src="/placeholder-avatar.png" alt="Author" className="h-10 w-10 rounded-full border border-gray-200" />
-                      <span className="text-sm font-medium text-gray-700">Team Gympulse</span>
+                     
+                      <span className="text-sm font-medium text-gray-700 italic"> {value.authorName}</span>
                   </div>
                   
                  

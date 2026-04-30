@@ -3,13 +3,23 @@ import React, { useState, useTransition } from 'react';
 import { ImagePlus, Send, Type, AlignLeft, Hash, Eye } from 'lucide-react';
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+import ProtectedRoutes from '../../../components/ProtectedRoutes';
 
 const CreateBlog = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [category, setCategory] = useState("");
   
     const createPost = useMutation(api.posts.createPost);
     const [isPending, startTransition] = useTransition();
+
+    const {user, isLoaded} = useUser();
+
+const router = useRouter();
+
+    if (!isLoaded) return;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,12 +30,15 @@ const CreateBlog = () => {
                 await createPost({
                     title: title,
                     body: content,
+                    category: category,
+                    authorName: user?.fullName
                 });
                 
-                
+                router.push('/blog');
                 setTitle("");
                 setContent("");
-                alert("ბლოგი წარმატებით გამოქვეყნდა!");
+                setCategory("");
+         
             } catch (error) {
                 console.error("შეცდომა:", error);
                 alert("გამოქვეყნება ვერ მოხერხდა.");
@@ -34,6 +47,7 @@ const CreateBlog = () => {
     }
 
     return (
+        <ProtectedRoutes>
         <div className="min-h-screen bg-linear-to-b from-white to-purple-50/50 py-12 px-6">
             <div className="max-w-5xl mx-auto">
                 
@@ -102,13 +116,21 @@ const CreateBlog = () => {
                                 <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
                                     <Hash className="w-4 h-4 text-purple-500" /> კატეგორია
                                 </label>
-                                <select className="w-full px-4 py-3 rounded-xl bg-slate-50 border-transparent outline-none text-slate-600 font-medium appearance-none">
-                                    <option>ვარჯიში</option>
-                                    <option>კვება</option>
-                                    <option>მოტივაცია</option>
-                                    <option>სიახლეები</option>
-                                </select>
+
+                                <input 
+      type="text"
+      placeholder="მაგ: ფიტნესი" 
+      value = {category}
+      onChange = {(e) => setCategory(e.target.value)}
+      className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-transparent 
+                 text-slate-900 placeholder:text-slate-400
+                 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50
+                 transition-all duration-200"
+    />
+                                
                             </div>
+
+                          
                         </div>
 
                       
@@ -121,14 +143,13 @@ const CreateBlog = () => {
                                 <Send className="w-4 h-4" /> 
                                 {isPending ? "ქვეყნდება..." : "გამოქვეყნება"}
                             </button>
-                            <button className="w-full py-4 bg-white text-slate-600 border border-slate-200 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-50 transition-all">
-                                <Eye className="w-4 h-4" /> ნახვა
-                            </button>
+                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        </ProtectedRoutes>
     );
 };
 
