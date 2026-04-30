@@ -1,5 +1,5 @@
 "use client"
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import React, { useState } from 'react'
 import { api } from "@/convex/_generated/api";
 import { useUser } from '@clerk/nextjs';
@@ -11,8 +11,12 @@ const  Comments =  ({ postId }) => {
     const createComments = useMutation(api.comments.createComment);
     const { user, isLoaded } = useUser();
 
-    if (!isLoaded) return null;
+    
 
+    const getComments = useQuery(api.comments.getComments, { postId });
+
+    if (!getComments) return <p className='mt-6'>იტვირთება კომენტარები...</p>;
+  
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,7 +63,28 @@ const  Comments =  ({ postId }) => {
 
         
           
-             
+          <div className="mt-8 space-y-4">
+  {getComments.length === 0 ? (
+    <p className="text-gray-400">დატოვე კომენტარი...</p>
+  ) : (
+    getComments.map((c) => (
+      <div key={c._id} className="p-4 bg-gray-50 border-[0.5px] border-purple-300  shadow-lg rounded-xl">
+        
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-sm">
+            {c.authorName?.charAt(0)}
+          </div>
+
+          <span className="font-semibold text-sm">
+            {c.authorName}
+          </span>
+        </div>
+
+        <p className="text-gray-700">{c.body}</p>
+      </div>
+    ))
+  )}
+</div>
            
       
         </section>
