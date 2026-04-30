@@ -34,7 +34,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <main>
           <ClerkProvider>
-             <ConvexClientProvider>
+             <ConvexClientProvider >
               <Header />
         {children}
         </ConvexClientProvider>
