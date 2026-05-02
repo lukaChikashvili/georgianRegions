@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { fetchQuery } from 'convex/nextjs'
 import { api } from "@/convex/_generated/api";
 import { ArrowRight, Plus } from 'lucide-react';
+import Blog from '../../components/Blog';
 
 
 
@@ -14,8 +15,7 @@ const AllBlogs = async () => {
     
     const allPosts = await fetchQuery(api.posts.getPosts);
 
-
-
+  
  
 
 
@@ -44,49 +44,8 @@ const AllBlogs = async () => {
            </Link>
         </div>
 
-       
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {allPosts.map((value) => (
-            <div key={value._id} className="group bg-white rounded-3xl border border-gray-100 p-8 shadow-sm transition-all duration-300 hover:shadow-2xl hover:shadow-[#F3E8FF]/40 flex flex-col justify-between">
-              
-              <div className="space-y-4">
-                 
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                      <span className="text-[#9333EA] font-semibold">{value.category}</span>
-                      <span>·</span>
-                      <time dateTime={value._creationTime ? new Date(value._creationTime).toISOString() : new Date().toISOString()}>
-                          {value._creationTime ? new Date(value._creationTime).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric'}) : 'Recently'}
-                      </time>
-                  </div>
-
-              
-                  <h2 className="text-2xl font-bold tracking-tight text-[#1D1E2C] leading-tight group-hover:text-[#7C3AED] transition-colors line-clamp-2">
-                    {value.title}
-                  </h2>
-                  
-                
-                  <p className="text-gray-600 leading-relaxed text-base line-clamp-3">
-                    {value.body}
-                  </p>
-              </div>
-
-            
-              <div className="mt-8 flex items-center justify-between pt-6 border-t border-gray-100">
-                  <div className="flex items-center gap-3">
-                    
-                     
-                      <span className="text-sm font-medium text-gray-700 italic"> {value.authorName}</span>
-                  </div>
-                  
-                 
-                  <Link href={`/blog/${value._id}`} className="text-sm font-semibold text-[#7C3AED] flex items-center gap-2 group-hover:gap-3 transition-all">
-                      იხილეთ სრულად
-                     <ArrowRight size = {15} />
-                  </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+           <Blog posts = {allPosts} />
+      
       </div>
     </div>
   )
