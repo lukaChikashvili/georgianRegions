@@ -52,6 +52,54 @@ const CreateMemorial = () => {
       return;
     }
 
+    if (!formData.firstName.trim() || !formData.lastName.trim()) {
+        setError('გთხოვთ, შეავსოთ სახელი და გვარი.');
+        setIsSubmitting(false);
+        setStep(1); 
+        return;
+      }
+    
+      if (!formData.birthDate || !formData.deathDate) {
+        setError('გთხოვთ, მიუთითოთ როგორც დაბადების, ისე გარდაცვალების თარიღი.');
+        setIsSubmitting(false);
+        setStep(1);
+        return;
+      }
+    
+      if (!formData.urlSlug.trim()) {
+        setError('გთხოვთ, მიუთითოთ გვერდის უნიკალური ბმული (URL Slug).');
+        setIsSubmitting(false);
+        setStep(4); 
+        return;
+      }
+
+      const birth = new Date(formData.birthDate);
+  const death = new Date(formData.deathDate);
+  const now = new Date();
+
+  if (birth > now) {
+    setError('დაბადების თარიღი ვერ იქნება მომავალში.');
+    setIsSubmitting(false);
+    setStep(1);
+    return;
+  }
+
+  if (death > now) {
+    setError('გარდაცვალების თარიღი ვერ იქნება მომავალში.');
+    setIsSubmitting(false);
+    setStep(1);
+    return;
+  }
+
+  if (birth > death) {
+    setError('არასწორი თარიღები: გარდაცვალების თარიღი ვერ იქნება დაბადების თარიღზე ადრე.');
+    setIsSubmitting(false);
+    setStep(1);
+    return;
+  }
+
+  
+
     setIsSubmitting(true);
     setError('');
 
