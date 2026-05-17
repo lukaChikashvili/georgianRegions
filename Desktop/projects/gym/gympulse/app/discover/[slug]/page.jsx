@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from "@/convex/_generated/api";
 import { useParams } from 'next/navigation';
-import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock } from 'lucide-react';
+import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock, CreditCard } from 'lucide-react';
 
 const MemorialPage = () => {
   const params = useParams();
@@ -24,8 +24,10 @@ const MemorialPage = () => {
   const [isNameInputModalOpen, setIsNameInputModalOpen] = useState(false);
   const [attendeeName, setAttendeeName] = useState("");
 
-  // NEW: State for managing active image popup in lightbox modal
   const [activeLightboxImage, setActiveLightboxImage] = useState(null);
+
+
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (slug) {
@@ -74,6 +76,14 @@ const MemorialPage = () => {
     } finally {
       setIsRSVPing(false);
     }
+  };
+
+
+  const handleCopyIban = () => {
+    if (!memorial?.bankAccountIban) return;
+    navigator.clipboard.writeText(memorial.bankAccountIban);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   const formatGeorgianDate = (dateString) => {
@@ -139,7 +149,7 @@ const MemorialPage = () => {
 
       <main className="relative z-10 max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-       
+         
           <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl">
             <h2 className="font-serif text-xl text-[#FFF5D6] mb-6 flex items-center gap-3">
               <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
@@ -150,6 +160,7 @@ const MemorialPage = () => {
             </p>
           </section>
 
+          
           {memorial.galleryUrls && memorial.galleryUrls.length > 0 && (
             <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
               <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
@@ -164,7 +175,6 @@ const MemorialPage = () => {
                     onClick={() => setActiveLightboxImage(url)}
                     className="cursor-pointer aspect-square rounded-xl overflow-hidden border border-white/5 bg-[#0D0D0F] group relative"
                   >
-               
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
                       <span className="text-[11px] text-[#D4AF37] font-light tracking-wider uppercase border border-[#D4AF37]/30 px-3 py-1.5 rounded-lg bg-black/50 backdrop-blur-xs">
                         გადიდება
@@ -184,6 +194,7 @@ const MemorialPage = () => {
         </div>
 
         <div className="space-y-8">
+       
           {memorial.enableCandle && (
             <section className="bg-gradient-to-b from-[#161619]/60 to-[#0F0F12]/80 border border-[#D4AF37]/15 rounded-2xl p-6 text-center">
               <h3 className="font-serif text-base text-[#FFF5D6] mb-4 tracking-wide">ვირტუალური პანაშვიდი</h3>
@@ -200,7 +211,7 @@ const MemorialPage = () => {
             </section>
           )}
 
-          
+       
           <section className="bg-[#121214]/30 border border-white/5 rounded-2xl p-6 space-y-6">
             <h3 className="font-serif text-base text-[#FFF5D6] border-b border-white/5 pb-3 tracking-wide">საორგანიზაციო ინფორმაცია</h3>
             <div className="space-y-5">
@@ -237,7 +248,49 @@ const MemorialPage = () => {
             </div>
           </section>
 
-         
+          {memorial.enableDonations && memorial.bankAccountIban && (
+            <section className="bg-gradient-to-b from-[#1A150F]/50 to-[#121214]/60 border border-[#D4AF37]/20 rounded-2xl p-6 relative overflow-hidden space-y-4 animate-fade-in">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-[#D4AF37]/5 blur-xl rounded-full pointer-events-none" />
+              
+              <div>
+                <h3 className="font-serif text-base text-[#FFF5D6] tracking-wide flex items-center gap-2">
+                  <CreditCard size={18} className="text-[#D4AF37]" /> ფინანსური დახმარება (ფულის დაწერა)
+                </h3>
+                <p className="text-[11px] text-gray-400 font-light mt-1 leading-relaxed">
+                  თუ გსურთ თანადგომა გამოუცხადოთ ოჯახს სარიტუალო ხარჯების დასაფარად, შეგიძლიათ თანხა პირდაპირ მითითებულ ანგარიშზე გადარიცხოთ.
+                </p>
+              </div>
+
+              <div className="bg-[#0D0D0F]/70 border border-white/5 rounded-xl p-4 flex flex-col gap-2">
+                <div className="flex items-center justify-between text-xs font-light">
+                  <span className="text-gray-500">მიმღები ბანკი:</span>
+                  <span className="text-gray-200 font-medium">
+                    {memorial.bankName === 'tbc' ? 'თიბისი ბანკი (TBC)' : 'საქართველოს ბანკი (BOG)'}
+                  </span>
+                </div>
+                
+                <div className="flex flex-col gap-1 mt-1 pt-2 border-t border-white/5">
+                  <span className="text-[10px] uppercase tracking-widest text-gray-500 font-light">ანგარიშის ნომერი (IBAN)</span>
+                  <span className="font-mono text-xs text-gray-200 font-medium tracking-wider select-all break-all mt-0.5">
+                    {memorial.bankAccountIban}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={handleCopyIban}
+                className="cursor-pointer w-full py-2.5 px-4 rounded-xl text-xs font-medium border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all active:scale-[0.99]"
+              >
+                {copied ? (
+                  <span className="text-green-400 font-semibold animate-pulse">✓ ანგარიში დაკოპირდა</span>
+                ) : (
+                  'ანგარიშის ნომრის კოპირება'
+                )}
+              </button>
+            </section>
+          )}
+
+       
           <section className="bg-gradient-to-br from-[#121214]/80 to-[#1A150F]/40 border border-[#D4AF37]/10 rounded-2xl p-5 flex flex-col items-center text-center space-y-4">
             <div className="space-y-1">
               <h4 className="text-xs font-serif text-[#FFF5D6] tracking-wide">პანაშვიდსა და დაკრძალვაზე დასწრება</h4>
@@ -290,7 +343,7 @@ const MemorialPage = () => {
         </div>
       )}
 
-
+      
       {isListModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fade-in">
           <div className="bg-[#121214] border border-white/10 w-full max-w-lg rounded-2xl p-6 relative shadow-2xl flex flex-col max-h-[80vh]">
@@ -322,7 +375,7 @@ const MemorialPage = () => {
         </div>
       )}
 
-  
+     
       {activeLightboxImage && (
         <div 
           onClick={() => setActiveLightboxImage(null)}

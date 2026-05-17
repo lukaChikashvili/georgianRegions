@@ -32,6 +32,10 @@ export default defineSchema({
         epitaph: v.string(),
         biography: v.string(),
 
+        enableDonations: v.boolean(),
+        bankName: v.optional(v.string()),       
+        bankAccountIban: v.optional(v.string()),
+
         funeralLocation: v.string(),
         funeralTime: v.string(),
         cemeteryLocation: v.optional(v.string()),

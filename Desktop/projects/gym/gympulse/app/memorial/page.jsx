@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { User, Calendar, MapPin, Shield, ChevronRight, ChevronLeft, Sparkles, ImageIcon, Mail, Plus, X } from 'lucide-react';
+import { User, Calendar, MapPin, Shield, ChevronRight, ChevronLeft, Sparkles, ImageIcon, Mail, Plus, X, CreditCard } from 'lucide-react';
 import { useMutation } from 'convex/react';
 import { api } from "@/convex/_generated/api";
 import { useUser } from '@clerk/nextjs';
@@ -17,7 +17,6 @@ const CreateMemorial = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   
- 
   const [newGalleryUrl, setNewGalleryUrl] = useState('');
 
   const [formData, setFormData] = useState({
@@ -36,10 +35,14 @@ const CreateMemorial = () => {
     privacyType: 'public',
     requireModeration: false,
     mainPortraitUrl: '',
-    galleryUrls: [] , 
+    galleryUrls: [] ,
+    enableDonations: false, 
+    bankName: 'bog',        
+    bankAccountIban: '',
   });
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, 4));
+  
+  const nextStep = () => setStep((prev) => Math.min(prev + 1, 5));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   const handleChange = (e) => {
@@ -51,7 +54,6 @@ const CreateMemorial = () => {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
-
 
   const handleAddGalleryUrl = () => {
     if (!newGalleryUrl.trim()) return;
@@ -68,7 +70,6 @@ const CreateMemorial = () => {
     setError('');
   };
 
-  
   const handleRemoveGalleryUrl = (indexToRemove) => {
     setFormData((prev) => ({
       ...prev,
@@ -95,11 +96,18 @@ const CreateMemorial = () => {
       setStep(1);
       return;
     }
+
+    if (formData.enableDonations && !formData.bankAccountIban.trim()) {
+      setError('საფინანსო მხარდაჭერის ჩართვისას საბანკო ანგარიშის (IBAN) შევსება სავალდებულოა.');
+      setIsSubmitting(false);
+      setStep(4); 
+      return;
+    }
     
     if (!formData.urlSlug.trim()) {
       setError('გთხოვთ, მიუთითოთ გვერდის უნიკალური ბმული (URL Slug).');
       setIsSubmitting(false);
-      setStep(4); 
+      setStep(5); 
       return;
     }
 
@@ -151,6 +159,9 @@ const CreateMemorial = () => {
         creatorName: user.fullName || user.firstName || "ანონიმური",
         mainPortraitUrl: formData.mainPortraitUrl.trim() || undefined,
         galleryUrls: formData.galleryUrls, 
+        enableDonations: formData.enableDonations,
+        bankName: formData.enableDonations ? formData.bankName : undefined,
+        bankAccountIban: formData.enableDonations ? formData.bankAccountIban.trim() : undefined,
       });
 
       if (resultId) {
@@ -169,9 +180,9 @@ const CreateMemorial = () => {
 
       <div className="max-w-4xl mx-auto relative z-10">
         
-       
-        <div className="mb-12 flex items-center justify-between max-w-md mx-auto relative">
-          {[1, 2, 3, 4].map((num) => (
+    
+        <div className="mb-12 flex items-center justify-between max-w-xl mx-auto relative">
+          {[1, 2, 3, 4, 5].map((num) => (
             <div key={num} className="flex items-center relative z-10">
               <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-medium transition-all duration-500 ${
                 step >= num 
@@ -180,8 +191,8 @@ const CreateMemorial = () => {
               }`}>
                 {num}
               </div>
-              {num < 4 && (
-                <div className={`w-16 md:w-24 h-px mx-2 transition-all duration-500 ${
+              {num < 5 && (
+                <div className={`w-12 md:w-20 h-px mx-2 transition-all duration-500 ${
                   step > num ? 'bg-[#D4AF37]/50' : 'bg-white/5'
                 }`} />
               )}
@@ -196,8 +207,7 @@ const CreateMemorial = () => {
         )}
 
         <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 md:p-10 backdrop-blur-xl shadow-2xl transition-all duration-300">
-          
-      
+        
           {step === 1 && (
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
@@ -261,7 +271,7 @@ const CreateMemorial = () => {
             </div>
           )}
 
-       
+         
           {step === 2 && (
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
@@ -281,7 +291,6 @@ const CreateMemorial = () => {
                 <textarea name="biography" value={formData.biography} onChange={handleChange} rows={5} placeholder="გააზიარეთ მისი ცხოვრების გზა..." className="form-input resize-none py-3" />
               </div>
 
-             
               <div className="flex flex-col gap-2 pt-2 border-t border-white/5">
                 <label className="text-xs text-gray-400 font-light tracking-wide">ფოტოგალერეის ბმულები</label>
                 <div className="flex gap-2">
@@ -305,7 +314,6 @@ const CreateMemorial = () => {
                 </div>
               </div>
 
-             
               {formData.galleryUrls.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
                   {formData.galleryUrls.map((url, idx) => (
@@ -325,7 +333,7 @@ const CreateMemorial = () => {
             </div>
           )}
 
-       
+     
           {step === 3 && (
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
@@ -415,6 +423,73 @@ const CreateMemorial = () => {
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
                 <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
+                  <CreditCard size={20} className="text-[#D4AF37]" /> ფინანსური მხარდაჭერა (ფულის დაწერა)
+                </h2>
+                <p className="text-xs text-gray-500 mt-1">ჩართეთ ოჯახის ფინანსური თანადგომის მოდული ტრადიციული წესის შესაბამისად.</p>
+              </div>
+
+              <div className="flex items-center justify-between p-4 rounded-xl bg-[#161619]/30 border border-white/5 mt-4">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-300">მხარდაჭერის მოდულის გააქტიურება</h4>
+                  <p className="text-xs text-gray-500">მნახველებს შეეძლებათ ოჯახისთვის თანხის პირდაპირ გადარიცხვა.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer select-none">
+                  <input 
+                    type="checkbox" 
+                    name="enableDonations" 
+                    checked={formData.enableDonations} 
+                    onChange={handleChange} 
+                    className="sr-only peer" 
+                  />
+                  <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
+                </label>
+              </div>
+
+              {formData.enableDonations && (
+                <div className="p-5 rounded-xl bg-[#1A150F]/20 border border-[#D4AF37]/20 mt-4 space-y-5 animate-fade-in">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs text-gray-400 font-light tracking-wide">აირჩიეთ ბანკი</label>
+                      <select 
+                        name="bankName" 
+                        value={formData.bankName} 
+                        onChange={handleChange} 
+                        className="form-input bg-[#0D0D0F]"
+                      >
+                        <option value="bog">საქართველოს ბანკი (BOG)</option>
+                        <option value="tbc">თიბისი ბანკი (TBC)</option>
+                      </select>
+                    </div>
+
+                    <div className="flex flex-col gap-2 sm:col-span-2">
+                      <label className="text-xs text-gray-400 font-light tracking-wide">საბანკო ანგარიშის ნომერი (IBAN)</label>
+                      <input 
+                        type="text"
+                        name="bankAccountIban" 
+                        maxLength={22}
+                        placeholder="მაგ: GE00BG0000000012345678"
+                        value={formData.bankAccountIban} 
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase().replace(/\s+/g, '');
+                          handleChange(e);
+                        }} 
+                        className="form-input focus:border-[#D4AF37] outline-none placeholder:text-gray-700"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-gray-500 font-light italic">
+                    * ყურადღება: დარწმუნდით, რომ ანგარიშის ნომერი სწორია. თანხა ჩაირიცხება პირდაპირ ოჯახის მითითებულ ანგარიშზე ყოველგვარი საკომისიოს გარეშე.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+       
+          {step === 5 && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="mb-6">
+                <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
                   <Shield size={20} className="text-[#D4AF37]" /> კონფიდენციალურობა და ბმული
                 </h2>
                 <p className="text-xs text-gray-500 mt-1">დაარეგულირეთ გვერდის წვდომისა და უსაფრთხოების პარამეტრები.</p>
@@ -462,7 +537,7 @@ const CreateMemorial = () => {
             </div>
           )}
 
-     
+       
           <div className="mt-10 pt-6 border-t border-white/5 flex justify-between">
             <button
               onClick={prevStep}
@@ -474,7 +549,7 @@ const CreateMemorial = () => {
               <ChevronLeft size={14} /> უკან
             </button>
 
-            {step < 4 ? (
+            {step < 5 ? (
               <button
                 onClick={nextStep}
                 className="px-6 py-2 rounded-xl bg-linear-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-[0.98] hover:brightness-110 cursor-pointer shadow-lg shadow-[#D4AF37]/5"
