@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowDown } from "lucide-react";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -68,9 +69,9 @@ const Hero = () => {
             className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
             style={{ animationDelay: '800ms', animationFillMode: 'forwards' }}
           >
-            <button className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-sm tracking-wider uppercase transition-all duration-300 hover:brightness-110 shadow-lg hover:shadow-[#D4AF37]/10 active:scale-[0.99] cursor-pointer">
+            <Link href = "/memorial" className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-sm tracking-wider uppercase transition-all duration-300 hover:brightness-110 shadow-lg hover:shadow-[#D4AF37]/10 active:scale-[0.99] cursor-pointer">
               შექმენი მემორიალი
-            </button>
+            </Link>
             <a 
               href="#how-it-works" 
               className="px-8 py-3.5 rounded-xl bg-[#121214]/40 border border-white/5 backdrop-blur-md text-gray-300 font-medium text-sm tracking-wider uppercase text-center transition-all duration-300 hover:bg-white/5 hover:text-white hover:border-[#D4AF37]/30 active:scale-[0.99]"
