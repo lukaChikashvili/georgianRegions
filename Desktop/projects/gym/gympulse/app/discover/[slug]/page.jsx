@@ -7,7 +7,6 @@ import { useParams } from 'next/navigation';
 import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock, CreditCard, MessageSquare, Send } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
 
-
 const MemorialPage = () => {
   const params = useParams();
   const slug = params.slug;
@@ -20,11 +19,21 @@ const MemorialPage = () => {
   const condolences = useQuery(api.memorials.getCondolences, memorial ? { memorialId: memorial._id } : "skip");
   const addCondolenceMutation = useMutation(api.memorials.addCondolence);
 
-  // edit and delete condolence
+  // Edit and delete condolence 
   const deleteCondolenceMutation = useMutation(api.memorials.deleteCondolence);
   const editCondolenceMutation = useMutation(api.memorials.editCondolence);
   const [editingCondolenceId, setEditingCondolenceId] = useState(null);
   const [editText, setEditText] = useState("");
+
+  
+  const [expandedThreads, setExpandedThreads] = useState({});
+
+  const toggleThread = (id) => {
+    setExpandedThreads((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const handleDeleteCondolence = async (id) => {
     if (!window.confirm("ნამდვილად გსურთ ამ შეტყობინების წაშლა?")) return;
@@ -56,8 +65,32 @@ const MemorialPage = () => {
     }
   };
 
+  // Replying to condolences 
+  const [replyingToId, setReplyingToId] = useState(null);
+  const [replyText, setReplyText] = useState("");
+  const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
-
+  const handlePostReply = async (e, parentId) => {
+    e.preventDefault();
+    if (!replyText.trim() || !guestName.trim() || !memorial) return;
+  
+    setIsSubmittingReply(true);
+    try {
+      await addCondolenceMutation({
+        memorialId: memorial._id,
+        body: replyText.trim(),
+        authorName: guestName.trim(),
+        authorId: user?.id || undefined,
+        parentId: parentId, 
+      });
+      setReplyText("");
+      setReplyingToId(null);
+    } catch (err) {
+      console.error("პასუხის გაგზავნა ვერ მოხერხდა:", err);
+    } finally {
+      setIsSubmittingReply(false);
+    }
+  };
 
   const [hasLitCandle, setHasLitCandle] = useState(false);
   const [isLighting, setIsLighting] = useState(false);
@@ -70,19 +103,13 @@ const MemorialPage = () => {
   const [attendeeName, setAttendeeName] = useState("");
 
   const [activeLightboxImage, setActiveLightboxImage] = useState(null);
-
-
   const [copied, setCopied] = useState(false);
- 
 
-  // condolence section
+ 
   const [condolenceText, setCondolenceText] = useState("");
   const [guestName, setGuestName] = useState("");
   const [isSubmittingCondolence, setIsSubmittingCondolence] = useState(false);
   const [submissionNotice, setSubmissionNotice] = useState("");
-
-
-
 
   useEffect(() => {
     if (slug) {
@@ -100,7 +127,6 @@ const MemorialPage = () => {
     }
   }, [user]);
 
-  
   const handlePostCondolence = async (e) => {
     e.preventDefault();
     if (!condolenceText.trim() || !guestName.trim() || !memorial) return;
@@ -169,7 +195,6 @@ const MemorialPage = () => {
     }
   };
 
-
   const handleCopyIban = () => {
     if (!memorial?.bankAccountIban) return;
     navigator.clipboard.writeText(memorial.bankAccountIban);
@@ -201,7 +226,6 @@ const MemorialPage = () => {
       </div>
     );
   }
-
 
   const isCreator = user?.id === memorial.creatorId;
   const visibleCondolences = (condolences || []).filter(c => c.isApproved || isCreator);
@@ -244,7 +268,6 @@ const MemorialPage = () => {
 
       <main className="relative z-10 max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-         
           <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl">
             <h2 className="font-serif text-xl text-[#FFF5D6] mb-6 flex items-center gap-3">
               <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
@@ -255,7 +278,6 @@ const MemorialPage = () => {
             </p>
           </section>
 
-          
           {memorial.galleryUrls && memorial.galleryUrls.length > 0 && (
             <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
               <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
@@ -275,7 +297,6 @@ const MemorialPage = () => {
                         გადიდება
                       </span>
                     </div>
-                    
                     <img 
                       src={url} 
                       alt={`გალერეა - ${index + 1}`}
@@ -289,7 +310,6 @@ const MemorialPage = () => {
         </div>
 
         <div className="space-y-8">
-       
           {memorial.enableCandle && (
             <section className="bg-gradient-to-b from-[#161619]/60 to-[#0F0F12]/80 border border-[#D4AF37]/15 rounded-2xl p-6 text-center">
               <h3 className="font-serif text-base text-[#FFF5D6] mb-4 tracking-wide">ვირტუალური პანაშვიდი</h3>
@@ -306,7 +326,6 @@ const MemorialPage = () => {
             </section>
           )}
 
-       
           <section className="bg-[#121214]/30 border border-white/5 rounded-2xl p-6 space-y-6">
             <h3 className="font-serif text-base text-[#FFF5D6] border-b border-white/5 pb-3 tracking-wide">საორგანიზაციო ინფორმაცია</h3>
             <div className="space-y-5">
@@ -346,7 +365,6 @@ const MemorialPage = () => {
           {memorial.enableDonations && memorial.bankAccountIban && (
             <section className="bg-gradient-to-b from-[#1A150F]/50 to-[#121214]/60 border border-[#D4AF37]/20 rounded-2xl p-6 relative overflow-hidden space-y-4 animate-fade-in">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#D4AF37]/5 blur-xl rounded-full pointer-events-none" />
-              
               <div>
                 <h3 className="font-serif text-base text-[#FFF5D6] tracking-wide flex items-center gap-2">
                   <CreditCard size={18} className="text-[#D4AF37]" /> ფინანსური დახმარება (ფულის დაწერა)
@@ -363,7 +381,6 @@ const MemorialPage = () => {
                     {memorial.bankName === 'tbc' ? 'თიბისი ბანკი (TBC)' : 'საქართველოს ბანკი (BOG)'}
                   </span>
                 </div>
-                
                 <div className="flex flex-col gap-1 mt-1 pt-2 border-t border-white/5">
                   <span className="text-[10px] uppercase tracking-widest text-gray-500 font-light">ანგარიშის ნომერი (IBAN)</span>
                   <span className="font-mono text-xs text-gray-200 font-medium tracking-wider select-all break-all mt-0.5">
@@ -372,20 +389,12 @@ const MemorialPage = () => {
                 </div>
               </div>
 
-              <button
-                onClick={handleCopyIban}
-                className="cursor-pointer w-full py-2.5 px-4 rounded-xl text-xs font-medium border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all active:scale-[0.99]"
-              >
-                {copied ? (
-                  <span className="text-green-400 font-semibold animate-pulse">✓ ანგარიში დაკოპირდა</span>
-                ) : (
-                  'ანგარიშის ნომრის კოპირება'
-                )}
+              <button onClick={handleCopyIban} className="cursor-pointer w-full py-2.5 px-4 rounded-xl text-xs font-medium border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all active:scale-[0.99]">
+                {copied ? <span className="text-green-400 font-semibold animate-pulse">✓ ანგარიში დაკოპირდა</span> : 'ანგარიშის ნომრის კოპირება'}
               </button>
             </section>
           )}
 
-       
           <section className="bg-gradient-to-br from-[#121214]/80 to-[#1A150F]/40 border border-[#D4AF37]/10 rounded-2xl p-5 flex flex-col items-center text-center space-y-4">
             <div className="space-y-1">
               <h4 className="text-xs font-serif text-[#FFF5D6] tracking-wide">პანაშვიდსა და დაკრძალვაზე დასწრება</h4>
@@ -416,149 +425,234 @@ const MemorialPage = () => {
         </div>
       </main>
 
-
+  
       <section className="max-w-4xl mx-auto mt-12 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
-            <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
-              <MessageSquare size={20} className="text-[#D4AF37]" /> სამძიმრის კედელი
-            </h2>
+        <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
+          <MessageSquare size={20} className="text-[#D4AF37]" /> სამძიმრის კედელი
+        </h2>
 
-           
-            <form onSubmit={handlePostCondolence} className="space-y-4 bg-[#0D0D0F]/40 p-5 border border-white/5 rounded-xl">
-              {submissionNotice && (
-                <div className="p-3 text-xs text-center rounded-lg bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 animate-fade-in">
-                  {submissionNotice}
-                </div>
-              )}
-              
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="sm:col-span-1">
-                  <input 
-                    type="text" 
-                    required
-                    placeholder="თქვენი სახელი" 
-                    value={guestName}
-                    disabled={!!user} 
-                    onChange={(e) => setGuestName(e.target.value)}
-                    className="w-full bg-[#0D0D0F] border border-white/5 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none disabled:opacity-50"
-                  />
-                </div>
-                <div className="sm:col-span-2 relative flex items-center">
-                  <input 
-                    type="text" 
-                    required
-                    placeholder="დატოვეთ სამძიმრის სიტყვა..." 
-                    value={condolenceText}
-                    onChange={(e) => setCondolenceText(e.target.value)}
-                    className="w-full bg-[#0D0D0F] border border-white/5 rounded-xl p-3 pr-12 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
-                  />
-                  <button 
-                    type="submit" 
-                    disabled={isSubmittingCondolence}
-                    className="absolute right-2 p-2 rounded-lg text-[#D4AF37] hover:bg-white/5 transition disabled:opacity-40 cursor-pointer"
-                  >
-                    <Send size={16} />
-                  </button>
-                </div>
-              </div>
-            </form>
-
-          
-            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-  {visibleCondolences.length > 0 ? (
-    visibleCondolences.map((condolence) => {
-      const isCommentAuthor = user?.id && condolence.authorId === user.id;
-      const isPageOwner = user?.id && memorial.creatorId === user.id;
-      const isCurrentlyEditing = editingCondolenceId === condolence._id;
-
-      return (
-        <div key={condolence._id} className="p-5 rounded-xl bg-[#0D0D0F]/40 border border-white/5 space-y-2 relative group animate-fade-in">
-          
-         
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-[#D4AF37]">{condolence.authorName}</span>
-              {!condolence.isApproved && isPageOwner && (
-                <span className="text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md font-sans">
-                  ელოდება დასტურს
-                </span>
-              )}
+        <form onSubmit={handlePostCondolence} className="space-y-4 bg-[#0D0D0F]/40 p-5 border border-white/5 rounded-xl">
+          {submissionNotice && (
+            <div className="p-3 text-xs text-center rounded-lg bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 animate-fade-in">
+              {submissionNotice}
             </div>
-            
-            <div className="flex items-center gap-3">
-              <span className="text-[11px] text-gray-500 font-light flex items-center gap-1.5">
-                <Clock size={12} />
-                {new Date(condolence.createdAt).toLocaleDateString('ka-GE')}
-              </span>
-
-              
-              {!isCurrentlyEditing && (isCommentAuthor || isPageOwner) && (
-                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  {isCommentAuthor && (
-                    <button 
-                      onClick={() => {
-                        setEditingCondolenceId(condolence._id);
-                        setEditText(condolence.body);
-                      }}
-                      className="cursor-pointer text-xs text-gray-500 hover:text-[#D4AF37] transition font-light"
-                    >
-                      შეცვლა
-                    </button>
-                  )}
-                  <button 
-                    onClick={() => handleDeleteCondolence(condolence._id)}
-                    className="cursor-pointer text-xs text-gray-500 hover:text-red-400 transition font-light"
-                  >
-                    წაშლა
-                  </button>
-                </div>
-              )}
+          )}
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="sm:col-span-1">
+              <input 
+                type="text" 
+                required
+                placeholder="თქვენი სახელი" 
+                value={guestName}
+                disabled={!!user} 
+                onChange={(e) => setGuestName(e.target.value)}
+                className="w-full bg-[#0D0D0F] border border-white/5 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none disabled:opacity-50"
+              />
+            </div>
+            <div className="sm:col-span-2 relative flex items-center">
+              <input 
+                type="text" 
+                required
+                placeholder="დატოვეთ სამძიმრის სიტყვა..." 
+                value={condolenceText}
+                onChange={(e) => setCondolenceText(e.target.value)}
+                className="w-full bg-[#0D0D0F] border border-white/5 rounded-xl p-3 pr-12 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
+              />
+              <button 
+                type="submit" 
+                disabled={isSubmittingCondolence}
+                className="absolute right-2 p-2 rounded-lg text-[#D4AF37] hover:bg-white/5 transition disabled:opacity-40 cursor-pointer"
+              >
+                <Send size={16} />
+              </button>
             </div>
           </div>
+        </form>
 
-        
-          {isCurrentlyEditing ? (
-            <form onSubmit={(e) => handleSaveEdit(e, condolence._id)} className="space-y-3 pt-1 animate-fade-in">
-              <textarea
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)}
-                rows={2}
-                className="w-full bg-[#0D0D0F] border border-[#D4AF37]/30 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none resize-none"
-              />
-              <div className="flex justify-end gap-2">
-                <button 
-                  type="button" 
-                  onClick={() => setEditingCondolenceId(null)}
-                  className="cursor-pointer px-3 py-1.5 rounded-lg border border-white/5 text-xs text-gray-500 hover:text-white transition"
-                >
-                  გაუქმება
-                </button>
-                <button 
-                  type="submit"
-                  className="cursor-pointer px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black font-medium text-xs shadow-md transition hover:brightness-110"
-                >
-                  შენახვა
-                </button>
-              </div>
-            </form>
+        <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+          {visibleCondolences.length > 0 ? (
+            visibleCondolences
+              .filter((c) => !c.parentId)
+              .map((condolence) => {
+                const isCommentAuthor = user?.id && condolence.authorId === user.id;
+                const isPageOwner = user?.id && memorial.creatorId === user.id;
+                const isCurrentlyEditing = editingCondolenceId === condolence._id;
+                const isCurrentlyReplying = replyingToId === condolence._id;
+
+                const messageReplies = visibleCondolences.filter((r) => r.parentId === condolence._id);
+                const hasReplies = messageReplies.length > 0;
+                
+                
+                const isThreadExpanded = !!expandedThreads[condolence._id];
+
+                return (
+                  <div key={condolence._id} className="p-5 rounded-xl bg-[#0D0D0F]/40 border border-white/5 space-y-4 relative group transition hover:border-white/10 animate-fade-in">
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-200">{condolence.authorName}</span>
+                        {!condolence.isApproved && isPageOwner && (
+                          <span className="text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md">
+                            ელოდება დასტურს
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-[11px] text-gray-500 font-light flex items-center gap-1.5">
+                          <Clock size={12} />
+                          {new Date(condolence.createdAt).toLocaleDateString('ka-GE')}
+                        </span>
+
+                        <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          {!isCurrentlyEditing && (
+                            <button 
+                              onClick={() => {
+                                setReplyingToId(isCurrentlyReplying ? null : condolence._id);
+                                if (!isCurrentlyReplying) {
+                                  setExpandedThreads(prev => ({ ...prev, [condolence._id]: true }));
+                                }
+                              }}
+                              className="cursor-pointer text-xs text-gray-500 hover:text-[#D4AF37] transition font-light"
+                            >
+                              პასუხი
+                            </button>
+                          )}
+                          {!isCurrentlyEditing && (isCommentAuthor || isPageOwner) && (
+                            <>
+                              {isCommentAuthor && (
+                                <button 
+                                  onClick={() => {
+                                    setEditingCondolenceId(condolence._id);
+                                    setEditText(condolence.body);
+                                  }}
+                                  className="cursor-pointer text-xs text-gray-500 hover:text-[#D4AF37] transition font-light"
+                                >
+                                  შეცვლა
+                                </button>
+                              )}
+                              <button 
+                                onClick={() => handleDeleteCondolence(condolence._id)}
+                                className="cursor-pointer text-xs text-gray-500 hover:text-red-400 transition font-light"
+                              >
+                                წაშლა
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {isCurrentlyEditing ? (
+                      <form onSubmit={(e) => handleSaveEdit(e, condolence._id)} className="space-y-3 pt-1">
+                        <textarea
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          rows={2}
+                          className="w-full bg-[#0D0D0F] border border-[#D4AF37]/30 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none resize-none"
+                        />
+                        <div className="flex justify-end gap-2">
+                          <button type="button" onClick={() => setEditingCondolenceId(null)} className="px-3 py-1.5 rounded-lg border border-white/5 text-xs text-gray-500 hover:text-white transition">გაუქმება</button>
+                          <button type="submit" className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black font-medium text-xs shadow-md transition hover:brightness-110">შენახვა</button>
+                        </div>
+                      </form>
+                    ) : (
+                      <p className="text-sm text-gray-400 font-light leading-relaxed whitespace-pre-line mt-1">
+                        {condolence.body}
+                      </p>
+                    )}
+
+                    {hasReplies && (
+                      <div className="pt-2 border-t border-white/5 flex items-center">
+                        <button
+                          type="button"
+                          onClick={() => toggleThread(condolence._id)}
+                          className="cursor-pointer text-xs font-medium text-[#D4AF37] hover:underline flex items-center gap-1"
+                        >
+                          {isThreadExpanded ? '▲ პასუხების დამალვა' : `▼ პასუხების ნახვა (${messageReplies.length})`}
+                        </button>
+                      </div>
+                    )}
+
+                    {isThreadExpanded && (
+                      <div className="space-y-2 pl-4 border-l border-white/5 mt-2 animate-fade-in">
+                        {messageReplies.map((reply) => {
+                          const isReplyAuthor = user?.id && reply.authorId === user.id;
+                          const isReplyFromOwner = reply.authorId === memorial.creatorId;
+
+                          return (
+                            <div 
+                              key={reply._id} 
+                              className={`p-4 rounded-xl border relative group transition-all duration-200 ${
+                                isReplyFromOwner ? 'bg-[#1A150F]/10 border-[#D4AF37]/10' : 'bg-[#121214]/20 border-white/5'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-xs font-medium text-gray-200">{reply.authorName}</span>
+                                  {isReplyFromOwner && (
+                                    <span className="text-[9px] uppercase tracking-wider text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-1.5 py-0.5 rounded-md">
+                                      ოჯახი
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-[10px] text-gray-500 font-light flex items-center gap-1">
+                                    <Clock size={10} />
+                                    {new Date(reply.createdAt).toLocaleDateString('ka-GE')}
+                                  </span>
+                                  {(isReplyAuthor || isPageOwner) && (
+                                    <button 
+                                      onClick={() => handleDeleteCondolence(reply._id)}
+                                      className="cursor-pointer opacity-0 group-hover:opacity-100 text-[10px] text-gray-500 hover:text-red-400 transition font-light duration-200"
+                                    >
+                                      წაშლა
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                              <p className="text-xs text-gray-400 font-light leading-relaxed mt-1 whitespace-pre-line">
+                                {reply.body}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {isCurrentlyReplying && (
+                      <form onSubmit={(e) => handlePostReply(e, condolence._id)} className="flex gap-2 items-center pt-2 animate-fade-in pl-4 border-l border-white/5">
+                        <input 
+                          type="text"
+                          required
+                          placeholder="დაწერეთ პასუხი..."
+                          value={replyText}
+                          onChange={(e) => setReplyText(e.target.value)}
+                          className="flex-1 bg-[#0D0D0F] border border-white/10 rounded-xl p-2.5 text-xs text-gray-200 focus:border-[#D4AF37] outline-none"
+                        />
+                        <button 
+                          type="submit"
+                          disabled={isSubmittingReply}
+                          className="cursor-pointer bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black text-xs font-semibold px-4 py-2.5 rounded-xl transition hover:brightness-110 disabled:opacity-40"
+                        >
+                          გაგზავნა
+                        </button>
+                      </form>
+                    )}
+
+                  </div>
+                );
+              })
           ) : (
-            <p className="text-sm text-gray-400 font-light leading-relaxed whitespace-pre-line">
-              {condolence.body}
-            </p>
+            <div className="text-center py-10 text-gray-600 text-sm font-light">
+              სამძიმრის სიტყვები ჯერ არ დაწერილა. იყავით პირველი, ვინც ანუგეშებს ოჯახს.
+            </div>
           )}
-
         </div>
-      );
-    })
-  ) : (
-    <div className="text-center py-10 text-gray-600 text-sm font-light">
-      სამძიმრის სიტყვები ჯერ არ დაწერილა. იყავით პირველი, ვინც ანუგეშებს ოჯახს.
-    </div>
-  )}
-</div>
-          </section>
+      </section>
       
-
-      
+   
       {isNameInputModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fade-in">
           <div className="bg-[#121214] border border-white/10 w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
@@ -580,19 +674,17 @@ const MemorialPage = () => {
         </div>
       )}
 
-      
+     
       {isListModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fade-in">
           <div className="bg-[#121214] border border-white/10 w-full max-w-lg rounded-2xl p-6 relative shadow-2xl flex flex-col max-h-[80vh]">
             <button onClick={() => setIsListModalOpen(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white cursor-pointer"><X size={18} /></button>
-            
             <div className="mb-4">
               <h3 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-2">
                 <Users size={20} className="text-[#D4AF37]" /> ვინ ესწრება
               </h3>
               <p className="text-xs text-gray-500 font-light mt-0.5">სულ დადასტურებულია: {memorial.attendeesCount || 0} ადამიანის მოსვლა</p>
             </div>
-
             <div className="overflow-y-auto flex-1 pr-1 space-y-2 custom-scrollbar">
               {memorial.attendeesList && memorial.attendeesList.length > 0 ? (
                 memorial.attendeesList.map((attendee, idx) => (
@@ -624,16 +716,8 @@ const MemorialPage = () => {
           >
             <X size={20} />
           </button>
-          
-          <div 
-            className="relative max-w-5xl max-h-[85vh] rounded-xl overflow-hidden shadow-2xl border border-white/5 bg-black" 
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img 
-              src={activeLightboxImage} 
-              alt="გადიდებული ფოტო" 
-              className="max-w-full max-h-[85vh] object-contain"
-            />
+          <div className="relative max-w-5xl max-h-[85vh] rounded-xl overflow-hidden shadow-2xl border border-white/5 bg-black" onClick={(e) => e.stopPropagation()}>
+            <img src={activeLightboxImage} alt="გადიდებული ფოტო" className="max-w-full max-h-[85vh] object-contain" />
           </div>
         </div>
       )}
