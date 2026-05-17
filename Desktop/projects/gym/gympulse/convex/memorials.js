@@ -23,6 +23,8 @@ export const createMemorial = mutation({
         funeralTime: v.string(),
         cemeteryLocation: v.optional(v.string()),
 
+        
+
         enableCandle: v.boolean(),
         urlSlug: v.string(),
         privacyType: v.string(),
@@ -60,6 +62,9 @@ export const createMemorial = mutation({
             enableDonations: args.enableDonations,
             bankName: args.bankName,
             bankAccountIban: args.bankAccountIban,
+
+            
+
            
             enableCandle: args.enableCandle,
             urlSlug: args.urlSlug,
@@ -296,5 +301,62 @@ export const editCondolence = mutation({
     });
 
     return shouldReapprove; 
+  },
+});
+
+
+
+export const getMyGraveDesign = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
+
+    return await ctx.db
+      .query("graveDesigns")
+      .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
+      .unique();
+  },
+});
+
+
+export const saveMyGraveDesign = mutation({
+  args: {
+    stoneType: v.string(),
+    fenceStyle: v.string(),
+    flowers: v.string(),
+    winePoured: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("მოითხოვება ავტორიზაცია!");
+
+    const userId = identity.subject;
+
+   
+    const existingDesign = await ctx.db
+      .query("graveDesigns")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .unique();
+
+    if (existingDesign) {
+      
+      await ctx.db.patch(existingDesign._id, {
+        stoneType: args.stoneType,
+        fenceStyle: args.fenceStyle,
+        flowers: args.flowers,
+        winePoured: args.winePoured,
+      });
+      return existingDesign._id;
+    } else {
+   
+      return await ctx.db.insert("graveDesigns", {
+        userId,
+        stoneType: args.stoneType,
+        fenceStyle: args.fenceStyle,
+        flowers: args.flowers,
+        winePoured: args.winePoured,
+      });
+    }
   },
 });

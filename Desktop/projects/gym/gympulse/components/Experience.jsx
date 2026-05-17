@@ -1,13 +1,13 @@
 "use client";
 
-import { Grid, useGLTF } from "@react-three/drei";
-import React, { useRef } from "react";
+import { Grid, useGLTF, useTexture } from "@react-three/drei";
+import React, { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { grassVertex } from "../shaders/vertex";
 import { grassFragment } from "../shaders/fragment";
 
-const Experience = ({ hasDesigned }) => {
+const Experience = ({ hasDesigned, settings }) => {
   const uniforms = useRef({
     uTime: { value: 0 },
     uSeason: { value: 1.5 },
@@ -19,11 +19,63 @@ const Experience = ({ hasDesigned }) => {
 
   const graveModel = useGLTF("/grave.glb");
 
+  const textures = useTexture({
+    granite: "/black.avif",
+    marble: "/gray.avif",
+  });
+
+  Object.values(textures).forEach((texture) => {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    
+    texture.repeat.set(1, 1); 
+  });
+
+
+  const clonedScene = useMemo(() => graveModel.scene.clone(), [graveModel]);
+
+  useEffect(() => {
+    if (!settings) return;
+
+    clonedScene.traverse((child) => {
+      if (child.isMesh) {
+         console.log(child.name)
+        
+       
+          
+          
+          if (child.material) {
+            child.material = child.material.clone();
+          }
+
+          if (child.material) {
+            child.material = child.material.clone(); 
+            
+            if (settings.stoneType === "black_granite") {
+              child.material.map = textures.granite;
+              child.material.color.set("#ffffff"); 
+              child.material.roughness = 0.15; 
+              child.material.metalness = 0.0; 
+            } else if (settings.stoneType === "gray_marble") {
+              child.material.map = textures.marble;
+              child.material.color.set("#ffffff");
+              child.material.roughness = 0.45; 
+              child.material.metalness = 0.0;
+            }
+    
+            child.material.needsUpdate = true;
+          }
+
+          
+          
+        
+      }
+    });
+  }, [clonedScene, settings, textures]);
   return (
     <>
       <fog attach="fog" args={["#0b0d12", 30, 150]} />
 
-   
       <Grid
         position={[0, -3.95, 0]}
         args={[40, 40]}
@@ -35,26 +87,22 @@ const Experience = ({ hasDesigned }) => {
         fadeDistance={40}
       />
 
-      
       {hasDesigned && (
         <group position={[0, -4, 0]}>
-       
-          <mesh position={[0, 0.05, 0]}>
-            <boxGeometry args={[4, 0.1, 5]} />
-            <meshStandardMaterial color="#1a1a1a" roughness={0.3} />
-          </mesh>
-          
         
+        
+          
+         
           <primitive 
-            object={graveModel.scene.clone()} 
-            scale={0.12} 
+            object={clonedScene} 
+            scale={0.07} 
             position={[0, 0.1, 0]}
           />
         </group>
       )}
 
-     
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -6, 0]}>
+
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -20, 0]}>
         <planeGeometry args={[1000, 1000, 400, 400]} />
         <shaderMaterial
           vertexShader={grassVertex}
@@ -64,7 +112,6 @@ const Experience = ({ hasDesigned }) => {
         />
       </mesh>
 
-   
       <ambientLight intensity={0.2} />
       <directionalLight position={[20, 30, 10]} intensity={1.2} color="#8ea3ff" />
       <directionalLight position={[-20, 10, -30]} intensity={0.4} color="#4d5cff" />

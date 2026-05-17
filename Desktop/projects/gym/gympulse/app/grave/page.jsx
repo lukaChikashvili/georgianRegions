@@ -23,9 +23,8 @@ const Page = () => {
         <OrbitControls 
           enableDamping 
           dampingFactor={0.05}
-          maxPolarAngle={Math.PI / 2 - 0.05} 
-          minDistance={8}
-          maxDistance={40}
+         
+        
         />
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
         

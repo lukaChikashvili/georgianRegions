@@ -41,7 +41,7 @@ export default defineSchema({
         flowers: v.string(),        
         winePoured: v.boolean(),     
         audioToastUrl: v.optional(v.string()),
-        
+
         funeralLocation: v.string(),
         funeralTime: v.string(),
         cemeteryLocation: v.optional(v.string()),
@@ -67,6 +67,14 @@ export default defineSchema({
     }).index("by_urlSlug", ["urlSlug"]) 
     .index("by_creatorId", ["creatorId"]),
 
+    graveDesigns: defineTable({
+      userId: v.string(), 
+      stoneType: v.string(),      
+      fenceStyle: v.string(),      
+      flowers: v.string(),         
+      winePoured: v.boolean(),     
+      audioToastUrl: v.optional(v.string()),
+    }).index("by_userId", ["userId"]),
 
   condolences: defineTable({
     memorialId: v.id("memorials"),
