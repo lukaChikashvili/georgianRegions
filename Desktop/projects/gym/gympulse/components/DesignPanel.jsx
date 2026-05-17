@@ -3,12 +3,10 @@
 import React, { useState } from "react";
 
 const DesignPanel = ({ designSettings, updateSetting, handlePublish, router }) => {
-
   const [activeCategory, setActiveCategory] = useState("stone");
 
-
   const categories = [
-    { id: "stone", label: "ქვის სტილი", icon: "ინ" },
+    { id: "stone", label: "ქვის სტილი", icon: "💎" },
     { id: "fence", label: "ღობე & ბაქანი", icon: "🚧" },
     { id: "flowers", label: "ყვავილები", icon: "💐" },
     { id: "wine", label: "ღვინის დასხმა", icon: "🍷" },
@@ -17,34 +15,32 @@ const DesignPanel = ({ designSettings, updateSetting, handlePublish, router }) =
   ];
 
   return (
-    <div className="w-full bg-[#0d0f14] border-t border-white/5 flex flex-col h-[360px] lg:h-[280px] text-white">
+    <div className="w-full bg-[#0d0f14] border-t border-white/5 flex flex-col h-[500px] lg:h-[450px] text-white">
       
-    
-      <div className="flex justify-center gap-2 lg:gap-6 py-3 px-4 bg-[#111319] border-b border-white/5 overflow-x-auto scrollbar-none">
+      
+      <div className="flex justify-start md:justify-center items-center gap-2 lg:gap-5 py-3 px-4 bg-[#111319] border-b border-white/5 overflow-x-auto flex-nowrap scrollbar-none snap-x">
         {categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() => setActiveCategory(cat.id)}
-            className={`flex flex-col items-center justify-center p-2 min-w-[75px] lg:min-w-[90px] rounded-xl transition-all duration-300 group ${
+            className={`flex flex-col items-center justify-center p-2 min-w-[85px] lg:min-w-[100px] rounded-xl transition-all duration-300 group snap-center flex-shrink-0 ${
               activeCategory === cat.id
                 ? "bg-[#ffd700]/10 border border-[#ffd700]/30 text-[#ffd700] scale-105"
                 : "border border-transparent text-gray-400 hover:text-white hover:bg-white/[0.02]"
             }`}
           >
-           
-            <span className="text-2xl mb-1 transition-transform group-hover:scale-110 duration-200">
+            <span className="text-xl lg:text-2xl mb-1 transition-transform group-hover:scale-110 duration-200">
               {cat.icon}
             </span>
-            
-            <span className="text-[10px] lg:text-xs font-light tracking-wide text-center">
+            <span className="text-[10px] lg:text-xs font-light tracking-wide text-center whitespace-nowrap">
               {cat.label}
             </span>
           </button>
         ))}
       </div>
 
-    
-      <div className="flex-1 p-6 overflow-y-auto bg-[#0d0f14]/50">
+     
+      <div className="flex-1 p-6 overflow-y-auto bg-[#0d0f14]/50 min-h-0">
         
         
         {activeCategory === "stone" && (
@@ -69,7 +65,7 @@ const DesignPanel = ({ designSettings, updateSetting, handlePublish, router }) =
           </div>
         )}
 
-
+      
         {activeCategory === "fence" && (
           <div className="space-y-3">
             <p className="text-xs text-gray-400 uppercase tracking-wider">საფლავის გარშემო პერიმეტრის მოწყობა</p>
@@ -115,7 +111,7 @@ const DesignPanel = ({ designSettings, updateSetting, handlePublish, router }) =
           </div>
         )}
 
-   
+      
         {activeCategory === "wine" && (
           <div className="space-y-3 max-w-md">
             <p className="text-xs text-gray-400 uppercase tracking-wider">ტრადიციული შესანდობარი</p>
@@ -139,11 +135,11 @@ const DesignPanel = ({ designSettings, updateSetting, handlePublish, router }) =
           </div>
         )}
 
-        
+       
         {activeCategory === "voice" && (
           <div className="space-y-3 max-w-xl">
             <p className="text-xs text-gray-400 uppercase tracking-wider">ხმოვანი მოგონების დატოვება</p>
-            <div className="p-4 rounded-xl bg-white/[0.01] border border-white/5 flex items-center justify-between gap-4">
+            <div className="p-4 rounded-xl bg-white/[0.01] border border-white/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">🎙️</span>
                 <div>
@@ -151,53 +147,88 @@ const DesignPanel = ({ designSettings, updateSetting, handlePublish, router }) =
                   <p className="text-xs text-gray-500 mt-0.5">სტუმრები შეძლებენ მოუსმინონ თქვენს ხმას მემორიალის მონახულებისას</p>
                 </div>
               </div>
-              <button className="py-2.5 px-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 text-xs font-medium transition-all whitespace-nowrap">
+              <button className="py-2.5 px-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-500 text-xs font-medium transition-all whitespace-nowrap w-full md:w-auto">
                 🔴 ჩაწერა
               </button>
             </div>
           </div>
         )}
 
-      
+   
         {activeCategory === "text" && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl">
-            <div className="flex flex-col space-y-1">
-              <label className="text-[11px] text-gray-400 uppercase">სახელი და გვარი</label>
-              <input
-                type="text"
-                value={designSettings.fullName}
-                onChange={(e) => updateSetting("fullName", e.target.value)}
-                className="bg-white/[0.02] border border-white/5 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#ffd700]"
-                placeholder="გიორგი კალანდაძე"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label className="text-[11px] text-gray-400 uppercase">დაბადების წელი</label>
-              <input
-                type="text"
-                value={designSettings.birthYear}
-                onChange={(e) => updateSetting("birthYear", e.target.value)}
-                className="bg-white/[0.02] border border-white/5 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#ffd700]"
-                placeholder="1955"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label className="text-[11px] text-gray-400 uppercase">გარდაცვალების წელი</label>
-              <input
-                type="text"
-                value={designSettings.deathYear}
-                onChange={(e) => updateSetting("deathYear", e.target.value)}
-                className="bg-white/[0.02] border border-white/5 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#ffd700]"
-                placeholder="2023"
-              />
+          <div className="space-y-4 animate-fadeIn w-full">
+            <p className="text-xs text-gray-400 uppercase tracking-wider">მონუმენტის პერსონალიზაცია</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+              
+              
+              <div className="flex flex-col space-y-1">
+                <label className="text-[11px] text-gray-400 uppercase">პორტრეტი</label>
+                <div className="relative border border-white/5 bg-white/[0.02] rounded-xl h-[42px] flex items-center justify-center hover:border-white/10 transition-all overflow-hidden">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          updateSetting("portraitImg", reader.result); 
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                  />
+                  <span className="text-xs font-light text-gray-400 flex items-center gap-1.5">
+                    {designSettings.portraitImg ? "📸 შეცვლა" : "➕ სურათი"}
+                  </span>
+                </div>
+              </div>
+
+              
+              <div className="flex flex-col space-y-1">
+                <label className="text-[11px] text-gray-400 uppercase">სახელი და გვარი</label>
+                <input
+                  type="text"
+                  value={designSettings.fullName || ""}
+                  onChange={(e) => updateSetting("fullName", e.target.value)}
+                  className="bg-white/[0.02] border border-white/5 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#ffd700] text-white placeholder-gray-600"
+                  placeholder="გიორგი კალანდაძე"
+                />
+              </div>
+
+              
+              <div className="flex flex-col space-y-1">
+                <label className="text-[11px] text-gray-400 uppercase">დაბადების წელი</label>
+                <input
+                  type="text"
+                  value={designSettings.birthYear || ""}
+                  onChange={(e) => updateSetting("birthYear", e.target.value)}
+                  className="bg-white/[0.02] border border-white/5 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#ffd700] text-white placeholder-gray-600"
+                  placeholder="1955"
+                />
+              </div>
+
+             
+              <div className="flex flex-col space-y-1">
+                <label className="text-[11px] text-gray-400 uppercase">გარდაცვალების წელი</label>
+                <input
+                  type="text"
+                  value={designSettings.deathYear || ""}
+                  onChange={(e) => updateSetting("deathYear", e.target.value)}
+                  className="bg-white/[0.02] border border-white/5 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#ffd700] text-white placeholder-gray-600"
+                  placeholder="2023"
+                />
+              </div>
             </div>
           </div>
         )}
 
       </div>
 
-     
-      <div className="px-6 py-3 border-t border-white/5 bg-[#0a0b0f] flex items-center justify-between gap-4">
+    
+      <div className="px-6 py-3 border-t border-white/5 bg-[#0a0b0f] flex items-center justify-between gap-4 flex-shrink-0">
         <button
           onClick={() => router.back()}
           className="text-xs font-light text-gray-500 hover:text-white transition-colors"

@@ -319,13 +319,18 @@ export const getMyGraveDesign = query({
   },
 });
 
-
 export const saveMyGraveDesign = mutation({
+ 
   args: {
     stoneType: v.string(),
     fenceStyle: v.string(),
     flowers: v.string(),
     winePoured: v.boolean(),
+    fullName: v.string(),
+    birthYear: v.string(),
+    deathYear: v.string(),
+    portraitImg: v.union(v.string(), v.null()),
+    voiceToast: v.union(v.string(), v.null()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -333,7 +338,6 @@ export const saveMyGraveDesign = mutation({
 
     const userId = identity.subject;
 
-   
     const existingDesign = await ctx.db
       .query("graveDesigns")
       .withIndex("by_userId", (q) => q.eq("userId", userId))
@@ -346,16 +350,26 @@ export const saveMyGraveDesign = mutation({
         fenceStyle: args.fenceStyle,
         flowers: args.flowers,
         winePoured: args.winePoured,
+        fullName: args.fullName,
+        birthYear: args.birthYear,
+        deathYear: args.deathYear,
+        portraitImg: args.portraitImg,
+        voiceToast: args.voiceToast,
       });
       return existingDesign._id;
     } else {
-   
+     
       return await ctx.db.insert("graveDesigns", {
         userId,
         stoneType: args.stoneType,
         fenceStyle: args.fenceStyle,
         flowers: args.flowers,
         winePoured: args.winePoured,
+        fullName: args.fullName,
+        birthYear: args.birthYear,
+        deathYear: args.deathYear,
+        portraitImg: args.portraitImg,
+        voiceToast: args.voiceToast,
       });
     }
   },

@@ -73,7 +73,12 @@ export default defineSchema({
       fenceStyle: v.string(),      
       flowers: v.string(),         
       winePoured: v.boolean(),     
-      audioToastUrl: v.optional(v.string()),
+      fullName: v.string(),
+      birthYear: v.string(),
+      deathYear: v.string(),
+      portraitImg: v.union(v.string(), v.null()),
+      voiceToast: v.union(v.string(), v.null()),
+  
     }).index("by_userId", ["userId"]),
 
   condolences: defineTable({
