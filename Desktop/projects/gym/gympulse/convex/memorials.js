@@ -108,3 +108,37 @@ export const getMyMemorials = query({
       .collect();
   },
 });
+
+export const deleteMemorial = mutation({
+  args: { id: v.id("memorials") },
+  handler: async (ctx, args) => {
+    const memorial = await ctx.db.get(args.id);
+    if (!memorial) {
+      throw new Error("მემორიალი ვერ მოიძებნა.");
+    }
+    await ctx.db.delete(args.id);
+    return true;
+  },
+});
+
+export const updateMemorial = mutation({
+  args: {
+    id: v.id("memorials"),
+    firstName: v.string(),
+    lastName: v.string(),
+    epitaph: v.string(),
+    biography: v.string(),
+    location: v.string(),
+    mainPortraitUrl: v.optional(v.string()),
+    privacyType: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...updateData } = args;
+    const memorial = await ctx.db.get(id);
+    if (!memorial) {
+      throw new Error("მემორიალი ვერ მოიძებნა.");
+    }
+    await ctx.db.patch(id, updateData);
+    return true;
+  },
+});
