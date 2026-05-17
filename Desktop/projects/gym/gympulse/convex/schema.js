@@ -35,6 +35,14 @@ export default defineSchema({
         funeralTime: v.string(),
         cemeteryLocation: v.optional(v.string()),
         attendeesCount: v.optional(v.number()),
+        attendeesList: v.optional(
+            v.array(
+              v.object({
+                name: v.string(),
+                timestamp: v.number(),
+              })
+            )
+          ),
       
         enableCandle: v.boolean(),    
         candleCount: v.number(),

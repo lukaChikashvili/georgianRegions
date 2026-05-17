@@ -149,8 +149,12 @@ export const updateMemorial = mutation({
 });
 
 
+
 export const attendFuneral = mutation({
-  args: { id: v.id("memorials") },
+  args: { 
+    id: v.id("memorials"),
+    name: v.string() 
+  },
   handler: async (ctx, args) => {
     const memorial = await ctx.db.get(args.id);
 
@@ -159,8 +163,17 @@ export const attendFuneral = mutation({
     }
 
     
+    const currentAttendees = memorial.attendeesList || [];
+
+   
+    const updatedAttendees = [
+      ...currentAttendees,
+      { name: args.name, timestamp: Date.now() }
+    ];
+
     await ctx.db.patch(args.id, {
-      attendeesCount: (memorial.attendeesCount || 0) + 1,
+      attendeesList: updatedAttendees,
+      attendeesCount: updatedAttendees.length, 
     });
 
     return true;
