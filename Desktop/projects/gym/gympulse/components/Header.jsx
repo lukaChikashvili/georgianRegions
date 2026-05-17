@@ -28,15 +28,15 @@ const Header = () => {
 
   const links = [
     { id: 1, link: "/", title: "მთავარი" },
-    { id: 2, link: "/", title: "ჩვენს შესახებ" },
-    { id: 3, link: "/", title: "ფიტნეს დარბაზისთვის" }, 
-    { id: 4, link: "/", title: "წევრებისთვის" },
-    { id: 5, link: "/blog", title: "ბლოგი" },
+    { id: 2, link: "/", title: "აღმოაჩინე" },
+    { id: 3, link: "/", title: "3D სასაფლაო" }, 
+    { id: 4, link: "/", title: "მოგონებების მელოდია" },
+    { id: 5, link: "/blog", title: "ისტორიები" },
   ];
 
   return (
     <div 
-      className='w-full flex items-center justify-between px-12 py-4 border-b border-[#D4AF37]/10 backdrop-blur-md sticky top-0 z-50 transition-all selection:bg-[#D4AF37] selection:text-black'
+      className='w-full flex items-center justify-between px-12 -mt-16 py-4 border-b border-[#D4AF37]/10 backdrop-blur-md sticky top-0 z-50 transition-all selection:bg-[#D4AF37] selection:text-black'
       style={{
        
         background: 'radial-gradient(ellipse 80% 60% at 30% 0%, #1A150F 0%, #111114 55%, #0D0D0F 100%)',
