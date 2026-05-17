@@ -5,7 +5,9 @@
 
 body {
     font-family: "BPG Algeti Compact", sans-serif;
+    background: radial-gradient(circle, #1C160E 0%, #0D0D0D 60%, #050505 100%);
 }
+
 
 
 

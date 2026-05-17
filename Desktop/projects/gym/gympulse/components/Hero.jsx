@@ -1,121 +1,138 @@
-import Image from "next/image";
-import banner from "../public/banner.png";
-import { ArrowRight, Calendar, Zap, Star, CheckCircle2 } from "lucide-react";
+"use client";
+
+import { ArrowDown } from "lucide-react";
 
 const Hero = () => {
   return (
-    <div className="relative w-full min-h-screen overflow-hidden bg-white ">
+    <section
+      className="relative min-h-screen flex items-center overflow-hidden bg-[#0D0D0F] selection:bg-[#D4AF37] selection:text-black"
+      aria-label="Hero"
+      style={{
+        background: 'radial-gradient(ellipse 80% 60% at 30% 50%, #1A150F 0%, #111114 55%, #0D0D0F 100%)',
+      }}
+    >
      
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 ">
-        <div className="absolute top-[-10%] left-[-10%] w-125 h-125 bg-purple-100 rounded-full blur-[120px] opacity-60" />
-        <div className="absolute bottom-[-10%] right-[-5%] w-100 h-100 bg-blue-50 rounded-full blur-[100px] opacity-70" />
-      </div>
+      <div
+        className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none blur-3xl opacity-60"
+        style={{
+          background: 'radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%)',
+        }}
+      />
 
-      <div className="max-w-7xl -mt-12 mx-auto px-6 lg:px-12 py-20 lg:py-32 flex flex-col lg:flex-row items-center justify-between gap-16">
-       
-        <div className="flex-1 space-y-8 text-center lg:text-left">
-          
       
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 border border-purple-100 text-purple-700 text-sm font-semibold tracking-wide">
-            <Star className="w-4 h-4 fill-purple-500" />
-             #1 ფიტნეს დარბაზების მართვის პლატფორმა
+      <div
+        className="absolute inset-0 z-0 pointer-events-none opacity-30"
+        style={{
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E\")",
+        }}
+      />
+
+ 
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full pt-32 pb-24 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
+        
+        <div className="max-w-2xl">
+          
+          <div
+            className="flex items-center gap-3 mb-8 animate-fade-in"
+            style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
+          >
+            <div className="w-8 h-[1px] bg-gradient-to-r from-[#D4AF37] to-transparent opacity-80" />
+            <span className="font-sans text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium">
+              A place of lasting remembrance
+            </span>
           </div>
 
        
-          <h1 className="text-6xl font-bold leading-tight text-gray-900">
-  აშენე. გაზარდე. <br />
-  <span className="text-purple-600">მიაღწიე წარმატებას.</span>
-</h1>
+          <h1
+            className="font-serif text-5xl md:text-6xl lg:text-7xl font-light text-[#FFF5D6] leading-[1.15] mb-6 tracking-wide"
+            style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
+          >
+            Honor a life
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF5D6] via-[#D4AF37] to-[#AA7C11] font-light italic pr-2">
+              beautifully
+            </span>
+            <br />
+            <span className="font-extralight text-gray-400/80">forever.</span>
+          </h1>
 
        
-          <p className="max-w-lg mx-auto lg:mx-0 text-gray-600 text-lg lg:text-xl leading-relaxed">
-          ერთიანი პლატფორმა თქვენი დარბაზის სამართავად, წევრების 
-  ჩასართავად და ბიზნესის სტრესის გარეშე გასავითარებლად.
+          <p
+            className="font-sans text-sm md:text-base text-gray-400 font-light leading-relaxed max-w-lg mb-10"
+            style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
+          >
+            EverTribute is a gentle, dignified space where families create lasting online memorials — a place to gather, remember, and share the story of someone irreplaceable.
           </p>
 
           
-          <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-            <button className="group w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-900 text-white font-bold flex items-center justify-center gap-2 hover:bg-purple-600 transition-all duration-300 shadow-xl shadow-purple-200 hover:shadow-purple-300">
-             ცადე უფასოდ
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          <div
+            className="flex flex-col sm:flex-row gap-4"
+            style={{ animationDelay: '800ms', animationFillMode: 'forwards' }}
+          >
+            <button className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-sm tracking-wider uppercase transition-all duration-300 hover:brightness-110 shadow-lg hover:shadow-[#D4AF37]/10 active:scale-[0.99]">
+              Begin a Tribute
             </button>
-            <button className="w-full sm:w-auto px-8 py-4 rounded-2xl border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 transition-colors">
-            გაიგე მეტი
-            </button>
+            <a 
+              href="#how-it-works" 
+              className="px-8 py-3.5 rounded-xl bg-[#121214]/40 border border-white/5 backdrop-blur-md text-gray-300 font-medium text-sm tracking-wider uppercase text-center transition-all duration-300 hover:bg-white/5 hover:text-white hover:border-[#D4AF37]/30 active:scale-[0.99]"
+            >
+              See How It Works
+            </a>
           </div>
 
         
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4">
-            {[
-  { icon: Zap, text: "სწრაფი ინსტალაცია" },
-  { icon: Calendar, text: "ავტომატური განრიგი" },
-  { icon: CheckCircle2, text: "წევრების აპლიკაცია" }
-].map((feature, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm font-medium text-slate-500">
-                <feature.icon className="w-4 h-4 text-purple-600" />
-                {feature.text}
-              </div>
-            ))}
-          </div>
+          <p
+            className="mt-8 font-sans text-xs text-gray-500/80 tracking-wide"
+            style={{ animationDelay: '1000ms', animationFillMode: 'forwards' }}
+          >
+            Free to begin &nbsp;&middot;&nbsp; No account required &nbsp;&middot;&nbsp; Private by default
+          </p>
         </div>
 
-        
-        <div className="flex-1 relative w-full max-w-150 lg:max-w-none">
+    
+        <div className="hidden lg:block relative w-[380px] h-[480px] rounded-2xl bg-gradient-to-b from-[#161619]/60 to-[#0F0F12]/90 border border-white/[0.04] p-8 shadow-2xl backdrop-blur-lg group overflow-hidden">
+  
+          <div className="absolute top-0 right-0 w-32 h-32 border-t border-r border-[#D4AF37]/10 rounded-tr-2xl pointer-events-none group-hover:border-[#D4AF37]/30 transition-colors duration-700" />
           
+          <div className="w-full h-full flex flex-col justify-between relative z-10">
           
-          <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-8 border-white/50 backdrop-blur-sm">
-            <Image
-              src={banner}
-              width={800}
-              height={800}
-              alt="Dashboard Preview"
-              className="object-cover hover:scale-105 transition-transform duration-700"
-              priority
-            />
-          </div>
-
-       
-          <div className="absolute -top-6 -left-6 lg:-left-12 z-20 bg-white/80 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-5 rounded-2xl border border-white/20 animate-bounce-slow hover:-translate-y-2 transition-transform cursor-default hidden sm:block">
-            <div className="flex items-center gap-3 mb-1">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Zap className="w-4 h-4 text-green-600 fill-green-600" />
-              </div>
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Revenue</p>
+            <div className="w-10 h-10 rounded-full border border-[#D4AF37]/20 flex items-center justify-center bg-[#0D0D0F]">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
             </div>
-            <h3 className="text-2xl font-black text-slate-800">$24,560</h3>
-            <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-full">+18.6%</span>
-          </div>
 
-      
-          <div className="absolute top-1/2 -right-8 z-20 bg-white/80 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-5 rounded-2xl border border-white/20 hover:-translate-y-2 transition-transform cursor-default hidden md:block">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Active Members</p>
-            <div className="flex items-baseline gap-2">
-              <h3 className="text-3xl font-black text-slate-800">1,284</h3>
-              <span className="text-purple-600 font-bold text-sm">↑</span>
-            </div>
-            <div className="flex -space-x-2 mt-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-7 h-7 rounded-full border-2 border-white bg-slate-200" />
-              ))}
-              <div className="w-7 h-7 rounded-full border-2 border-white bg-purple-600 flex items-center justify-center text-[10px] text-white font-bold">+12</div>
+           
+            <div className="space-y-4">
+              <div className="w-16 h-[1px] bg-[#D4AF37]/30" />
+              <p className="font-serif text-xl italic text-gray-300 font-light leading-relaxed">
+                "To live in hearts we leave behind is not to die."
+              </p>
+              <p className="font-sans text-xs tracking-widest uppercase text-[#D4AF37]/60">
+                — Thomas Campbell
+              </p>
             </div>
           </div>
 
-          <div className="absolute -bottom-10 left-10 z-20 bg-slate-900 shadow-2xl p-5 rounded-2xl w-64 hidden lg:block">
-            <div className="flex gap-1 mb-2">
-              {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
-            </div>
-            <p className="text-sm text-slate-300 italic leading-relaxed">
-              "საუკეთესო ინვესტიციაა. მასშტაბირება ყოველგვარი ძალისხმევის გარეშე შევძელით."
-            </p>
-            <p className="text-xs mt-3 font-bold text-white uppercase tracking-widest">— Alex Rivera, Elite Fit</p>
-          </div>
-
+          <div className="absolute -bottom-20 -right-20 w-48 h-48 bg-[#AA7C11]/5 rounded-full blur-2xl pointer-events-none" />
         </div>
+
       </div>
-      
-      
-    </div>
+
+
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-10" 
+        style={{ background: 'linear-gradient(to bottom, transparent, #0D0D0F)' }} 
+      />
+
+     
+      <a
+        href="#how-it-works"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-gray-500 hover:text-[#D4AF37] transition-colors duration-300 group"
+        aria-label="Scroll to learn more"
+      >
+        <span className="font-sans text-[10px] tracking-widest uppercase transition-colors group-hover:text-gray-300">Scroll</span>
+        <ArrowDown size={14} className="animate-bounce text-[#D4AF37]/70 group-hover:text-[#D4AF37]" />
+      </a>
+    </section>
   );
 };
 
