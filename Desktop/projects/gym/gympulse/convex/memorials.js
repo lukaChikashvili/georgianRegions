@@ -12,8 +12,11 @@ export const createMemorial = mutation({
         mainPortraitUrl: v.optional(v.string()),
         epitaph: v.string(),
         biography: v.string(),
-        musicTrack: v.string(),
-        gravestoneModel: v.string(),
+        
+        funeralLocation: v.string(),
+        funeralTime: v.string(),
+        cemeteryLocation: v.optional(v.string()),
+
         enableCandle: v.boolean(),
         urlSlug: v.string(),
         privacyType: v.string(),
@@ -42,8 +45,10 @@ export const createMemorial = mutation({
             mainPortraitUrl: args.mainPortraitUrl,
             epitaph: args.epitaph,
             biography: args.biography,
-            musicTrack: args.musicTrack,
-            gravestoneModel: args.gravestoneModel,
+            funeralLocation: args.funeralLocation,
+            funeralTime: args.funeralTime,
+            cemeteryLocation: args.cemeteryLocation,
+           
             enableCandle: args.enableCandle,
             urlSlug: args.urlSlug,
             privacyType: args.privacyType,

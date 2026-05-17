@@ -29,7 +29,7 @@ const Header = () => {
   const links = [
     { id: 1, link: "/", title: "მთავარი" },
     { id: 2, link: "/discover", title: "აღმოაჩინე" },
-    { id: 3, link: "/", title: "3D სასაფლაო" }, 
+    { id: 3, link: "/grave", title: "3D სასაფლაო" }, 
     { id: 4, link: "/", title: "მოგონებების მელოდია" },
     { id: 5, link: "/blog", title: "ისტორიები" },
   ];

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { User, Calendar, MapPin, Music, Shield, ChevronRight, ChevronLeft, Upload, Sparkles, ImageIcon } from 'lucide-react';
+import { User, Calendar, MapPin, Music, Shield, ChevronRight, ChevronLeft, Upload, Sparkles, ImageIcon, Mail, Eye } from 'lucide-react';
 import { useMutation } from 'convex/react';
 import { api } from "@/convex/_generated/api";
 import { useUser } from '@clerk/nextjs';
@@ -261,48 +261,92 @@ const CreateMemorial = () => {
           )}
 
        
-          {step === 3 && (
-            <div className="space-y-6 animate-fade-in">
-              <div className="mb-6">
-                <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-                  <Music size={20} className="text-[#D4AF37]" /> მემორიალური პარამეტრები
-                </h2>
-                <p className="text-xs text-gray-500 mt-1">პრემიუმ ფუნქციები ატმოსფერული გარემოს შესაქმნელად.</p>
-              </div>
+{step === 3 && (
+  <div className="space-y-6 animate-fade-in">
+    <div className="mb-6">
+      <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
+        <MapPin size={22} className="text-[#D4AF37]" /> სამძიმრისა და დაკრძალვის დეტალები
+      </h2>
+      <p className="text-xs text-gray-500 mt-1">მიუთითეთ ინფორმაცია, რათა ახლობლებმა შეძლონ მოსვლა და გვერდში დგომა.</p>
+    </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-gray-400 font-light tracking-wide">ფონური მელოდია</label>
-                  <select name="musicTrack" value={formData.musicTrack} onChange={handleChange} className="form-input appearance-none bg-[#0D0D0F]">
-                    <option value="piano">მოგონებების მელოდია (ფორტეპიანო)</option>
-                    <option value="guitar">ნაზი აკორდები (აკუსტიკური გიტარა)</option>
-                    <option value="nature">ბუნების სიმშვიდე (ქარი და წვიმა)</option>
-                    <option value="none">მუსიკის გარეშე</option>
-                  </select>
-                </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-gray-400 font-light tracking-wide">საფლავის ქვის 3D მოდელი</label>
-                  <select name="gravestoneModel" value={formData.gravestoneModel} onChange={handleChange} className="form-input appearance-none bg-[#0D0D0F]">
-                    <option value="classic_marble">კლასიკური მარმარილო (მუქი)</option>
-                    <option value="modern_granite">თანამედროვე გრანიტი (ოქროსფერი კანტებით)</option>
-                    <option value="minimalist_stone">მინიმალისტური ობელისკი</option>
-                  </select>
-                </div>
-              </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div className="flex flex-col gap-2">
+        <label className="text-xs text-gray-400 font-light tracking-wide">სამძიმრის / პანიხიდის ადგილი</label>
+        <input 
+          type="text"
+          name="funeralLocation" 
+          placeholder="მაგ: საბურთალო, ამაღლების ქ. #12"
+          value={formData.funeralLocation} 
+          onChange={handleChange} 
+          className="form-input bg-[#0D0D0F] border border-white/10 rounded-lg p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
+        />
+      </div>
 
-              <div className="flex items-center justify-between p-4 rounded-xl bg-[#161619]/30 border border-white/5 mt-4">
-                <div>
-                  <h4 className="text-sm font-medium text-gray-300">ციფრული სანთლის გააქტიურება</h4>
-                  <p className="text-xs text-gray-500">მნახველებს შეეძლებათ გვერდზე ვირტუალური სანთლის დანთება 24 საათით.</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" name="enableCandle" checked={formData.enableCandle} onChange={handleChange} className="sr-only peer" />
-                  <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-linear-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
-                </label>
-              </div>
-            </div>
-          )}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs text-gray-400 font-light tracking-wide">გამოსვენების დრო</label>
+        <input 
+          type="datetime-local"
+          name="funeralTime" 
+          value={formData.funeralTime} 
+          onChange={handleChange} 
+          className="form-input bg-[#0D0D0F] border border-white/10 rounded-lg p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
+        />
+      </div>
+    </div>
+
+    <div className="flex flex-col gap-2">
+      <label className="text-xs text-gray-400 font-light tracking-wide">საფლავის / ქელეხის ლოკაცია (სურვილისამებრ)</label>
+      <input 
+        type="text"
+        name="cemeteryLocation" 
+        placeholder="მაგ: კუკიის სასაფლაო / რესტორანი შარაგული"
+        value={formData.cemeteryLocation} 
+        onChange={handleChange} 
+        className="form-input bg-[#0D0D0F] border border-white/10 rounded-lg p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
+      />
+    </div>
+
+    
+    <div className="flex items-center justify-between p-4 rounded-xl bg-[#161619]/30 border border-white/5 mt-4">
+      <div>
+        <h4 className="text-sm font-medium text-gray-300">ციფრული სანთლის გააქტიურება</h4>
+        <p className="text-xs text-gray-500">მნახველებს შეეძლებათ გვერდზე ვირტუალური სანთლის დანთება.</p>
+      </div>
+      <label className="relative inline-flex items-center cursor-pointer select-none">
+        <input 
+          type="checkbox" 
+          name="enableCandle" 
+          checked={formData.enableCandle} 
+          onChange={handleChange} 
+          className="sr-only peer" 
+        />
+        <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
+      </label>
+    </div>
+
+  
+    <div className="p-5 rounded-xl bg-[#161619]/40 border border-[#D4AF37]/20 mt-4 backdrop-blur-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="space-y-1 text-center sm:text-left">
+        <h4 className="text-sm font-medium text-gray-200 flex items-center justify-center sm:justify-start gap-2">
+          <Mail size={16} className="text-[#D4AF37]" /> ციფრული მოსაწვევი ბარათი
+        </h4>
+        <p className="text-xs text-gray-500 max-w-sm">
+          ავტომატურად გენერირდება ტრადიციული, ღირსეული ელექტრონული ბარათი, რომლის გაზიარებასაც შეძლებთ სოციალურ ქსელებში.
+        </p>
+      </div>
+      
+      <button
+        type="button"
+        onClick={() => alert("მოსაწვევი ბარათის გენერაცია...")}
+        className="cursor-pointer whitespace-nowrap bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] hover:from-[#BD8E1A] hover:to-[#E5C158] text-black text-xs font-medium px-4 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5"
+      >
+        ბარათის ნახვა / გაზიარება
+      </button>
+    </div>
+  </div>
+)}
 
         
           {step === 4 && (
