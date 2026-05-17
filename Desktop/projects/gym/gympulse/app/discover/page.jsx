@@ -25,7 +25,7 @@ const Discover = () => {
         style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%)' }}
       />
       
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 mt-4">
         
  
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">

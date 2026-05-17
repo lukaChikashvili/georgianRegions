@@ -67,4 +67,33 @@ export const getAllPublicMemorials = query({
       .order("desc") 
       .collect();
   },
+});
+
+export const getMemorialBySlug = query({
+  args: { urlSlug: v.string() },
+  handler: async (ctx, args) => {
+
+    return await ctx.db
+      .query("memorials")
+      .withIndex("by_urlSlug", (q) => q.eq("urlSlug", args.urlSlug))
+      .unique();
+  },
+});
+
+
+export const lightCandle = mutation({
+  args: { id: v.id("memorials") },
+  handler: async(ctx, args) => {
+    const memorial = await ctx.db.get(args.id);
+
+    if (!memorial) {
+      throw new Error("მემორიალი ვერ მოიძებნა.");
+    }
+
+    await ctx.db.patch(args.id, {
+      candleCount: (memorial.candleCount || 0) + 1,
+    });
+
+    return true;
+  }
 })
