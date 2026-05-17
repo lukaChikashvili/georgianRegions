@@ -147,3 +147,22 @@ export const updateMemorial = mutation({
     return true;
   },
 });
+
+
+export const attendFuneral = mutation({
+  args: { id: v.id("memorials") },
+  handler: async (ctx, args) => {
+    const memorial = await ctx.db.get(args.id);
+
+    if (!memorial) {
+      throw new Error("მემორიალი ვერ მოიძებნა.");
+    }
+
+    
+    await ctx.db.patch(args.id, {
+      attendeesCount: (memorial.attendeesCount || 0) + 1,
+    });
+
+    return true;
+  },
+});

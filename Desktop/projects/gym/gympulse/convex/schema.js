@@ -31,8 +31,11 @@ export default defineSchema({
         epitaph: v.string(),
         biography: v.string(),
 
-        musicTrack: v.string(),     
-        gravestoneModel: v.string(),  
+        funeralLocation: v.string(),
+        funeralTime: v.string(),
+        cemeteryLocation: v.optional(v.string()),
+        attendeesCount: v.optional(v.number()),
+      
         enableCandle: v.boolean(),    
         candleCount: v.number(),
 

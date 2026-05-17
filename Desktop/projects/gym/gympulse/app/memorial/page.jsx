@@ -25,9 +25,10 @@ const CreateMemorial = () => {
     deathDate: '',
     location: '',
     epitaph: '',
+    funeralLocation: '',
+    funeralTime: '',
+    cemeteryLocation: '',
     biography: '',
-    musicTrack: 'piano',
-    gravestoneModel: 'classic_marble',
     enableCandle: true,
     urlSlug: '',
     privacyType: 'public',
@@ -115,8 +116,10 @@ const CreateMemorial = () => {
         epitaph: formData.epitaph,
         biography: formData.biography,
         mainPortraitUrl: '',
-        musicTrack: formData.musicTrack,
-        gravestoneModel: formData.gravestoneModel,
+        funeralLocation: formData.funeralLocation,
+    funeralTime: formData.funeralTime,
+    cemeteryLocation: formData.cemeteryLocation,
+        
         enableCandle: formData.enableCandle,
         urlSlug: formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-'), 
         privacyType: formData.privacyType,
@@ -273,7 +276,7 @@ const CreateMemorial = () => {
 
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
       <div className="flex flex-col gap-2">
-        <label className="text-xs text-gray-400 font-light tracking-wide">სამძიმრის / პანიხიდის ადგილი</label>
+        <label className="text-xs text-gray-400 font-light tracking-wide">სამძიმრის / პანაშვიდის ადგილი</label>
         <input 
           type="text"
           name="funeralLocation" 
