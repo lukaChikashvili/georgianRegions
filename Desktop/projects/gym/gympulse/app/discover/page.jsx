@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from "@/convex/_generated/api";
-import { Search, MapPin, Calendar, ArrowRight, Sparkles } from 'lucide-react';
+import { Search, MapPin, Calendar, ArrowRight, Sparkles, CandlestickChart, Flame } from 'lucide-react';
 import Link from 'next/link';
 
 const Discover = () => {
@@ -113,6 +113,11 @@ const Discover = () => {
                   <p className="text-xs text-gray-500 font-light line-clamp-4 leading-relaxed">
                     {memorial.biography}
                   </p>
+
+
+                  <div className='flex mt-6'>
+                     <p className='flex items-center gap-2'><Flame /> {memorial.candleCount}</p>
+                  </div>
                 </div>
 
                

@@ -4,7 +4,7 @@ import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import { useConvexAuth } from 'convex/react';
 import Image from 'next/image';
 import logo from '../public/logo.png';
-import { User } from 'lucide-react';
+import { AppWindow, LayoutDashboard, User } from 'lucide-react';
 import Link from 'next/link';
 
 const Header = () => {
@@ -92,17 +92,29 @@ const Header = () => {
           </SignInButton>
         )}
   
-        {isAuthenticated && !isLoading && (
-          <div className='flex items-center gap-4'>
-            <h1 className='text-sm font-serif italic text-[#FFF5D6]/90 font-light tracking-wide'>
-              გამარჯობა, <span className="text-[#D4AF37] font-sans font-normal not-italic">{user?.firstName}</span>
-            </h1>
-           
-            <div className="p-px rounded-full bg-linear-to-b from-[#D4AF37]/40 to-transparent">
-              <UserButton afterSwitchSessionUrl='/' />
-            </div>
-          </div>
-        )}
+  {isAuthenticated && !isLoading && (
+  <div className='flex items-center gap-5 relative z-10'>
+    
+
+    <Link 
+      href="/admin" 
+      className="p-2 rounded-xl bg-[#121214]/40 border border-white/5 backdrop-blur-md text-gray-400 hover:text-[#FFF5D6] hover:border-[#D4AF37]/30 hover:shadow-[0_0_10px_rgba(212,175,55,0.05)] transition-all duration-300 group cursor-pointer"
+      title="ადმინ პანელი"
+    >
+      <LayoutDashboard className="w-4 h-4 transition-transform duration-300 group-hover:scale-105 text-gray-400 group-hover:text-[#D4AF37]" />
+    </Link>
+
+   
+    <h1 className='text-sm font-serif italic text-[#FFF5D6]/90 font-light tracking-wide hidden lg:block'>
+      გამარჯობა, <span className="text-[#D4AF37] font-sans font-normal not-italic">{user?.firstName}</span>
+    </h1>
+   
+    
+    <div className="p-[1px] rounded-full bg-gradient-to-b from-[#D4AF37]/40 to-transparent flex items-center justify-center">
+      <UserButton afterSwitchSessionUrl='/' />
+    </div>
+  </div>
+)}
       </div>
 
     </div>

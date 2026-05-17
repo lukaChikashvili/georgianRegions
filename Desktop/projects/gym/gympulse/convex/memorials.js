@@ -96,4 +96,15 @@ export const lightCandle = mutation({
 
     return true;
   }
-})
+});
+
+export const getMyMemorials = query({
+  args: { creatorId: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("memorials")
+      .withIndex("by_creatorId", (q) => q.eq("creatorId", args.creatorId))
+      .order("desc")
+      .collect();
+  },
+});
