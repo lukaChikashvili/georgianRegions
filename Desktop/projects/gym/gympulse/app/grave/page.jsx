@@ -50,7 +50,7 @@ const Page = () => {
             </p>
             
             <button 
-              onClick={() => router.push("/create-gravestone")}
+              onClick={() => router.push("/grave/create-gravestone")}
               className="w-full py-3 px-6 text-sm font-medium text-[#0b0d12] bg-[#ffd700] hover:bg-[#ffe240] transition-all duration-300 rounded-xl shadow-lg shadow-yellow-500/5 hover:scale-[1.02] active:scale-[0.98]"
             >
               მონუმენტის დიზაინის დაწყება

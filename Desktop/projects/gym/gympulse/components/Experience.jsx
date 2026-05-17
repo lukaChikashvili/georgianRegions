@@ -17,7 +17,7 @@ const Experience = ({ hasDesigned }) => {
     uniforms.current.uTime.value = state.clock.getElapsedTime();
   });
 
-  const graveModel = useGLTF("./grave.glb");
+  const graveModel = useGLTF("/grave.glb");
 
   return (
     <>
