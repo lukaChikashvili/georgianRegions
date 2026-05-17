@@ -31,7 +31,8 @@ const CreateMemorial = () => {
     enableCandle: true,
     urlSlug: '',
     privacyType: 'public',
-    requireModeration: false
+    requireModeration: false,
+    mainPortraitUrl: '',
   });
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 4));
