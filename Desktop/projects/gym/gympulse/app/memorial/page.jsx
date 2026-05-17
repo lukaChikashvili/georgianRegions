@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { User, Calendar, MapPin, Music, Shield, ChevronRight, ChevronLeft, Upload, Sparkles, ImageIcon, Mail, Eye } from 'lucide-react';
+import { User, Calendar, MapPin, Shield, ChevronRight, ChevronLeft, Sparkles, ImageIcon, Mail, Plus, X } from 'lucide-react';
 import { useMutation } from 'convex/react';
 import { api } from "@/convex/_generated/api";
 import { useUser } from '@clerk/nextjs';
@@ -10,13 +10,15 @@ import { useRouter } from 'next/navigation';
 const CreateMemorial = () => {
   const router = useRouter();
   const { user } = useUser();
-  
 
   const createMemorialMutation = useMutation(api.memorials.createMemorial);
 
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  
+ 
+  const [newGalleryUrl, setNewGalleryUrl] = useState('');
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -34,19 +36,45 @@ const CreateMemorial = () => {
     privacyType: 'public',
     requireModeration: false,
     mainPortraitUrl: '',
+    galleryUrls: [] , 
   });
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 4));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target ).checked;
+    
     setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
   };
 
+
+  const handleAddGalleryUrl = () => {
+    if (!newGalleryUrl.trim()) return;
+    if (!newGalleryUrl.startsWith('http://') && !newGalleryUrl.startsWith('https://')) {
+      setError('გთხოვთ შეიყვანოთ ვალიდური ბმული (უნდა იწყებოდეს http:// ან https://).');
+      return;
+    }
+    
+    setFormData((prev) => ({
+      ...prev,
+      galleryUrls: [...prev.galleryUrls, newGalleryUrl.trim()]
+    }));
+    setNewGalleryUrl('');
+    setError('');
+  };
+
+  
+  const handleRemoveGalleryUrl = (indexToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      galleryUrls: prev.galleryUrls.filter((_, idx) => idx !== indexToRemove)
+    }));
+  };
 
   const handleSubmit = async () => {
     if (!user) {
@@ -55,58 +83,55 @@ const CreateMemorial = () => {
     }
 
     if (!formData.firstName.trim() || !formData.lastName.trim()) {
-        setError('გთხოვთ, შეავსოთ სახელი და გვარი.');
-        setIsSubmitting(false);
-        setStep(1); 
-        return;
-      }
+      setError('გთხოვთ, შეავსოთ სახელი და გვარი.');
+      setIsSubmitting(false);
+      setStep(1); 
+      return;
+    }
     
-      if (!formData.birthDate || !formData.deathDate) {
-        setError('გთხოვთ, მიუთითოთ როგორც დაბადების, ისე გარდაცვალების თარიღი.');
-        setIsSubmitting(false);
-        setStep(1);
-        return;
-      }
+    if (!formData.birthDate || !formData.deathDate) {
+      setError('გთხოვთ, მიუთითოთ როგორც დაბადების, ისე გარდაცვალების თარიღი.');
+      setIsSubmitting(false);
+      setStep(1);
+      return;
+    }
     
-      if (!formData.urlSlug.trim()) {
-        setError('გთხოვთ, მიუთითოთ გვერდის უნიკალური ბმული (URL Slug).');
-        setIsSubmitting(false);
-        setStep(4); 
-        return;
-      }
+    if (!formData.urlSlug.trim()) {
+      setError('გთხოვთ, მიუთითოთ გვერდის უნიკალური ბმული (URL Slug).');
+      setIsSubmitting(false);
+      setStep(4); 
+      return;
+    }
 
-      const birth = new Date(formData.birthDate);
-  const death = new Date(formData.deathDate);
-  const now = new Date();
+    const birth = new Date(formData.birthDate);
+    const death = new Date(formData.deathDate);
+    const now = new Date();
 
-  if (birth > now) {
-    setError('დაბადების თარიღი ვერ იქნება მომავალში.');
-    setIsSubmitting(false);
-    setStep(1);
-    return;
-  }
+    if (birth > now) {
+      setError('დაბადების თარიღი ვერ იქნება მომავალში.');
+      setIsSubmitting(false);
+      setStep(1);
+      return;
+    }
 
-  if (death > now) {
-    setError('გარდაცვალების თარიღი ვერ იქნება მომავალში.');
-    setIsSubmitting(false);
-    setStep(1);
-    return;
-  }
+    if (death > now) {
+      setError('გარდაცვალების თარიღი ვერ იქნება მომავალში.');
+      setIsSubmitting(false);
+      setStep(1);
+      return;
+    }
 
-  if (birth > death) {
-    setError('არასწორი თარიღები: გარდაცვალების თარიღი ვერ იქნება დაბადების თარიღზე ადრე.');
-    setIsSubmitting(false);
-    setStep(1);
-    return;
-  }
-
-  
+    if (birth > death) {
+      setError('არასწორი თარიღები: გარდაცვალების თარიღი ვერ იქნება დაბადების თარიღზე ადრე.');
+      setIsSubmitting(false);
+      setStep(1);
+      return;
+    }
 
     setIsSubmitting(true);
     setError('');
 
     try {
-    
       const resultId = await createMemorialMutation({
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -115,11 +140,9 @@ const CreateMemorial = () => {
         location: formData.location,
         epitaph: formData.epitaph,
         biography: formData.biography,
-        mainPortraitUrl: '',
         funeralLocation: formData.funeralLocation,
-    funeralTime: formData.funeralTime,
-    cemeteryLocation: formData.cemeteryLocation,
-        
+        funeralTime: formData.funeralTime,
+        cemeteryLocation: formData.cemeteryLocation,
         enableCandle: formData.enableCandle,
         urlSlug: formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-'), 
         privacyType: formData.privacyType,
@@ -127,14 +150,13 @@ const CreateMemorial = () => {
         creatorId: user.id,
         creatorName: user.fullName || user.firstName || "ანონიმური",
         mainPortraitUrl: formData.mainPortraitUrl.trim() || undefined,
+        galleryUrls: formData.galleryUrls, 
       });
 
       if (resultId) {
-    
         router.push(`/discover/${formData.urlSlug}`);
       }
     } catch (err) {
-      
       setError(err instanceof Error ? err.message : 'დაფიქსირდა შეცდომა. გთხოვთ სცადოთ ხელახლა.');
     } finally {
       setIsSubmitting(false);
@@ -143,7 +165,6 @@ const CreateMemorial = () => {
 
   return (
     <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans selection:bg-[#D4AF37] selection:text-black py-20 px-6 relative overflow-hidden">
-   
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-125 bg-linear-to-b from-[#1A150F] to-transparent opacity-40 blur-3xl pointer-events-none" />
 
       <div className="max-w-4xl mx-auto relative z-10">
@@ -168,7 +189,6 @@ const CreateMemorial = () => {
           ))}
         </div>
 
-        
         {error && (
           <div className="mb-6 max-w-3xl mx-auto p-4 rounded-xl bg-red-950/20 border border-red-500/20 text-red-400 text-sm font-light text-center backdrop-blur-md">
             {error}
@@ -177,7 +197,7 @@ const CreateMemorial = () => {
 
         <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 md:p-10 backdrop-blur-xl shadow-2xl transition-all duration-300">
           
-       
+      
           {step === 1 && (
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
@@ -241,14 +261,14 @@ const CreateMemorial = () => {
             </div>
           )}
 
-     
+       
           {step === 2 && (
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
                 <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-                  <Sparkles size={20} className="text-[#D4AF37]" /> ცხოვრების ისტორია
+                  <Sparkles size={20} className="text-[#D4AF37]" /> ცხოვრების ისტორია და გალერეა
                 </h2>
-                <p className="text-xs text-gray-500 mt-1">აღწერეთ მისი პიროვნება, მიღწევები და მემკვიდრეობა.</p>
+                <p className="text-xs text-gray-500 mt-1">აღწერეთ მისი პიროვნება და ატვირთეთ სამახსოვრო ფოტოების ბმულები.</p>
               </div>
 
               <div className="flex flex-col gap-2">
@@ -258,100 +278,139 @@ const CreateMemorial = () => {
 
               <div className="flex flex-col gap-2">
                 <label className="text-xs text-gray-400 font-light tracking-wide">ბიოგრაფია / მოგონებები</label>
-                <textarea name="biography" value={formData.biography} onChange={handleChange} rows={6} placeholder="გააზიარეთ მისი ცხოვრების გზა..." className="form-input resize-none py-3" />
+                <textarea name="biography" value={formData.biography} onChange={handleChange} rows={5} placeholder="გააზიარეთ მისი ცხოვრების გზა..." className="form-input resize-none py-3" />
               </div>
+
+             
+              <div className="flex flex-col gap-2 pt-2 border-t border-white/5">
+                <label className="text-xs text-gray-400 font-light tracking-wide">ფოტოგალერეის ბმულები</label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <input 
+                      type="url" 
+                      placeholder="ჩასვით ფოტოს ბმული (https://...)" 
+                      value={newGalleryUrl}
+                      onChange={(e) => setNewGalleryUrl(e.target.value)}
+                      className="form-input pl-10" 
+                    />
+                    <ImageIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleAddGalleryUrl}
+                    className="cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl px-4 text-xs font-medium text-[#D4AF37] flex items-center gap-1 transition"
+                  >
+                    <Plus size={14} /> დამატება
+                  </button>
+                </div>
+              </div>
+
+             
+              {formData.galleryUrls.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                  {formData.galleryUrls.map((url, idx) => (
+                    <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-white/5 bg-[#0D0D0F]">
+                      <img src={url} alt="გალერეა მინიატურა" className="w-full h-full object-cover grayscale opacity-70 group-hover:opacity-90 group-hover:grayscale-0 transition" />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveGalleryUrl(idx)}
+                        className="cursor-pointer absolute top-2 right-2 p-1 rounded-full bg-black/70 hover:bg-red-950/80 border border-white/10 text-gray-400 hover:text-red-400 transition"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
        
-{step === 3 && (
-  <div className="space-y-6 animate-fade-in">
-    <div className="mb-6">
-      <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-        <MapPin size={22} className="text-[#D4AF37]" /> სამძიმრისა და დაკრძალვის დეტალები
-      </h2>
-      <p className="text-xs text-gray-500 mt-1">მიუთითეთ ინფორმაცია, რათა ახლობლებმა შეძლონ მოსვლა და გვერდში დგომა.</p>
-    </div>
+          {step === 3 && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="mb-6">
+                <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
+                  <MapPin size={22} className="text-[#D4AF37]" /> სამძიმრისა და დაკრძალვის დეტალები
+                </h2>
+                <p className="text-xs text-gray-500 mt-1">მიუთითეთ ინფორმაცია, რათა ახლობლებმა შეძლონ მოსვლა და გვერდში დგომა.</p>
+              </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs text-gray-400 font-light tracking-wide">სამძიმრის / პანაშვიდის ადგილი</label>
+                  <input 
+                    type="text"
+                    name="funeralLocation" 
+                    placeholder="მაგ: საბურთალო, ამაღლების ქ. #12"
+                    value={formData.funeralLocation} 
+                    onChange={handleChange} 
+                    className="form-input focus:border-[#D4AF37] outline-none"
+                  />
+                </div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-      <div className="flex flex-col gap-2">
-        <label className="text-xs text-gray-400 font-light tracking-wide">სამძიმრის / პანაშვიდის ადგილი</label>
-        <input 
-          type="text"
-          name="funeralLocation" 
-          placeholder="მაგ: საბურთალო, ამაღლების ქ. #12"
-          value={formData.funeralLocation} 
-          onChange={handleChange} 
-          className="form-input bg-[#0D0D0F] border border-white/10 rounded-lg p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
-        />
-      </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs text-gray-400 font-light tracking-wide">გამოსვენების დრო</label>
+                  <input 
+                    type="datetime-local"
+                    name="funeralTime" 
+                    value={formData.funeralTime} 
+                    onChange={handleChange} 
+                    className="form-input focus:border-[#D4AF37] outline-none"
+                    style={{ colorScheme: 'dark' }}
+                  />
+                </div>
+              </div>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-xs text-gray-400 font-light tracking-wide">გამოსვენების დრო</label>
-        <input 
-          type="datetime-local"
-          name="funeralTime" 
-          value={formData.funeralTime} 
-          onChange={handleChange} 
-          className="form-input bg-[#0D0D0F] border border-white/10 rounded-lg p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
-        />
-      </div>
-    </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-gray-400 font-light tracking-wide">საფლავის / ქელეხის ლოკაცია (სურვილისამებრ)</label>
+                <input 
+                  type="text"
+                  name="cemeteryLocation" 
+                  placeholder="მაგ: კუკიის სასაფლაო / რესტორანი შარაგული"
+                  value={formData.cemeteryLocation} 
+                  onChange={handleChange} 
+                  className="form-input focus:border-[#D4AF37] outline-none"
+                />
+              </div>
 
-    <div className="flex flex-col gap-2">
-      <label className="text-xs text-gray-400 font-light tracking-wide">საფლავის / ქელეხის ლოკაცია (სურვილისამებრ)</label>
-      <input 
-        type="text"
-        name="cemeteryLocation" 
-        placeholder="მაგ: კუკიის სასაფლაო / რესტორანი შარაგული"
-        value={formData.cemeteryLocation} 
-        onChange={handleChange} 
-        className="form-input bg-[#0D0D0F] border border-white/10 rounded-lg p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
-      />
-    </div>
+              <div className="flex items-center justify-between p-4 rounded-xl bg-[#161619]/30 border border-white/5 mt-4">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-300">ციფრული სანთლის გააქტიურება</h4>
+                  <p className="text-xs text-gray-500">მნახველებს შეეძლებათ გვერდზე ვირტუალური სანთლის დანთება.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer select-none">
+                  <input 
+                    type="checkbox" 
+                    name="enableCandle" 
+                    checked={formData.enableCandle} 
+                    onChange={handleChange} 
+                    className="sr-only peer" 
+                  />
+                  <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
+                </label>
+              </div>
 
-    
-    <div className="flex items-center justify-between p-4 rounded-xl bg-[#161619]/30 border border-white/5 mt-4">
-      <div>
-        <h4 className="text-sm font-medium text-gray-300">ციფრული სანთლის გააქტიურება</h4>
-        <p className="text-xs text-gray-500">მნახველებს შეეძლებათ გვერდზე ვირტუალური სანთლის დანთება.</p>
-      </div>
-      <label className="relative inline-flex items-center cursor-pointer select-none">
-        <input 
-          type="checkbox" 
-          name="enableCandle" 
-          checked={formData.enableCandle} 
-          onChange={handleChange} 
-          className="sr-only peer" 
-        />
-        <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
-      </label>
-    </div>
+              <div className="p-5 rounded-xl bg-[#161619]/40 border border-[#D4AF37]/20 mt-4 backdrop-blur-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="space-y-1 text-center sm:text-left">
+                  <h4 className="text-sm font-medium text-gray-200 flex items-center justify-center sm:justify-start gap-2">
+                    <Mail size={16} className="text-[#D4AF37]" /> ციფრული მოსაწვევი ბარათი
+                  </h4>
+                  <p className="text-xs text-gray-500 max-w-sm">
+                    ავტომატურად გენერირდება ტრადიციული, ღირსეული ელექტრონული ბარათი, რომლის გაზიარებასაც შეძლებთ სოციალურ ქსელებში.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => alert("მოსაწვევი ბარათის გენერაცია...")}
+                  className="cursor-pointer whitespace-nowrap bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] hover:from-[#BD8E1A] hover:to-[#E5C158] text-black text-xs font-medium px-4 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5"
+                >
+                  ბარათის ნახვა / გაზიარება
+                </button>
+              </div>
+            </div>
+          )}
 
-  
-    <div className="p-5 rounded-xl bg-[#161619]/40 border border-[#D4AF37]/20 mt-4 backdrop-blur-xs flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div className="space-y-1 text-center sm:text-left">
-        <h4 className="text-sm font-medium text-gray-200 flex items-center justify-center sm:justify-start gap-2">
-          <Mail size={16} className="text-[#D4AF37]" /> ციფრული მოსაწვევი ბარათი
-        </h4>
-        <p className="text-xs text-gray-500 max-w-sm">
-          ავტომატურად გენერირდება ტრადიციული, ღირსეული ელექტრონული ბარათი, რომლის გაზიარებასაც შეძლებთ სოციალურ ქსელებში.
-        </p>
-      </div>
-      
-      <button
-        type="button"
-        onClick={() => alert("მოსაწვევი ბარათის გენერაცია...")}
-        className="cursor-pointer whitespace-nowrap bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] hover:from-[#BD8E1A] hover:to-[#E5C158] text-black text-xs font-medium px-4 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5"
-      >
-        ბარათის ნახვა / გაზიარება
-      </button>
-    </div>
-  </div>
-)}
-
-        
+         
           {step === 4 && (
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
@@ -374,7 +433,7 @@ const CreateMemorial = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'public' ? 'bg-[#1A150F]/20 border-[#D4AF37]/30' : 'bg-[#161619]/20 border-white/5'}`}>
                     <div className="flex items-center gap-2">
-                      <input type="radio" name="privacyType" value="public" checked={formData.privacyType === 'public' ? true : false} onChange={handleChange} className="accent-[#D4AF37]" />
+                      <input type="radio" name="privacyType" value="public" checked={formData.privacyType === 'public'} onChange={handleChange} className="accent-[#D4AF37]" />
                       <span className="text-sm font-medium text-gray-300">საჯარო (Public)</span>
                     </div>
                     <span className="text-xs text-gray-500 pl-5">მემორიალი ხელმისაწვდომია ყველასთვის და გამოჩნდება ძებნაში.</span>
@@ -382,7 +441,7 @@ const CreateMemorial = () => {
 
                   <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'private' ? 'bg-[#1A150F]/20 border-[#D4AF37]/30' : 'bg-[#161619]/20 border-white/5'}`}>
                     <div className="flex items-center gap-2">
-                      <input type="radio" name="privacyType" value="private" checked={formData.privacyType === 'private' ? true : false} onChange={handleChange} className="accent-[#D4AF37]" />
+                      <input type="radio" name="privacyType" value="private" checked={formData.privacyType === 'private'} onChange={handleChange} className="accent-[#D4AF37]" />
                       <span className="text-sm font-medium text-gray-300">პირადი (Private)</span>
                     </div>
                     <span className="text-xs text-gray-500 pl-5">გვერდის ნახვა შესაძლებელი იქნება მხოლოდ პირდაპირი ბმულით.</span>
@@ -403,7 +462,7 @@ const CreateMemorial = () => {
             </div>
           )}
 
-          
+     
           <div className="mt-10 pt-6 border-t border-white/5 flex justify-between">
             <button
               onClick={prevStep}

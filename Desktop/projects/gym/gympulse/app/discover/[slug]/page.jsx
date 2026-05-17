@@ -20,10 +20,12 @@ const MemorialPage = () => {
   const [hasRSVPed, setHasRSVPed] = useState(false);
   const [isRSVPing, setIsRSVPing] = useState(false);
   
- 
   const [isListModalOpen, setIsListModalOpen] = useState(false);
   const [isNameInputModalOpen, setIsNameInputModalOpen] = useState(false);
   const [attendeeName, setAttendeeName] = useState("");
+
+  // NEW: State for managing active image popup in lightbox modal
+  const [activeLightboxImage, setActiveLightboxImage] = useState(null);
 
   useEffect(() => {
     if (slug) {
@@ -49,13 +51,11 @@ const MemorialPage = () => {
     }
   };
 
-  
   const handleAttendButtonClick = () => {
     if (hasRSVPed || isRSVPing) return;
     setIsNameInputModalOpen(true);
   };
 
-  
   const handleConfirmAttendance = async (e) => {
     e.preventDefault();
     if (!attendeeName.trim() || !memorial) return;
@@ -139,6 +139,7 @@ const MemorialPage = () => {
 
       <main className="relative z-10 max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
+       
           <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl">
             <h2 className="font-serif text-xl text-[#FFF5D6] mb-6 flex items-center gap-3">
               <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
@@ -148,10 +149,41 @@ const MemorialPage = () => {
               {memorial.biography}
             </p>
           </section>
+
+          {memorial.galleryUrls && memorial.galleryUrls.length > 0 && (
+            <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
+              <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
+                <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+                ფოტოგალერეა
+              </h2>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {memorial.galleryUrls.map((url, index) => (
+                  <div 
+                    key={index}
+                    onClick={() => setActiveLightboxImage(url)}
+                    className="cursor-pointer aspect-square rounded-xl overflow-hidden border border-white/5 bg-[#0D0D0F] group relative"
+                  >
+               
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
+                      <span className="text-[11px] text-[#D4AF37] font-light tracking-wider uppercase border border-[#D4AF37]/30 px-3 py-1.5 rounded-lg bg-black/50 backdrop-blur-xs">
+                        გადიდება
+                      </span>
+                    </div>
+                    
+                    <img 
+                      src={url} 
+                      alt={`გალერეა - ${index + 1}`}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 contrast-105 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
 
         <div className="space-y-8">
-         
           {memorial.enableCandle && (
             <section className="bg-gradient-to-b from-[#161619]/60 to-[#0F0F12]/80 border border-[#D4AF37]/15 rounded-2xl p-6 text-center">
               <h3 className="font-serif text-base text-[#FFF5D6] mb-4 tracking-wide">ვირტუალური პანაშვიდი</h3>
@@ -168,7 +200,7 @@ const MemorialPage = () => {
             </section>
           )}
 
-      
+          
           <section className="bg-[#121214]/30 border border-white/5 rounded-2xl p-6 space-y-6">
             <h3 className="font-serif text-base text-[#FFF5D6] border-b border-white/5 pb-3 tracking-wide">საორგანიზაციო ინფორმაცია</h3>
             <div className="space-y-5">
@@ -205,14 +237,13 @@ const MemorialPage = () => {
             </div>
           </section>
 
-        
+         
           <section className="bg-gradient-to-br from-[#121214]/80 to-[#1A150F]/40 border border-[#D4AF37]/10 rounded-2xl p-5 flex flex-col items-center text-center space-y-4">
             <div className="space-y-1">
               <h4 className="text-xs font-serif text-[#FFF5D6] tracking-wide">პანაშვიდსა და დაკრძალვაზე დასწრება</h4>
               <p className="text-[11px] text-gray-500 max-w-xs font-light">დაადასტურეთ თქვენი მოსვლა, რათა დაეხმაროთ ორგანიზატორებს საორგანიზაციო დეტალების დაგეგმვაში.</p>
             </div>
 
-            
             <button 
               onClick={() => setIsListModalOpen(true)}
               className="group cursor-pointer bg-[#0D0D0F]/60 hover:bg-[#121215] border border-white/5 hover:border-[#D4AF37]/30 rounded-xl px-4 py-2 flex items-center gap-3 transition-all duration-200"
@@ -237,7 +268,7 @@ const MemorialPage = () => {
         </div>
       </main>
 
-     
+      
       {isNameInputModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fade-in">
           <div className="bg-[#121214] border border-white/10 w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
@@ -259,7 +290,7 @@ const MemorialPage = () => {
         </div>
       )}
 
-     
+
       {isListModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fade-in">
           <div className="bg-[#121214] border border-white/10 w-full max-w-lg rounded-2xl p-6 relative shadow-2xl flex flex-col max-h-[80vh]">
@@ -272,7 +303,6 @@ const MemorialPage = () => {
               <p className="text-xs text-gray-500 font-light mt-0.5">სულ დადასტურებულია: {memorial.attendeesCount || 0} ადამიანის მოსვლა</p>
             </div>
 
-           
             <div className="overflow-y-auto flex-1 pr-1 space-y-2 custom-scrollbar">
               {memorial.attendeesList && memorial.attendeesList.length > 0 ? (
                 memorial.attendeesList.map((attendee, idx) => (
@@ -288,6 +318,32 @@ const MemorialPage = () => {
                 <div className="text-center py-8 text-gray-600 text-sm font-light">ჯერჯერობით დასწრება არავის დაუდასტურებია.</div>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+  
+      {activeLightboxImage && (
+        <div 
+          onClick={() => setActiveLightboxImage(null)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md animate-fade-in cursor-zoom-out"
+        >
+          <button 
+            onClick={() => setActiveLightboxImage(null)}
+            className="absolute top-6 right-6 text-gray-400 hover:text-white cursor-pointer bg-white/5 p-2 rounded-full border border-white/10"
+          >
+            <X size={20} />
+          </button>
+          
+          <div 
+            className="relative max-w-5xl max-h-[85vh] rounded-xl overflow-hidden shadow-2xl border border-white/5 bg-black" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img 
+              src={activeLightboxImage} 
+              alt="გადიდებული ფოტო" 
+              className="max-w-full max-h-[85vh] object-contain"
+            />
           </div>
         </div>
       )}
