@@ -1,10 +1,23 @@
 "use client";
 
 import React, { useState } from 'react';
-import { User, Calendar, MapPin, Music, Laylo, Shield, ChevronRight, ChevronLeft, Upload, Sparkles } from 'lucide-react';
+import { User, Calendar, MapPin, Music, Shield, ChevronRight, ChevronLeft, Upload, Sparkles, ImageIcon } from 'lucide-react';
+import { useMutation } from 'convex/react';
+import { api } from "@/convex/_generated/api";
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 
 const CreateMemorial = () => {
+  const router = useRouter();
+  const { user } = useUser();
+  
+
+  const createMemorialMutation = useMutation(api.memorials.createMemorial);
+
   const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -32,15 +45,58 @@ const CreateMemorial = () => {
     }));
   };
 
+
+  const handleSubmit = async () => {
+    if (!user) {
+      setError('მემორიალის გამოსაქვეყნებლად საჭიროა ავტორიზაცია.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+    
+      const resultId = await createMemorialMutation({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        birthDate: formData.birthDate,
+        deathDate: formData.deathDate,
+        location: formData.location,
+        epitaph: formData.epitaph,
+        biography: formData.biography,
+        mainPortraitUrl: '',
+        musicTrack: formData.musicTrack,
+        gravestoneModel: formData.gravestoneModel,
+        enableCandle: formData.enableCandle,
+        urlSlug: formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-'), 
+        privacyType: formData.privacyType,
+        requireModeration: formData.requireModeration,
+        creatorId: user.id,
+        creatorName: user.fullName || user.firstName || "ანონიმური",
+        mainPortraitUrl: formData.mainPortraitUrl.trim() || undefined,
+      });
+
+      if (resultId) {
+    
+        router.push(`/discover/${formData.urlSlug}`);
+      }
+    } catch (err) {
+      
+      setError(err instanceof Error ? err.message : 'დაფიქსირდა შეცდომა. გთხოვთ სცადოთ ხელახლა.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans selection:bg-[#D4AF37] selection:text-black py-20 px-6 relative overflow-hidden">
-      
-     
+   
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-125 bg-linear-to-b from-[#1A150F] to-transparent opacity-40 blur-3xl pointer-events-none" />
 
-      <div className="max-w-3xl mx-auto relative z-10">
+      <div className="max-w-4xl mx-auto relative z-10">
         
- 
+       
         <div className="mb-12 flex items-center justify-between max-w-md mx-auto relative">
           {[1, 2, 3, 4].map((num) => (
             <div key={num} className="flex items-center relative z-10">
@@ -60,7 +116,13 @@ const CreateMemorial = () => {
           ))}
         </div>
 
-      
+        
+        {error && (
+          <div className="mb-6 max-w-3xl mx-auto p-4 rounded-xl bg-red-950/20 border border-red-500/20 text-red-400 text-sm font-light text-center backdrop-blur-md">
+            {error}
+          </div>
+        )}
+
         <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 md:p-10 backdrop-blur-xl shadow-2xl transition-all duration-300">
           
        
@@ -109,18 +171,25 @@ const CreateMemorial = () => {
                 </div>
               </div>
 
-          
-              <div className="flex flex-col gap-2 pt-2">
-                <label className="text-xs text-gray-400 font-light tracking-wide">მთავარი პორტრეტი</label>
-                <div className="border border-dashed border-white/10 hover:border-[#D4AF37]/30 bg-[#161619]/20 transition rounded-xl p-8 text-center cursor-pointer group">
-                  <Upload size={24} className="mx-auto text-gray-500 group-hover:text-[#D4AF37] transition mb-2" />
-                  <p className="text-xs text-gray-400">ატვირთეთ ფოტო (ავტომატურად გადავა შავ-თეთრ ტონალობაში)</p>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-gray-400 font-light tracking-wide">მთავარი პორტრეტის URL ბმული</label>
+                <div className="relative">
+                  <input 
+                    type="url" 
+                    name="mainPortraitUrl" 
+                    value={formData.mainPortraitUrl} 
+                    onChange={handleChange} 
+                    placeholder="https://example.com/photo.jpg" 
+                    className="form-input pl-10" 
+                  />
+                  <ImageIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                 </div>
+                <p className="text-[11px] text-gray-600 font-light pl-1">ჩასვით პირდაპირი ბმული ინტერნეტიდან (მაგალითად, Unsplash ან ნებისმიერი ჰოსტინგი).</p>
               </div>
             </div>
           )}
 
-
+     
           {step === 2 && (
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
@@ -142,7 +211,7 @@ const CreateMemorial = () => {
             </div>
           )}
 
-      
+       
           {step === 3 && (
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
@@ -173,7 +242,6 @@ const CreateMemorial = () => {
                 </div>
               </div>
 
-             
               <div className="flex items-center justify-between p-4 rounded-xl bg-[#161619]/30 border border-white/5 mt-4">
                 <div>
                   <h4 className="text-sm font-medium text-gray-300">ციფრული სანთლის გააქტიურება</h4>
@@ -187,7 +255,7 @@ const CreateMemorial = () => {
             </div>
           )}
 
-          
+        
           {step === 4 && (
             <div className="space-y-6 animate-fade-in">
               <div className="mb-6">
@@ -239,13 +307,13 @@ const CreateMemorial = () => {
             </div>
           )}
 
-        
+          
           <div className="mt-10 pt-6 border-t border-white/5 flex justify-between">
             <button
               onClick={prevStep}
-              disabled={step === 1}
+              disabled={step === 1 || isSubmitting}
               className={`px-5 py-2 rounded-xl border border-white/5 text-xs uppercase tracking-wider font-medium flex items-center gap-2 transition active:scale-[0.98] ${
-                step === 1 ? 'opacity-0 pointer-events-none' : 'hover:bg-white/5 text-gray-400 cursor-pointer'
+                step === 1 || isSubmitting ? 'opacity-0 pointer-events-none' : 'hover:bg-white/5 text-gray-400 cursor-pointer'
               }`}
             >
               <ChevronLeft size={14} /> უკან
@@ -260,10 +328,11 @@ const CreateMemorial = () => {
               </button>
             ) : (
               <button
-                onClick={() => console.log("დასრულდა:", formData)}
-                className="px-6 py-2 rounded-xl bg-linear-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-[0.98] hover:brightness-110 cursor-pointer shadow-lg shadow-[#D4AF37]/20"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="px-6 py-2 rounded-xl bg-linear-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-[0.98] hover:brightness-110 cursor-pointer shadow-lg shadow-[#D4AF37]/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                მემორიალის გამოქვეყნება
+                {isSubmitting ? 'ქვეყნდება...' : 'მემორიალის გამოქვეყნება'}
               </button>
             )}
           </div>
@@ -271,7 +340,6 @@ const CreateMemorial = () => {
         </div>
       </div>
 
-    
       <style jsx global>{`
         .form-input {
           width: 100%;

@@ -9,7 +9,7 @@
  */
 
 import type * as comments from "../comments.js";
-import type * as memorial from "../memorial.js";
+import type * as memorials from "../memorials.js";
 import type * as posts from "../posts.js";
 
 import type {
@@ -20,7 +20,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   comments: typeof comments;
-  memorial: typeof memorial;
+  memorials: typeof memorials;
   posts: typeof posts;
 }>;
 
