@@ -60,4 +60,14 @@ export default defineSchema({
         creatorName: v.string(),
     }).index("by_urlSlug", ["urlSlug"]) 
     .index("by_creatorId", ["creatorId"]),
+
+
+  condolences: defineTable({
+    memorialId: v.id("memorials"),
+    body: v.string(),            
+    authorName: v.string(),       
+    authorId: v.optional(v.string()), 
+    isApproved: v.boolean(),       
+    createdAt: v.number(),
+  })
 });

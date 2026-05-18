@@ -191,3 +191,32 @@ export const attendFuneral = mutation({
     return true;
   },
 });
+
+export const addCondolence = mutation({
+  args: {
+    memorialId: v.id("memorials"),
+    body: v.string(),
+    authorName: v.string(),
+    authorId: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const memorial = await ctx.db.get(args.memorialId);
+    if (!memorial) {
+      throw new Error("მემორიალი ვერ მოიძებნა.");
+    }
+
+  
+    const shouldApproveImmediately = !memorial.requireModeration;
+
+    await ctx.db.insert("condolences", {
+      memorialId: args.memorialId,
+      body: args.body,
+      authorName: args.authorName,
+      authorId: args.authorId,
+      isApproved: shouldApproveImmediately,
+      createdAt: Date.now(),
+    });
+
+    return shouldApproveImmediately; 
+  },
+});
