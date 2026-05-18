@@ -69,5 +69,8 @@ export default defineSchema({
     authorId: v.optional(v.string()), 
     isApproved: v.boolean(),       
     createdAt: v.number(),
+
+    parentId: v.optional(v.id("condolences")),
+    
   }).index("by_memorialId", ["memorialId"]),
 });

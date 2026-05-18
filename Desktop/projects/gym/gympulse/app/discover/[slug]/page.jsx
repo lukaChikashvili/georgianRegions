@@ -473,10 +473,10 @@ const MemorialPage = () => {
       return (
         <div key={condolence._id} className="p-5 rounded-xl bg-[#0D0D0F]/40 border border-white/5 space-y-2 relative group animate-fade-in">
           
-          {/* Top Info Header Bar */}
+         
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-200">{condolence.authorName}</span>
+              <span className="text-sm font-medium text-[#D4AF37]">{condolence.authorName}</span>
               {!condolence.isApproved && isPageOwner && (
                 <span className="text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md font-sans">
                   ელოდება დასტურს
@@ -490,7 +490,7 @@ const MemorialPage = () => {
                 {new Date(condolence.createdAt).toLocaleDateString('ka-GE')}
               </span>
 
-              {/* Securely render Action Controls exclusively if the user matches privileges */}
+              
               {!isCurrentlyEditing && (isCommentAuthor || isPageOwner) && (
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   {isCommentAuthor && (
@@ -515,7 +515,7 @@ const MemorialPage = () => {
             </div>
           </div>
 
-          {/* Conditional Render: Text field vs Editable form input box */}
+        
           {isCurrentlyEditing ? (
             <form onSubmit={(e) => handleSaveEdit(e, condolence._id)} className="space-y-3 pt-1 animate-fade-in">
               <textarea

@@ -198,6 +198,7 @@ export const addCondolence = mutation({
     body: v.string(),
     authorName: v.string(),
     authorId: v.optional(v.string()),
+    parentId: v.optional(v.id("condolences")),
   },
   handler: async (ctx, args) => {
     const memorial = await ctx.db.get(args.memorialId);
@@ -205,8 +206,9 @@ export const addCondolence = mutation({
       throw new Error("მემორიალი ვერ მოიძებნა.");
     }
 
-  
-    const shouldApproveImmediately = !memorial.requireModeration;
+    const isOwnerReplying = args.authorId && memorial.creatorId === args.authorId;
+    const shouldApproveImmediately = !memorial.requireModeration || isOwnerReplying;
+
 
     await ctx.db.insert("condolences", {
       memorialId: args.memorialId,
@@ -215,6 +217,7 @@ export const addCondolence = mutation({
       authorId: args.authorId,
       isApproved: shouldApproveImmediately,
       createdAt: Date.now(),
+      parentId: args.parentId,
     });
 
     return shouldApproveImmediately; 
