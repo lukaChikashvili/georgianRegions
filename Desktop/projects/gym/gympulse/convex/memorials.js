@@ -220,3 +220,19 @@ export const addCondolence = mutation({
     return shouldApproveImmediately; 
   },
 });
+
+export const getCondolences = query({
+  args: { memorialId: v.id("memorials") },
+  handler: async (ctx, args) => {
+    const memorial = await ctx.db.get(args.memorialId);
+    if (!memorial) return [];
+
+    return await ctx.db
+      .query("condolences")
+      .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
+      .order("desc") 
+      .collect();
+    
+    
+  },
+});
