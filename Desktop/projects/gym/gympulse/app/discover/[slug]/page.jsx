@@ -20,6 +20,45 @@ const MemorialPage = () => {
   const condolences = useQuery(api.memorials.getCondolences, memorial ? { memorialId: memorial._id } : "skip");
   const addCondolenceMutation = useMutation(api.memorials.addCondolence);
 
+  // edit and delete condolence
+  const deleteCondolenceMutation = useMutation(api.memorials.deleteCondolence);
+  const editCondolenceMutation = useMutation(api.memorials.editCondolence);
+  const [editingCondolenceId, setEditingCondolenceId] = useState(null);
+  const [editText, setEditText] = useState("");
+
+  const handleDeleteCondolence = async (id) => {
+    if (!window.confirm("ნამდვილად გსურთ ამ შეტყობინების წაშლა?")) return;
+    try {
+      await deleteCondolenceMutation({ id, userId: user?.id });
+    } catch (err) {
+      console.error("წაშლა ვერ მოხერხდა:", err);
+    }
+  };
+  
+  const handleSaveEdit = async (e, id) => {
+    e.preventDefault();
+    if (!editText.trim() || !user) return;
+  
+    try {
+      const keptLive = await editCondolenceMutation({
+        id,
+        newBody: editText.trim(),
+        userId: user.id
+      });
+      
+      setEditingCondolenceId(null);
+      setEditText("");
+      if (!keptLive) {
+        alert("ცვლილება შენახულია. შეტყობინება გამოჩნდება ოჯახის მიერ ხელახალი მოდერაციის შემდეგ.");
+      }
+    } catch (err) {
+      console.error("რედაქტირება ვერ მოხერხდა:", err);
+    }
+  };
+
+
+
+
   const [hasLitCandle, setHasLitCandle] = useState(false);
   const [isLighting, setIsLighting] = useState(false);
 
@@ -425,33 +464,97 @@ const MemorialPage = () => {
 
           
             <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-              {visibleCondolences.length > 0 ? (
-                visibleCondolences.map((condolence) => (
-                  <div key={condolence._id} className="p-5 rounded-xl bg-[#0D0D0F]/40 border border-white/5 space-y-2 relative group">
-                    
-                    {!condolence.isApproved && isCreator && (
-                      <span className="absolute top-4 right-4 text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md font-sans">
-                        ელოდება დასტურს
-                      </span>
-                    )}
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-[#D4AF37]">{condolence.authorName}</span>
-                      <span className="text-[11px] text-gray-500 font-light flex items-center gap-1.5">
-                        <Clock size={12} />
-                        {new Date(condolence.createdAt).toLocaleDateString('ka-GE')}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-400 font-light leading-relaxed whitespace-pre-line">
-                      {condolence.body}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-10 text-gray-600 text-sm font-light">
-                  სამძიმრის სიტყვები ჯერ არ დაწერილა. იყავით პირველი, ვინც ანუგეშებს ოჯახს.
+  {visibleCondolences.length > 0 ? (
+    visibleCondolences.map((condolence) => {
+      const isCommentAuthor = user?.id && condolence.authorId === user.id;
+      const isPageOwner = user?.id && memorial.creatorId === user.id;
+      const isCurrentlyEditing = editingCondolenceId === condolence._id;
+
+      return (
+        <div key={condolence._id} className="p-5 rounded-xl bg-[#0D0D0F]/40 border border-white/5 space-y-2 relative group animate-fade-in">
+          
+          {/* Top Info Header Bar */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-200">{condolence.authorName}</span>
+              {!condolence.isApproved && isPageOwner && (
+                <span className="text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md font-sans">
+                  ელოდება დასტურს
+                </span>
+              )}
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <span className="text-[11px] text-gray-500 font-light flex items-center gap-1.5">
+                <Clock size={12} />
+                {new Date(condolence.createdAt).toLocaleDateString('ka-GE')}
+              </span>
+
+              {/* Securely render Action Controls exclusively if the user matches privileges */}
+              {!isCurrentlyEditing && (isCommentAuthor || isPageOwner) && (
+                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  {isCommentAuthor && (
+                    <button 
+                      onClick={() => {
+                        setEditingCondolenceId(condolence._id);
+                        setEditText(condolence.body);
+                      }}
+                      className="cursor-pointer text-xs text-gray-500 hover:text-[#D4AF37] transition font-light"
+                    >
+                      შეცვლა
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => handleDeleteCondolence(condolence._id)}
+                    className="cursor-pointer text-xs text-gray-500 hover:text-red-400 transition font-light"
+                  >
+                    წაშლა
+                  </button>
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Conditional Render: Text field vs Editable form input box */}
+          {isCurrentlyEditing ? (
+            <form onSubmit={(e) => handleSaveEdit(e, condolence._id)} className="space-y-3 pt-1 animate-fade-in">
+              <textarea
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                rows={2}
+                className="w-full bg-[#0D0D0F] border border-[#D4AF37]/30 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none resize-none"
+              />
+              <div className="flex justify-end gap-2">
+                <button 
+                  type="button" 
+                  onClick={() => setEditingCondolenceId(null)}
+                  className="cursor-pointer px-3 py-1.5 rounded-lg border border-white/5 text-xs text-gray-500 hover:text-white transition"
+                >
+                  გაუქმება
+                </button>
+                <button 
+                  type="submit"
+                  className="cursor-pointer px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black font-medium text-xs shadow-md transition hover:brightness-110"
+                >
+                  შენახვა
+                </button>
+              </div>
+            </form>
+          ) : (
+            <p className="text-sm text-gray-400 font-light leading-relaxed whitespace-pre-line">
+              {condolence.body}
+            </p>
+          )}
+
+        </div>
+      );
+    })
+  ) : (
+    <div className="text-center py-10 text-gray-600 text-sm font-light">
+      სამძიმრის სიტყვები ჯერ არ დაწერილა. იყავით პირველი, ვინც ანუგეშებს ოჯახს.
+    </div>
+  )}
+</div>
           </section>
       
 
