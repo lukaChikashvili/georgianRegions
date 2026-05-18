@@ -69,5 +69,5 @@ export default defineSchema({
     authorId: v.optional(v.string()), 
     isApproved: v.boolean(),       
     createdAt: v.number(),
-  })
+  }).index("by_memorialId", ["memorialId"]),
 });

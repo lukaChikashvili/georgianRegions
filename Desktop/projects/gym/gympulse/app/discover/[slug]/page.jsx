@@ -4,15 +4,21 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from "@/convex/_generated/api";
 import { useParams } from 'next/navigation';
-import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock, CreditCard } from 'lucide-react';
+import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock, CreditCard, MessageSquare, Send } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
+
 
 const MemorialPage = () => {
   const params = useParams();
   const slug = params.slug;
+  const { user } = useUser();
 
   const memorial = useQuery(api.memorials.getMemorialBySlug, { urlSlug: slug });
   const lightCandleMutation = useMutation(api.memorials.lightCandle);
   const attendFuneralMutation = useMutation(api.memorials.attendFuneral);
+
+  const condolences = useQuery(api.memorials.getCondolences, memorial ? { memorialId: memorial._id } : "skip");
+  const addCondolenceMutation = useMutation(api.memorials.addCondolence);
 
   const [hasLitCandle, setHasLitCandle] = useState(false);
   const [isLighting, setIsLighting] = useState(false);
@@ -28,6 +34,16 @@ const MemorialPage = () => {
 
 
   const [copied, setCopied] = useState(false);
+ 
+
+  // condolence section
+  const [condolenceText, setCondolenceText] = useState("");
+  const [guestName, setGuestName] = useState("");
+  const [isSubmittingCondolence, setIsSubmittingCondolence] = useState(false);
+  const [submissionNotice, setSubmissionNotice] = useState("");
+
+
+
 
   useEffect(() => {
     if (slug) {
@@ -38,6 +54,42 @@ const MemorialPage = () => {
       if (alreadyRSVPed) setHasRSVPed(true);
     }
   }, [slug]);
+
+  useEffect(() => {
+    if (user) {
+      setGuestName(user.fullName || user.firstName || "");
+    }
+  }, [user]);
+
+  
+  const handlePostCondolence = async (e) => {
+    e.preventDefault();
+    if (!condolenceText.trim() || !guestName.trim() || !memorial) return;
+
+    setIsSubmittingCondolence(true);
+    setSubmissionNotice("");
+
+    try {
+      const isApprovedImmediately = await addCondolenceMutation({
+        memorialId: memorial._id,
+        body: condolenceText.trim(),
+        authorName: guestName.trim(),
+        authorId: user?.id || undefined,
+      });
+
+      setCondolenceText("");
+      if (!isApprovedImmediately) {
+        setSubmissionNotice("თქვენი სამძიმარი გაიგზავნა. იგი გამოჩნდება კედელზე ოჯახის მიერ მოდერაციის დადასტურების შემდეგ.");
+      } else {
+        setSubmissionNotice("სამძიმარი წარმატებით გამოქვეყნდა.");
+      }
+      setTimeout(() => setSubmissionNotice(""), 5000);
+    } catch (err) {
+      console.error("სამძიმრის გაგზავნა ვერ მოხერხდა:", err);
+    } finally {
+      setIsSubmittingCondolence(false);
+    }
+  };
 
   const handleLightCandle = async () => {
     if (hasLitCandle || !memorial) return;
@@ -110,6 +162,10 @@ const MemorialPage = () => {
       </div>
     );
   }
+
+
+  const isCreator = user?.id === memorial.creatorId;
+  const visibleCondolences = (condolences || []).filter(c => c.isApproved || isCreator);
 
   return (
     <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans pb-24 relative overflow-hidden">
@@ -320,6 +376,84 @@ const MemorialPage = () => {
           </section>
         </div>
       </main>
+
+
+      <section className="max-w-4xl mx-auto mt-12 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
+            <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
+              <MessageSquare size={20} className="text-[#D4AF37]" /> სამძიმრის კედელი
+            </h2>
+
+           
+            <form onSubmit={handlePostCondolence} className="space-y-4 bg-[#0D0D0F]/40 p-5 border border-white/5 rounded-xl">
+              {submissionNotice && (
+                <div className="p-3 text-xs text-center rounded-lg bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 animate-fade-in">
+                  {submissionNotice}
+                </div>
+              )}
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="sm:col-span-1">
+                  <input 
+                    type="text" 
+                    required
+                    placeholder="თქვენი სახელი" 
+                    value={guestName}
+                    disabled={!!user} 
+                    onChange={(e) => setGuestName(e.target.value)}
+                    className="w-full bg-[#0D0D0F] border border-white/5 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none disabled:opacity-50"
+                  />
+                </div>
+                <div className="sm:col-span-2 relative flex items-center">
+                  <input 
+                    type="text" 
+                    required
+                    placeholder="დატოვეთ სამძიმრის სიტყვა..." 
+                    value={condolenceText}
+                    onChange={(e) => setCondolenceText(e.target.value)}
+                    className="w-full bg-[#0D0D0F] border border-white/5 rounded-xl p-3 pr-12 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
+                  />
+                  <button 
+                    type="submit" 
+                    disabled={isSubmittingCondolence}
+                    className="absolute right-2 p-2 rounded-lg text-[#D4AF37] hover:bg-white/5 transition disabled:opacity-40 cursor-pointer"
+                  >
+                    <Send size={16} />
+                  </button>
+                </div>
+              </div>
+            </form>
+
+          
+            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+              {visibleCondolences.length > 0 ? (
+                visibleCondolences.map((condolence) => (
+                  <div key={condolence._id} className="p-5 rounded-xl bg-[#0D0D0F]/40 border border-white/5 space-y-2 relative group">
+                    
+                    {!condolence.isApproved && isCreator && (
+                      <span className="absolute top-4 right-4 text-[10px] text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md font-sans">
+                        ელოდება დასტურს
+                      </span>
+                    )}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-200">{condolence.authorName}</span>
+                      <span className="text-[11px] text-gray-500 font-light flex items-center gap-1.5">
+                        <Clock size={12} />
+                        {new Date(condolence.createdAt).toLocaleDateString('ka-GE')}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-400 font-light leading-relaxed whitespace-pre-line">
+                      {condolence.body}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-10 text-gray-600 text-sm font-light">
+                  სამძიმრის სიტყვები ჯერ არ დაწერილა. იყავით პირველი, ვინც ანუგეშებს ოჯახს.
+                </div>
+              )}
+            </div>
+          </section>
+      
 
       
       {isNameInputModalOpen && (
