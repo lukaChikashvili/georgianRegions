@@ -435,7 +435,7 @@ const MemorialPage = () => {
                       </span>
                     )}
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-200">{condolence.authorName}</span>
+                      <span className="text-sm font-medium text-[#D4AF37]">{condolence.authorName}</span>
                       <span className="text-[11px] text-gray-500 font-light flex items-center gap-1.5">
                         <Clock size={12} />
                         {new Date(condolence.createdAt).toLocaleDateString('ka-GE')}

@@ -236,3 +236,62 @@ export const getCondolences = query({
     
   },
 });
+
+
+export const deleteCondolence = mutation({
+  args: { 
+    id: v.id("condolences"),
+    userId: v.optional(v.string()) 
+  },
+  handler: async (ctx, args) => {
+    const condolence = await ctx.db.get(args.id);
+    if (!condolence) {
+      throw new Error("სამძიმრის შეტყობინება ვერ მოიძებნა.");
+    }
+
+    const memorial = await ctx.db.get(condolence.memorialId);
+
+    
+    const isAuthor = args.userId && condolence.authorId === args.userId;
+    const isMemorialCreator = args.userId && memorial?.creatorId === args.userId;
+
+    if (!isAuthor && !isMemorialCreator) {
+      throw new Error("თქვენ არ გაქვთ ამ შეტყობინების წაშლის უფლება.");
+    }
+
+    await ctx.db.delete(args.id);
+    return true;
+  },
+});
+
+
+export const editCondolence = mutation({
+  args: {
+    id: v.id("condolences"),
+    newBody: v.string(),
+    userId: v.string() 
+  },
+  handler: async (ctx, args) => {
+    const condolence = await ctx.db.get(args.id);
+    if (!condolence) {
+      throw new Error("სამძიმრის შეტყობინება ვერ მოიძებნა.");
+    }
+
+    
+    if (condolence.authorId !== args.userId) {
+      throw new Error("თქვენ არ გაქვთ ამ შეტყობინების რედაქტირების უფლება.");
+    }
+
+    const memorial = await ctx.db.get(condolence.memorialId);
+    
+    
+    const shouldReapprove = !memorial?.requireModeration;
+
+    await ctx.db.patch(args.id, {
+      body: args.newBody,
+      isApproved: shouldReapprove, 
+    });
+
+    return shouldReapprove; 
+  },
+});
