@@ -95,13 +95,7 @@ const Hero = () => {
            
             <div className="relative w-full max-w-[900px] h-[800px] lg:h-[600px] flex items-center justify-center">
                 
-                <Image 
-                    src="/banne.png" 
-                    alt="Ornate golden iris and goblet memory symbol"
-                    fill
-                    className="object-contain drop-shadow-[-20px_20px_60px_rgba(212,175,55,0.1)]"
-                    priority
-                />
+            
             </div>
         </div>
       </div>
