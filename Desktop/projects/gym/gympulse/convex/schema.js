@@ -36,12 +36,7 @@ export default defineSchema({
         bankName: v.optional(v.string()),       
         bankAccountIban: v.optional(v.string()),
 
-        stoneType: v.string(),       
-        fenceStyle: v.string(),      
-        flowers: v.string(),        
-        winePoured: v.boolean(),     
-        audioToastUrl: v.optional(v.string()),
-
+        
         funeralLocation: v.string(),
         funeralTime: v.string(),
         cemeteryLocation: v.optional(v.string()),
