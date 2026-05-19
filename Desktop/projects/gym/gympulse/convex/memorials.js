@@ -374,3 +374,37 @@ export const saveMyGraveDesign = mutation({
     }
   },
 });
+
+
+export const getAllGraveDesigns = query({
+  args: {},
+  handler: async (ctx) => {
+   
+    return await ctx.db.query("graveDesigns").collect();
+  },
+});
+
+
+export const deleteMyGraveDesign = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("მოითხოვება ავტორიზაცია!");
+
+    const userId = identity.subject;
+
+    
+    const existingDesign = await ctx.db
+      .query("graveDesigns")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .unique();
+
+    if (!existingDesign) {
+      throw new Error("მონუმენტის დიზაინი ვერ მოიძებნა.");
+    }
+
+    
+    await ctx.db.delete(existingDesign._id);
+    return true;
+  },
+});

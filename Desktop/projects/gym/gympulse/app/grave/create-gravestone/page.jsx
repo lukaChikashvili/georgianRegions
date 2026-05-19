@@ -74,7 +74,9 @@ const DesignGrave = () => {
         birthYear: designSettings.birthYear,
         deathYear: designSettings.deathYear,
       });
-      console.log("დიზაინი წარმატებით სინქრონიზირდა Convex-თან!");
+
+       router.push('/grave');
+ 
     } catch (error) {
       console.error("შეცდომა შენახვისას:", error);
       alert(error instanceof Error ? error.message : "დაფიქსირდა შეცდომა.");
@@ -104,7 +106,20 @@ const DesignGrave = () => {
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 10, 5]} intensity={0.8} castShadow />
         
-        <Experience settings={designSettings} hasDesigned={true} userData={userData} />
+        <Experience 
+  graveRecords={[
+    {
+      _id: "preview-id",
+      stoneType: designSettings.stoneType,
+      fenceStyle: designSettings.fenceStyle,
+      flowers: designSettings.flowers,
+      fullName: designSettings.fullName,
+      birthYear: designSettings.birthYear,
+      deathYear: designSettings.deathYear,
+      portraitImg: designSettings.portraitImg,
+    }
+  ]} 
+/>
       </Canvas>
 
 
