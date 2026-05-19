@@ -14,12 +14,13 @@ const DesignGrave = () => {
 
   const savedDesignData = useQuery(api.memorials.getMyGraveDesign);
   const saveDesign = useMutation(api.memorials.saveMyGraveDesign);
-
+  const deleteDesign = useMutation(api.memorials.deleteMyGraveDesign); 
 
   const [activeCategory, setActiveCategory] = useState("stone");
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false); 
 
-  const [designSettings, setDesignSettings] = useState({
+  const defaultSettings = {
     stoneType: "black_granite",
     fenceStyle: "none",        
     flowers: "none",       
@@ -29,7 +30,9 @@ const DesignGrave = () => {
     fullName: "",
     birthYear: "",
     deathYear: "",
-  });
+  };
+
+  const [designSettings, setDesignSettings] = useState(defaultSettings);
 
   useEffect(() => {
     if (savedDesignData !== undefined && savedDesignData !== null) {
@@ -74,9 +77,8 @@ const DesignGrave = () => {
         birthYear: designSettings.birthYear,
         deathYear: designSettings.deathYear,
       });
-
+    
        router.push('/grave');
- 
     } catch (error) {
       console.error("შეცდომა შენახვისას:", error);
       alert(error instanceof Error ? error.message : "დაფიქსირდა შეცდომა.");
@@ -85,12 +87,25 @@ const DesignGrave = () => {
     }
   };
 
-  const userData = {
-    imgUrl: designSettings.portraitImg,
-    name: designSettings.fullName, 
-    surname: "", 
-    birthYear: designSettings.birthYear,
-    deathYear: designSettings.deathYear,
+
+  const handleDelete = async () => {
+    if (!window.confirm("ნამდვილად გსურთ ამ ციფრული მემორიალის წაშლა?")) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteDesign();
+      
+      setDesignSettings(defaultSettings);
+      console.log("მონუმენტი წარმატებით წაიშალა.");
+      
+      
+      router.push("/grave");
+    } catch (error) {
+      console.error("შეცდომა წაშლისას:", error);
+      alert(error instanceof Error ? error.message : "წაშლა ვერ მოხერხდა.");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -106,22 +121,22 @@ const DesignGrave = () => {
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 10, 5]} intensity={0.8} castShadow />
         
+        
         <Experience 
-  graveRecords={[
-    {
-      _id: "preview-id",
-      stoneType: designSettings.stoneType,
-      fenceStyle: designSettings.fenceStyle,
-      flowers: designSettings.flowers,
-      fullName: designSettings.fullName,
-      birthYear: designSettings.birthYear,
-      deathYear: designSettings.deathYear,
-      portraitImg: designSettings.portraitImg,
-    }
-  ]} 
-/>
+          graveRecords={[
+            {
+              _id: "preview-id",
+              stoneType: designSettings.stoneType,
+              fenceStyle: designSettings.fenceStyle,
+              flowers: designSettings.flowers,
+              fullName: designSettings.fullName,
+              birthYear: designSettings.birthYear,
+              deathYear: designSettings.deathYear,
+              portraitImg: designSettings.portraitImg,
+            }
+          ]} 
+        />
       </Canvas>
-
 
       <div className="absolute top-6 left-6 pointer-events-none bg-black/40 backdrop-blur-md p-4 rounded-xl border border-white/5 hidden sm:block">
         <h1 className="text-base font-light tracking-wide text-white">3D საფლავის დიზაინერი</h1>
@@ -131,6 +146,17 @@ const DesignGrave = () => {
       </div>
 
       <div className="absolute top-6 right-6 flex items-center gap-3 z-20">
+       
+        {savedDesignData && (
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="px-4 py-2 text-xs font-light text-red-400 hover:text-red-200 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 backdrop-blur-md rounded-xl transition-all disabled:opacity-50"
+          >
+            {isDeleting ? "იშლება..." : "მემორიალის წაშლა"}
+          </button>
+        )}
+
         <button
           onClick={() => router.push("/")}
           className="px-4 py-2 text-xs font-light text-gray-400 hover:text-white bg-black/20 hover:bg-black/40 border border-white/5 backdrop-blur-md rounded-xl transition-all"
@@ -146,7 +172,6 @@ const DesignGrave = () => {
         </button>
       </div>
 
-  
       <DesignPanel 
         activeCategory={activeCategory} 
         setActiveCategory={setActiveCategory}
