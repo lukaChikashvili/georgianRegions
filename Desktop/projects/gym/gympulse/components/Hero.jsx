@@ -7,7 +7,7 @@ import Image from "next/image";
 const Hero = () => {
   return (
     <section
-      className=" -mt-12 relative min-h-screen flex items-center overflow-hidden bg-[#0D0D0F] selection:bg-[#D4AF37] selection:text-black"
+      className=" -mt-6 relative min-h-screen flex items-center overflow-hidden bg-[#0D0D0F] selection:bg-[#D4AF37] selection:text-black"
       aria-label="Hero"
       style={{
         background: 'radial-gradient(ellipse 80% 60% at 30% 50%, #1A150F 0%, #111114 55%, #0D0D0F 100%)',
@@ -93,10 +93,7 @@ const Hero = () => {
         
         <div className="lg:w-1/2 flex justify-center lg:justify-end">
            
-            <div className="relative w-full max-w-[900px] h-[800px] lg:h-[600px] flex items-center justify-center">
-                
-            
-            </div>
+              <img src = "/banner.png" className="absolute -z-1 left-36 -mt-[500px]  w-[80rem]"/>
         </div>
       </div>
     </section>

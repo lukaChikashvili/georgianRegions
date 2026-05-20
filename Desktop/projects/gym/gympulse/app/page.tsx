@@ -5,7 +5,7 @@ import { AboutUs} from '../components/AboutUs'
 import { Pricing } from '../components/Pricing'
 import {  VirtualCemetery } from '../components/VirtualCemetary'
 import { FAQ } from '../components/FAQ'
-import { ContactUs } from '../components/ContactUs'
+import  ContactForm from '../components/ContactForm'
 import { Footer } from '../components/Footer'
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
      <Pricing />
      <VirtualCemetery />
      <FAQ />
-     <ContactUs />
+     <ContactForm />
       <Footer />
      
     </>
