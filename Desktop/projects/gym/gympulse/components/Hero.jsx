@@ -7,7 +7,7 @@ import Image from "next/image";
 const Hero = () => {
   return (
     <section
-      className="relative min-h-screen flex items-center overflow-hidden bg-[#0D0D0F] selection:bg-[#D4AF37] selection:text-black"
+      className=" -mt-12 relative min-h-screen flex items-center overflow-hidden bg-[#0D0D0F] selection:bg-[#D4AF37] selection:text-black"
       aria-label="Hero"
       style={{
         background: 'radial-gradient(ellipse 80% 60% at 30% 50%, #1A150F 0%, #111114 55%, #0D0D0F 100%)',
@@ -63,7 +63,7 @@ const Hero = () => {
             className="font-sans text-sm md:text-base text-gray-400 font-light leading-relaxed max-w-lg mb-10 animate-fade-in"
             style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
           >
-            EverTribute არის მშვიდი და სათუთი სივრცე, სადაც ოჯახებს შეუძლიათ შექმნან სამუდამო ციფრული მემორიალები — ადგილი ერთად შეკრებისთვის, მოსაგონებლად და იმ ადამიანების ისტორიების გასაზიარებლად, რომელთა ჩანაცვლებაც შეუძლებელია.
+            GoldenMemory.ge არის მშვიდი და სათუთი სივრცე, სადაც ოჯახებს შეუძლიათ შექმნან სამუდამო ციფრული მემორიალები — ადგილი ერთად შეკრებისთვის, მოსაგონებლად და იმ ადამიანების ისტორიების გასაზიარებლად, რომელთა ჩანაცვლებაც შეუძლებელია.
           </p>
 
      

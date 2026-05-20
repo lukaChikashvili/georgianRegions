@@ -6,6 +6,7 @@ import { useMutation } from 'convex/react';
 import { api } from "@/convex/_generated/api";
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
+import ProtectedRoutes from '../../components/ProtectedRoutes';
 
 const CreateMemorial = () => {
   const router = useRouter();
@@ -175,6 +176,7 @@ const CreateMemorial = () => {
   };
 
   return (
+    <ProtectedRoutes>
     <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans selection:bg-[#D4AF37] selection:text-black py-20 px-6 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-125 bg-linear-to-b from-[#1A150F] to-transparent opacity-40 blur-3xl pointer-events-none" />
 
@@ -600,6 +602,7 @@ const CreateMemorial = () => {
         }
       `}</style>
     </div>
+    </ProtectedRoutes>
   );
 };
 

@@ -15,7 +15,7 @@ const Experience = ({ graveRecords = [] }) => {
   });
 
   useFrame((state) => {
-    uniforms.current.uTime.value = state.clock.getElapsedTime();
+    uniforms.current.uTime.value += 0.25;
   });
 
   const graveModel = useGLTF("/grave.glb");
