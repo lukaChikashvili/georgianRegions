@@ -235,14 +235,14 @@ const CreateMemorial = () => {
                   <label className="text-xs text-gray-400 font-light tracking-wide">დაბადების თარიღი</label>
                   <div className="relative">
                     <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} className="form-input pl-10 appearance-none" style={{ colorScheme: 'dark' }} />
-                    <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                    
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-xs text-gray-400 font-light tracking-wide">გარდაცვალების თარიღი</label>
                   <div className="relative">
                     <input type="date" name="deathDate" value={formData.deathDate} onChange={handleChange} className="form-input pl-10" style={{ colorScheme: 'dark' }} />
-                    <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                   
                   </div>
                 </div>
               </div>
@@ -251,7 +251,7 @@ const CreateMemorial = () => {
                 <label className="text-xs text-gray-400 font-light tracking-wide">დაბადების / ცხოვრების ადგილი</label>
                 <div className="relative">
                   <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="მაგ: თბილისი, საქართველო" className="form-input pl-10" />
-                  <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                  <MapPin size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500" />
                 </div>
               </div>
 
@@ -266,7 +266,7 @@ const CreateMemorial = () => {
                     placeholder="https://example.com/photo.jpg" 
                     className="form-input pl-10" 
                   />
-                  <ImageIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                  <ImageIcon size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
                 </div>
                 <p className="text-[11px] text-gray-600 font-light pl-1">ჩასვით პირდაპირი ბმული ინტერნეტიდან (მაგალითად, Unsplash ან ნებისმიერი ჰოსტინგი).</p>
               </div>
@@ -304,7 +304,7 @@ const CreateMemorial = () => {
                       onChange={(e) => setNewGalleryUrl(e.target.value)}
                       className="form-input pl-10" 
                     />
-                    <ImageIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                    <ImageIcon size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
                   </div>
                   <button
                     type="button"
@@ -500,8 +500,8 @@ const CreateMemorial = () => {
               <div className="flex flex-col gap-2">
                 <label className="text-xs text-gray-400 font-light tracking-wide">გვერდის უნიკალური ბმული (URL Slug)</label>
                 <div className="relative flex items-center">
-                  <span className="absolute left-3 text-xs text-gray-600 font-sans">evertribute.ge/</span>
-                  <input type="text" name="urlSlug" value={formData.urlSlug} onChange={handleChange} placeholder="elene-beridze" className="form-input pl-22.5" />
+                 
+                  <input type="text" name="urlSlug" value={formData.urlSlug} onChange={handleChange} placeholder="მაგ: elene-beridze" className="form-input pl-22.5" />
                 </div>
               </div>
 
