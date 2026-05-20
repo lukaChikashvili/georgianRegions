@@ -1,4 +1,5 @@
 import { Box, Layers, Move } from "lucide-react";
+import Link from "next/link";
 
 export const VirtualCemetery = () => {
   const features = [
