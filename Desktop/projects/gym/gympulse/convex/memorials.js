@@ -168,29 +168,29 @@ export const updateMemorial = mutation({
 
 
 export const attendFuneral = mutation({
-  args: { 
-    id: v.id("memorials"),
-    name: v.string() 
-  },
+  args: { id: v.id("memorials"), name: v.string() },
   handler: async (ctx, args) => {
     const memorial = await ctx.db.get(args.id);
+    if (!memorial) throw new Error("მემორიალი ვერ მოიძებნა.");
 
-    if (!memorial) {
-      throw new Error("მემორიალი ვერ მოიძებნა.");
-    }
-
-    
-    const currentAttendees = memorial.attendeesList || [];
-
-   
     const updatedAttendees = [
-      ...currentAttendees,
+      ...(memorial.attendeesList || []),
       { name: args.name, timestamp: Date.now() }
     ];
 
     await ctx.db.patch(args.id, {
       attendeesList: updatedAttendees,
       attendeesCount: updatedAttendees.length, 
+    });
+
+    
+    await ctx.db.insert("notifications", {
+      userId: memorial.creatorId,
+      memorialId: args.id,
+      message: `${args.name} დაესწრება დაკრძალვას`,
+      type: "ATTENDANCE",
+      isRead: false,
+      createdAt: Date.now(),
     });
 
     return true;

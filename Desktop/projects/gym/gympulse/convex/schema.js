@@ -87,4 +87,15 @@ export default defineSchema({
     parentId: v.optional(v.id("condolences")),
     
   }).index("by_memorialId", ["memorialId"]),
+
+
+  notifications: defineTable({
+    userId: v.string(),
+    memorialId: v.id("memorials"),
+    message: v.string(),
+    type: v.string(), 
+    isRead: v.boolean(),
+    createdAt: v.number(),
+}).index("by_userId", ["userId"]),
+
 });
