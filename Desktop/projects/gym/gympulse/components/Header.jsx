@@ -16,7 +16,7 @@ const Header = () => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
   const notifications = useQuery(
-    api.notifications.getMyNotifications, 
+    api.memorials.getMyNotifications, 
     isAuthenticated ? {} : "skip" 
   );
 

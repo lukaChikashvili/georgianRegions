@@ -211,6 +211,16 @@ export const getMyNotifications = query({
   },
 });
 
+export const markAsRead = mutation({
+  args: { id: v.id("notifications") },
+  handler: async (ctx, args) => {
+    
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthenticated");
+
+    await ctx.db.patch(args.id, { isRead: true });
+  },
+});
 
 
 
