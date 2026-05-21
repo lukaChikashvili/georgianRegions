@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useTransition } from 'react';
-import { ImagePlus, Send, Type, AlignLeft, Hash, Eye } from 'lucide-react';
+import { ImagePlus, Send, Type, AlignLeft, Hash } from 'lucide-react';
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from '@clerk/nextjs';
@@ -11,20 +11,16 @@ const CreateBlog = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [category, setCategory] = useState("");
-  
+ 
     const createPost = useMutation(api.posts.createPost);
     const [isPending, startTransition] = useTransition();
-
     const {user, isLoaded} = useUser();
+    const router = useRouter();
 
-const router = useRouter();
-
-    if (!isLoaded) return;
+    if (!isLoaded) return null;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-    
         startTransition(async () => {
             try {
                 await createPost({
@@ -33,12 +29,7 @@ const router = useRouter();
                     category: category,
                     authorName: user?.fullName
                 });
-                
                 router.push('/blog');
-                setTitle("");
-                setContent("");
-                setCategory("");
-         
             } catch (error) {
                 console.error("შეცდომა:", error);
                 alert("გამოქვეყნება ვერ მოხერხდა.");
@@ -48,105 +39,72 @@ const router = useRouter();
 
     return (
         <ProtectedRoutes>
-        <div className="min-h-screen bg-linear-to-b from-white to-purple-50/50 py-12 px-6">
-            <div className="max-w-5xl mx-auto">
+        <div className="min-h-screen bg-[#0A0A0A] py-20 px-6 mt-6">
+            <div className="max-w-4xl mx-auto">
                 
-              
-                <div className="mb-10 text-center lg:text-left">
-                    <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-                        ახალი ბლოგის <span className="text-purple-600">შექმნა</span>
+                <div className="mb-12 border-b border-[#D4AF37]/30 pb-8">
+                    <h2 className="text-4xl font-serif italic text-white tracking-wide">
+                        ახალი ისტორიის დამატება
                     </h2>
-                    <p className="text-slate-500 mt-2 font-medium">
-                        გაუზიარეთ თქვენი გამოცდილება და სიახლეები ფიტნეს საზოგადოებას.
+                    <p className="text-[#D4AF37]/70 mt-2 font-medium tracking-widest uppercase text-xs">
+                        გააზიარეთ მოგონება, რომელიც უკვდავია.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     
-                   
-                    <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-6">
-                        <div className="bg-white p-8 rounded-3xl shadow-sm border border-purple-100/50 space-y-6">
-                         
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
-                                    <Type className="w-4 h-4 text-purple-500" /> სათაური
-                                </label>
-                                <input 
-                                    type="text" 
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    placeholder="მაგ: როგორ დავიწყოთ სწორი ვარჯიში..."
-                                    className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-transparent focus:border-purple-300 focus:bg-white focus:ring-4 focus:ring-purple-100 outline-none transition-all duration-200 text-slate-800 font-medium"
-                                />
-                            </div>
-
-                            
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
-                                    <AlignLeft className="w-4 h-4 text-purple-500" /> კონტენტი
-                                </label>
-                                <textarea 
-                                    value={content}
-                                    onChange={(e) => setContent(e.target.value)}
-                                    rows={10}
-                                    placeholder="დაწერეთ თქვენი ბლოგის შინაარსი აქ..."
-                                    className="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-transparent focus:border-purple-300 focus:bg-white focus:ring-4 focus:ring-purple-100 outline-none transition-all duration-200 text-slate-800 resize-none"
-                                />
-                            </div>
-                        </div>
-                    </form>
-
-                    <div className="space-y-6">
+                 
+                    <div className="lg:col-span-2 space-y-6">
+                        <input 
+                            type="text" 
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="ისტორიის სათაური..."
+                            className="w-full bg-[#121212] border border-white/10 px-6 py-4 text-white placeholder:text-white/20 focus:border-[#D4AF37] outline-none transition-all text-xl rounded-2xl"
+                        />
                         
-                       
-                        <div className="bg-white p-6 rounded-3xl shadow-sm border border-purple-100/50">
-                            <label className="text-sm font-bold text-slate-700 mb-4 block">მთავარი ფოტო</label>
-                            <div className="group cursor-pointer relative aspect-video rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center hover:border-purple-400 hover:bg-purple-50/50 transition-all duration-300">
-                                <div className="p-3 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform duration-300">
-                                    <ImagePlus className="w-6 h-6 text-purple-600" />
-                                </div>
-                                <span className="text-xs font-bold text-slate-400 mt-3 tracking-wide">ფოტოს ატვირთვა</span>
-                                <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" />
-                            </div>
-                        </div>
-
-                   
-                        <div className="bg-white p-6 rounded-3xl shadow-sm border border-purple-100/50 space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
-                                    <Hash className="w-4 h-4 text-purple-500" /> კატეგორია
-                                </label>
-
-                                <input 
-      type="text"
-      placeholder="მაგ: ფიტნესი" 
-      value = {category}
-      onChange = {(e) => setCategory(e.target.value)}
-      className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-transparent 
-                 text-slate-900 placeholder:text-slate-400
-                 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50
-                 transition-all duration-200"
-    />
-                                
-                            </div>
-
-                          
-                        </div>
-
-                      
-                        <div className="flex flex-col gap-3">
-                            <button 
-                                onClick={handleSubmit}
-                                disabled={isPending}
-                                className="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-purple-600 transition-all shadow-lg shadow-slate-200 hover:shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                <Send className="w-4 h-4" /> 
-                                {isPending ? "ქვეყნდება..." : "გამოქვეყნება"}
-                            </button>
-                            
-                        </div>
+                        <textarea 
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            rows={12}
+                            placeholder="დაწერეთ თქვენი მოგონება..."
+                            className="w-full bg-[#121212] border border-white/10 p-6 text-white placeholder:text-white/20 focus:border-[#D4AF37] outline-none transition-all rounded-2xl resize-none"
+                        />
                     </div>
-                </div>
+
+                
+                    <div className="space-y-8">
+                        
+                        <div className="border border-white/10 p-6 rounded-2xl bg-[#121212]">
+                            <label className="text-[10px] uppercase tracking-widest text-white/50 mb-4 block">მთავარი ფოტო</label>
+                            <div className="aspect-square bg-[#0A0A0A] border border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-[#D4AF37] transition-all rounded-xl group">
+                                <ImagePlus className="w-6 h-6 text-white/20 group-hover:text-[#D4AF37]" />
+                                <span className="text-[10px] text-white/30 mt-2">ატვირთვა</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-[#121212] border border-white/10 p-6 rounded-2xl">
+                            <label className="text-[10px] uppercase tracking-widest text-white/50 mb-2 block flex items-center gap-2">
+                                <Hash size={12} /> კატეგორია
+                            </label>
+                            <input 
+                                type="text"
+                                placeholder="მაგ: მემუარი" 
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                                className="w-full bg-[#0A0A0A] border border-white/10 px-4 py-3 text-white focus:border-[#D4AF37] outline-none text-sm rounded-xl"
+                            />
+                        </div>
+
+                        <button 
+                            type="submit"
+                            disabled={isPending}
+                            className="w-full py-4 bg-[#D4AF37] text-black font-bold uppercase tracking-widest text-xs hover:bg-[#AA7C11] transition-all disabled:opacity-50 rounded-full"
+                        >
+                            {isPending ? "იგზავნება..." : "გამოქვეყნება"}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
         </ProtectedRoutes>

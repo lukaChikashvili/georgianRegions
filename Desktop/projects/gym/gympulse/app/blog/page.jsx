@@ -1,50 +1,42 @@
-
-
 import React from 'react'
 import Link from 'next/link' 
 import { fetchQuery } from 'convex/nextjs'
 import { api } from "@/convex/_generated/api";
-import { ArrowRight, Plus } from 'lucide-react';
+import { Plus, BookOpen } from 'lucide-react';
 import Blog from '../../components/Blog';
-
-
-
-
 
 const AllBlogs = async () => {
     
     const allPosts = await fetchQuery(api.posts.getPosts);
 
-  
- 
-
-
-
   return (
-    <div className="bg-white text-[#1D1E2C] min-h-screen">
- 
-      <div className="max-w-350 mx-auto px-6 py-12 md:px-12 lg:px-24">
+    <div className="bg-[#0A0A0A] text-gray-200 min-h-screen mt-6">
+      <div className="max-w-5xl mx-auto px-6 py-20">
         
-    
-        <div className="flex items-center justify-between border-b border-gray-200 pb-10 mb-16">
-          <div>
-             <span className="inline-flex items-center gap-2 rounded-full bg-[#FAF5FF] px-3 py-1 text-xs font-medium text-[#7C3AED] ring-1 ring-inset ring-[#F3E8FF]">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#9333EA] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#7C3AED]"></span>
-                </span>
-                Gympulse Insights
-             </span>
-             <h1 className="mt-4 text-5xl font-extrabold tracking-tight text-[#1D1E2C] sm:text-6xl">ფიტნეს ბლოგი</h1>
-          </div>
-           
       
-           <Link href="/blog/create" className="bg-purple-600 text-white px-8 py-3.5 rounded-xl font-semibold flex items-center gap-3 transition-transform hover:scale-105">
-              <Plus />  შექმენი ახალი პოსტი
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#D4AF37]/30 pb-10 mb-16 gap-6">
+          <div>
+             <div className="inline-flex items-center gap-2 text-[#D4AF37] mb-4 uppercase tracking-[0.2em] text-[10px] font-bold">
+                <BookOpen size={14} />
+                GoldenMemory 
+             </div>
+             <h1 className="text-5xl font-serif italic text-white leading-tight">
+               ცხოვრების ისტორიები
+             </h1>
+             <p className="mt-4 text-gray-400 max-w-lg">
+              მოყევით გარდაცვლილი ადამიანის მოგონება, ისტორია
+             </p>
+          </div>
+            
+           <Link 
+             href="/blog/create" 
+             className="bg-transparent border border-[#D4AF37] text-[#D4AF37] px-8 py-3 rounded-sm font-medium flex items-center gap-3 hover:bg-[#D4AF37] hover:text-black transition-all duration-300"
+           >
+              <Plus size={18} /> დაწერე ისტორია
            </Link>
         </div>
 
-           <Blog posts = {allPosts} />
+        <Blog posts={allPosts} />
       
       </div>
     </div>

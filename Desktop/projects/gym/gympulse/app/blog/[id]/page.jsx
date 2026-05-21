@@ -1,92 +1,84 @@
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
-import { Calendar, Clock, ArrowLeft, Send } from "lucide-react"; 
+import { Calendar, Clock, ArrowLeft } from "lucide-react"; 
 import Link from "next/link";
 import Comments from "../../../components/Comments";
-
 
 export default async function BlogDetailPage({ params }) {
   const { id } = await params;
   const post = await fetchQuery(api.posts.getPostById, { id });
 
-
   if (!post) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F8F9FA]">
-        <p className="text-gray-500 font-medium">Post not found</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A] text-white">
+        <p className="font-serif italic text-white/50">ისტორია ვერ მოიძებნა</p>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#F8F9FA] pb-20">
-     
-      <div className="max-w-4xl mx-auto pt-10 px-6">
+    <main className="min-h-screen bg-[#0A0A0A] pb-20 mt-12">
+      <div className="max-w-4xl mx-auto pt-16 px-6">
         <Link 
           href="/blog" 
-          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[#7C3AED] transition-colors mb-8"
+          className="inline-flex items-center text-[10px] uppercase tracking-widest text-white/30 hover:text-[#D4AF37] transition-colors mb-12"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          ყველა ბლოგი
+          უკან დაბრუნება
         </Link>
       </div>
 
       <article className="max-w-4xl mx-auto px-6">
-        
-        <header className="mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F3E8FF] text-[#7C3AED] text-xs font-bold uppercase tracking-wider mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#7C3AED] animate-pulse" />
-            Fitness Insights
+        <header className="mb-16">
+          <div className="text-[10px] uppercase tracking-widest text-[#D4AF37] mb-6 border-l border-[#D4AF37] pl-4">
+            {post.category || "მემუარი"}
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#0F172A] leading-tight mb-6">
+          <h1 className="text-5xl md:text-6xl font-serif italic text-white leading-tight mb-8">
             {post.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-6 text-gray-500 text-sm border-b border-gray-200 pb-8">
+          <div className="flex flex-wrap items-center gap-8 text-[10px] uppercase tracking-widest text-white/40 border-b border-white/10 pb-8">
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-[#7C3AED]" />
+              <Calendar className="w-3 h-3 text-[#D4AF37]" />
               <span>
-             {new Date(post._creationTime).toLocaleDateString("en-US", {
-               month: "long",
-               day: "numeric",
-               year: "numeric",
-             })}
-</span>
+                {new Date(post._creationTime).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#7C3AED]" />
-              <span>6 min read</span>
+              <Clock className="w-3 h-3 text-[#D4AF37]" />
+              <span>საკითხავი: 6 წუთი</span>
+            </div>
+            <div className="ml-auto italic text-white/20">
+              ავტორი: {post.authorName || "ანონიმური"}
             </div>
           </div>
         </header>
 
       
-        <div className="relative group mb-12">
-          <div className="absolute -inset-1 bg-linear-to-r from-[#7C3AED] to-[#C084FC] rounded-4xl blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
-          <img
-            className="relative w-full h-112.5 object-cover rounded-4xl shadow-xl border border-white"
-            src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80" 
-            alt={post.title}
-          />
+        <div className="relative mb-16">
+          <div className="aspect-[21/9] w-full bg-[#121212] border border-white/5 flex items-center justify-center overflow-hidden">
+            
+             <div className="w-full h-full bg-gradient-to-br from-[#121212] to-[#050505]" />
+          </div>
         </div>
 
-        
-        <div className="bg-white  p-8 md:p-12 shadow-sm border border-gray-100">
-          <div className="prose prose-lg max-w-none prose-headings:text-[#0F172A] prose-p:text-gray-600 prose-p:leading-relaxed">
-             <p className="text-xl text-gray-700 leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:text-[#7C3AED] first-letter:mr-3 first-letter:float-left">
+        <div className="max-w-2xl mx-auto">
+          <div className="prose prose-invert prose-lg prose-headings:font-serif prose-headings:italic prose-p:font-light prose-p:leading-relaxed text-white/80">
+            <p className="text-xl leading-loose first-letter:text-6xl first-letter:font-serif first-letter:italic first-letter:text-[#D4AF37] first-letter:mr-4 first-letter:float-left">
               {post.body}
             </p>
-            
-        
-          
           </div>
-
-      
-        
         </div>
-         
-         <Comments postId={post._id} />
+        
+    
+        <div className="mt-20 border-t border-white/10 pt-10 max-w-2xl mx-auto">
+          <Comments postId={post._id} />
+        </div>
       </article>
     </main>
   );
