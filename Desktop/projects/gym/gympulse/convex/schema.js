@@ -36,7 +36,7 @@ export default defineSchema({
         bankName: v.optional(v.string()),       
         bankAccountIban: v.optional(v.string()),
 
-        visits: v.number(),
+        visits: v.optional(v.float64()),
 
         
         funeralLocation: v.string(),

@@ -4,13 +4,18 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from "@/convex/_generated/api";
 import { useParams } from 'next/navigation';
-import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock, CreditCard, MessageSquare, Send } from 'lucide-react';
+import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock, CreditCard, MessageSquare, Send, Eye } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
 
 const MemorialPage = () => {
   const params = useParams();
   const slug = params.slug;
   const { user } = useUser();
+
+  const visits = useMutation(api.memorials.incrementVisits);
+
+  
+
 
   const memorial = useQuery(api.memorials.getMemorialBySlug, { urlSlug: slug });
   const lightCandleMutation = useMutation(api.memorials.lightCandle);
@@ -24,6 +29,13 @@ const MemorialPage = () => {
   const editCondolenceMutation = useMutation(api.memorials.editCondolence);
   const [editingCondolenceId, setEditingCondolenceId] = useState(null);
   const [editText, setEditText] = useState("");
+
+  useEffect(() => {
+    
+    if (memorial?._id) {
+      visits({ memorialId: memorial._id });
+    }
+  }, [memorial?._id, visits]);
 
   
   const [expandedThreads, setExpandedThreads] = useState({});
@@ -234,6 +246,8 @@ const MemorialPage = () => {
     <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans pb-24 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-[#1A150F] to-transparent opacity-40 blur-3xl pointer-events-none" />
 
+  
+
       <header className="relative z-10 pt-28 pb-16 text-center max-w-3xl mx-auto px-6 flex flex-col items-center">
         <div className="relative group mb-8">
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#AA7C11] via-[#D4AF37] to-transparent opacity-30 blur-md" />
@@ -253,6 +267,8 @@ const MemorialPage = () => {
         <h1 className="font-serif text-4xl md:text-6xl font-light text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D6] via-[#D4AF37] to-[#AA7C11] tracking-wide mb-3">
           {memorial.firstName} {memorial.lastName}
         </h1>
+
+   
         
         <div className="flex items-center gap-2 text-sm text-gray-500 font-light tracking-widest uppercase">
           <Calendar size={14} className="text-[#D4AF37]/70" />
@@ -264,6 +280,13 @@ const MemorialPage = () => {
         <p className="mt-8 font-serif text-lg md:text-xl text-gray-400 italic max-w-xl border-l border-r border-[#D4AF37]/20 px-6">
           "{memorial.epitaph}"
         </p>
+
+        <div className="flex items-center gap-2 text-gray-400 text-sm mt-4  ">
+  <Eye size={16} />
+  <span>
+    {memorial.visits ?? 0} {memorial.visits === 1 ? 'ნახვა' : 'ნახვა'}
+  </span>
+</div>
       </header>
 
       <main className="relative z-10 max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -673,6 +696,9 @@ const MemorialPage = () => {
           </div>
         </div>
       )}
+
+
+
 
      
       {isListModalOpen && (
