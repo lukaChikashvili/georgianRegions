@@ -1,15 +1,36 @@
 "use client";
 
 import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
-import { useConvexAuth } from 'convex/react';
+import { useConvexAuth, useQuery } from 'convex/react';
 import Image from 'next/image';
 import logo from '../public/logo.png';
 import { AppWindow, Bell, LayoutDashboard, User } from 'lucide-react';
 import Link from 'next/link';
+import { api } from '@/convex/_generated/api';
+import { useState } from 'react';
 
 const Header = () => {
   const { isAuthenticated, isLoading } = useConvexAuth();
   const { user, isLoaded } = useUser();
+
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+
+  const notifications = useQuery(
+    api.notifications.getMyNotifications, 
+    isAuthenticated ? {} : "skip" 
+  );
+
+
+  if (isLoading || !isLoaded) {
+    return (
+      <div className='w-full h-20 border-b border-[#D4AF37]/10 flex items-center justify-between px-12' style={{ background: 'radial-gradient(ellipse 80% 60% at 30% 0%, #1A150F 0%, #111114 55%, #0D0D0F 100%)' }}>
+        <div className="w-32 h-8 bg-white/5 animate-pulse rounded" />
+        <div className="w-96 h-4 bg-white/5 animate-pulse rounded hidden md:block" />
+        <div className="w-24 h-8 bg-white/5 animate-pulse rounded" />
+      </div>
+    );
+  }
+
 
   if (!isLoaded) {
     return (
@@ -104,12 +125,46 @@ const Header = () => {
       <LayoutDashboard className="w-4 h-4 transition-transform duration-300 group-hover:scale-105 text-gray-400 group-hover:text-[#D4AF37]" />
     </Link>
 
-    <button 
-  className="p-2 rounded-xl bg-[#121214]/40 border border-white/5 backdrop-blur-md text-gray-400 hover:text-[#FFF5D6] hover:border-[#D4AF37]/30 hover:shadow-[0_0_10px_rgba(212,175,55,0.05)] transition-all duration-300 group cursor-pointer"
-  title="შეტყობინებები"
->
-  <Bell className="w-4 h-4 transition-transform duration-300 group-hover:scale-105 text-gray-400 group-hover:text-[#D4AF37]" />
-</button>
+ 
+    <div className="relative">
+  <button 
+    onClick={() => setIsNotifOpen(!isNotifOpen)}
+    className="p-2 rounded-xl bg-[#121214]/40 border border-white/5 backdrop-blur-md text-gray-400 hover:text-[#FFF5D6] hover:border-[#D4AF37]/30 hover:shadow-[0_0_10px_rgba(212,175,55,0.05)] transition-all duration-300 group cursor-pointer"
+    title="შეტყობინებები"
+  >
+    <Bell className="w-4 h-4 transition-transform duration-300 group-hover:scale-105 text-gray-400 group-hover:text-[#D4AF37]" />
+    
+    {notifications?.some(n => !n.isRead) && (
+        <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#D4AF37] rounded-full animate-pulse" />
+    )}
+  </button>
+
+  
+  {isNotifOpen && (
+    <div className="absolute right-0 top-12 w-80 bg-[#121214]/95 border border-[#D4AF37]/20 backdrop-blur-xl rounded-2xl p-4 shadow-2xl z-50 animate-in fade-in zoom-in duration-200">
+      <h3 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-3 border-b border-white/5 pb-2">შეტყობინებები</h3>
+      <div className="max-h-60 overflow-y-auto space-y-2">
+        {notifications?.length === 0 ? (
+          <p className="text-gray-500 text-xs text-center py-4">ახალი შეტყობინებები არ არის</p>
+        ) : (
+          notifications?.map((n) => (
+            <div key={n._id} className="p-3 rounded-lg bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] transition-colors">
+              <p className="text-xs text-gray-300 font-light">{n.message}</p>
+              <p className="text-[10px] text-gray-500 mt-1">{new Date(n.createdAt).toLocaleDateString('ka-GE')}</p>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  )}
+</div>
+
+
+
+
+
+
+
    
     <h1 className='text-sm font-serif italic text-[#FFF5D6]/90 font-light tracking-wide hidden lg:block'>
       გამარჯობა, <span className="text-[#D4AF37] font-sans font-normal not-italic">{user?.firstName}</span>
