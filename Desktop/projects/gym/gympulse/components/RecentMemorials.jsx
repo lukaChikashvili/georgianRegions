@@ -2,7 +2,7 @@
 
 import { api } from "@/convex/_generated/api";
 import {  useQuery } from "convex/react";
-import { ArrowRight, Calendar } from "lucide-react";
+import { ArrowRight, Calendar, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export const RecentMemorials = () => {

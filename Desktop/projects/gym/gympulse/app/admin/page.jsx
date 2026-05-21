@@ -9,6 +9,9 @@ import Link from 'next/link';
 
 const AdminDashboard = () => {
   const { user, isLoaded } = useUser();
+
+  const notifications = useQuery(api.memorials.getMyNotifications);
+  const markAsRead = useMutation(api.memorials.markAsRead);
   
   
   const myMemorials = useQuery(api.memorials.getMyMemorials, user?.id ? { creatorId: user.id } : "skip");
@@ -208,6 +211,8 @@ const AdminDashboard = () => {
           </div>
         )}
 
+
+     
       </div>
 
       <style jsx global>{`

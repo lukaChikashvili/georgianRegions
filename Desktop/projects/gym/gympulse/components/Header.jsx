@@ -1,7 +1,7 @@
 "use client";
 
 import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
-import { useConvexAuth, useQuery } from 'convex/react';
+import { useConvexAuth, useMutation, useQuery } from 'convex/react';
 import Image from 'next/image';
 import logo from '../public/logo.png';
 import { AppWindow, Bell, LayoutDashboard, User } from 'lucide-react';
@@ -14,6 +14,8 @@ const Header = () => {
   const { user, isLoaded } = useUser();
 
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+
+  const markAsRead = useMutation(api.memorials.markAsRead);
 
   const notifications = useQuery(
     api.memorials.getMyNotifications, 
@@ -144,16 +146,33 @@ const Header = () => {
     <div className="absolute right-0 top-12 w-80 bg-[#121214]/95 border border-[#D4AF37]/20 backdrop-blur-xl rounded-2xl p-4 shadow-2xl z-50 animate-in fade-in zoom-in duration-200">
       <h3 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-3 border-b border-white/5 pb-2">შეტყობინებები</h3>
       <div className="max-h-60 overflow-y-auto space-y-2">
-        {notifications?.length === 0 ? (
-          <p className="text-gray-500 text-xs text-center py-4">ახალი შეტყობინებები არ არის</p>
+      {notifications?.length === 0 ? (
+  <p className="text-gray-500 text-xs text-center py-4">ახალი შეტყობინებები არ არის</p>
+) : (
+  notifications?.map((n) => (
+    <div 
+      key={n._id} 
+      className={`p-3 rounded-lg cursor-pointer transition-colors ${
+        n.isRead ? 'bg-white/[0.02]' : 'bg-[#D4AF37]/10' 
+      }`}
+      onClick={() => !n.isRead && markAsRead({ id: n._id })}
+    >
+      <div className="flex items-center gap-2">
+        {n.type === "CANDLE" ? (
+          <span className="text-[#D4AF37]">🕯️</span>
         ) : (
-          notifications?.map((n) => (
-            <div key={n._id} className="p-3 rounded-lg bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] transition-colors">
-              <p className="text-xs text-gray-300 font-light">{n.message}</p>
-              <p className="text-[10px] text-gray-500 mt-1">{new Date(n.createdAt).toLocaleDateString('ka-GE')}</p>
-            </div>
-          ))
+          <span className="text-[#D4AF37]">👥</span>
         )}
+        <p className={`text-xs ${n.isRead ? 'text-gray-400' : 'text-white'}`}>
+          {n.message}
+        </p>
+      </div>
+      <p className="text-[10px] text-gray-500 mt-1 ml-6">
+        {new Date(n.createdAt).toLocaleDateString()}
+      </p>
+    </div>
+  ))
+)}
       </div>
     </div>
   )}

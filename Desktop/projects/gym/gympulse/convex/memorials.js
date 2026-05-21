@@ -116,6 +116,15 @@ export const lightCandle = mutation({
       candleCount: (memorial.candleCount || 0) + 1,
     });
 
+    await ctx.db.insert("notifications", {
+      userId: memorial.creatorId,
+      memorialId: args.id, 
+      message: `${args.name}-მ აანთო სანთელი თქვენს მემორიალზე`,
+      type: "CANDLE",
+      isRead: false,
+      createdAt: Date.now(),
+    });
+
     return true;
   }
 });
