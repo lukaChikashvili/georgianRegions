@@ -197,6 +197,23 @@ export const attendFuneral = mutation({
   },
 });
 
+export const getMyNotifications = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return [];
+
+    return await ctx.db
+      .query("notifications")
+      .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
+      .order("desc")
+      .collect();
+  },
+});
+
+
+
+
 export const addCondolence = mutation({
   args: {
     memorialId: v.id("memorials"),
