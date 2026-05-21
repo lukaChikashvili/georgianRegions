@@ -444,3 +444,16 @@ export const deleteMyGraveDesign = mutation({
     return true;
   },
 });
+
+
+export const incrementVisits = mutation({
+  args: { memorialId: v.id("memorials")},
+  handler: async (ctx, args) => {
+    const memorial = await ctx.db.get(args.memorialId);
+    if (!memorial) return;
+
+    await ctx.db.patch(args.memorialId, {
+      visits: (memorial.visits || 0) + 1,
+    });
+  }
+})
