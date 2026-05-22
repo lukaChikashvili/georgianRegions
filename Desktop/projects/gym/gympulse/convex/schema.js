@@ -100,4 +100,13 @@ export default defineSchema({
     createdAt: v.number(),
 }).index("by_userId", ["userId"]),
 
+
+toasts: defineTable({
+  memorialId: v.id("memorials"),
+  audioUrl: v.string(), 
+  authorName: v.string(),
+  createdAt: v.number(),
+  privacy: v.string(), 
+}).index("by_memorialId", ["memorialId"]),
+
 });
