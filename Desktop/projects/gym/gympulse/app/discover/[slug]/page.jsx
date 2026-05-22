@@ -6,6 +6,8 @@ import { api } from "@/convex/_generated/api";
 import { useParams } from 'next/navigation';
 import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock, CreditCard, MessageSquare, Send, Eye } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
+import AudioPlayer from '../../../components/AudioPlayer';
+import CustomAudioPlayer from '../../../components/CustomAudioPlayer';
 
 const MemorialPage = () => {
   const params = useParams();
@@ -14,7 +16,7 @@ const MemorialPage = () => {
 
   const visits = useMutation(api.memorials.incrementVisits);
 
-  
+
 
 
   const memorial = useQuery(api.memorials.getMemorialBySlug, { urlSlug: slug });
@@ -24,11 +26,26 @@ const MemorialPage = () => {
   const condolences = useQuery(api.memorials.getCondolences, memorial ? { memorialId: memorial._id } : "skip");
   const addCondolenceMutation = useMutation(api.memorials.addCondolence);
 
+  
+  
+
   // Edit and delete condolence 
   const deleteCondolenceMutation = useMutation(api.memorials.deleteCondolence);
   const editCondolenceMutation = useMutation(api.memorials.editCondolence);
+  const approvedToasts = useQuery(
+    api.services.getApprovedToasts, 
+    memorial ? { memorialId: memorial._id } : "skip"
+  );
+  
   const [editingCondolenceId, setEditingCondolenceId] = useState(null);
   const [editText, setEditText] = useState("");
+
+
+  
+
+ 
+  
+
 
   useEffect(() => {
     
@@ -449,7 +466,54 @@ const MemorialPage = () => {
       </main>
 
   
-      <section className="max-w-4xl mx-auto mt-12 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
+    
+
+      <section className="max-w-4xl mx-auto mt-20 px-6">
+
+      <h2 className="font-serif text-xl text-[#FFF5D6] mb-6 flex items-center gap-3">
+              <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+              სადღეგრძელოები
+            </h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {approvedToasts && approvedToasts.length > 0 ? (
+    approvedToasts.map((toast) => (
+      <div 
+        key={toast._id} 
+        className="group relative bg-[#0D0D0F]/40 border border-white/5 hover:border-[#D4AF37]/30 transition-all duration-500 rounded-2xl p-6 backdrop-blur-md overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        
+        <div className="relative flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-[#1A150F] border border-[#D4AF37]/20 flex items-center justify-center shadow-inner">
+                <span className="text-[11px] text-[#D4AF37] font-bold">
+                  {toast.authorName.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-[#FFF5D6]">{toast.authorName}</h4>
+                <p className="text-[9px] text-gray-500 uppercase tracking-[0.2em]">სადღეგრძელო</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-2">
+            <CustomAudioPlayer storageId={toast.audioUrl} />
+          </div>
+        </div>
+      </div>
+    ))
+  ) : (
+    <div className="col-span-full text-center p-12 border border-white/5 rounded-2xl bg-[#0D0D0F]/20">
+      <p className="text-sm text-gray-500 font-light italic">ამ მემორიალზე ჯერ არ არის დამატებული სადღეგრძელოები.</p>
+    </div>
+  )}
+</div>
+</section>
+
+<section className="max-w-4xl mx-auto mt-12 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
         <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
           <MessageSquare size={20} className="text-[#D4AF37]" /> სამძიმრის კედელი
         </h2>
@@ -674,7 +738,6 @@ const MemorialPage = () => {
           )}
         </div>
       </section>
-      
    
       {isNameInputModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-fade-in">
