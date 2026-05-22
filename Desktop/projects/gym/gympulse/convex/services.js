@@ -4,10 +4,12 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 
-export const generateUploadUrl = mutation(async (ctx) => {
-  return await ctx.storage.generateUploadUrl();
-});
-
+export const generateUploadUrl = mutation({
+    args: {},
+    handler: async (ctx) => {
+      return await ctx.storage.generateUploadUrl();
+    },
+  });
 
 export const saveToast = mutation({
     args: {
@@ -18,15 +20,17 @@ export const saveToast = mutation({
     handler: async (ctx, args) => {
       
       const toastId = await ctx.db.insert("toasts", {
-        ...args,
+        memorialId: args.memorialId,
+        audioUrl: args.audioUrl,
+        authorName: args.authorName,
         privacy: "public",
-        isApproved: false, 
+        isApproved: false,
+        createdAt: Date.now(), 
       });
   
       
       const memorial = await ctx.db.get(args.memorialId);
       if (memorial) {
-       
         await ctx.db.insert("notifications", {
           userId: memorial.creatorId,
           memorialId: args.memorialId,
@@ -36,10 +40,10 @@ export const saveToast = mutation({
           createdAt: Date.now(),
         });
       }
+      
       return toastId;
     },
   });
-
   export const approveToast = mutation({
     args: { toastId: v.id("toasts") },
     handler: async (ctx, args) => {
@@ -59,3 +63,11 @@ export const getToasts = query({
       .collect();
   },
 });
+
+
+export const getToastUrl = mutation({
+    args: { storageId: v.string() },
+    handler: async (ctx, args) => {
+      return await ctx.storage.getUrl(args.storageId);
+    },
+  });
