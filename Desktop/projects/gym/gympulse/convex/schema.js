@@ -95,7 +95,7 @@ export default defineSchema({
     userId: v.string(),
     memorialId: v.id("memorials"),
     message: v.string(),
-    type: v.string(), 
+    type: v.union(v.literal("CANDLE"), v.literal("ATTENDANCE"), v.literal("CONDOLENCE"), v.literal("REPLY")),
     isRead: v.boolean(),
     createdAt: v.number(),
 }).index("by_userId", ["userId"]),

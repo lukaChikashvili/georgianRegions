@@ -251,7 +251,7 @@ export const addCondolence = mutation({
     const shouldApproveImmediately = !memorial.requireModeration || isOwnerReplying;
 
 
-    await ctx.db.insert("condolences", {
+    const newCondolenceId = await ctx.db.insert("condolences", {
       memorialId: args.memorialId,
       body: args.body,
       authorName: args.authorName,
@@ -261,7 +261,33 @@ export const addCondolence = mutation({
       parentId: args.parentId,
     });
 
-    return shouldApproveImmediately; 
+    if (args.parentId) {
+      const parentCondolence = await ctx.db.get(args.parentId);
+      
+    
+      if (parentCondolence && parentCondolence.authorId && parentCondolence.authorId !== args.authorId) {
+        await ctx.db.insert("notifications", {
+          userId: parentCondolence.authorId,
+          memorialId: args.memorialId,
+          message: `${args.authorName}-მ გიპასუხათ სამძიმარზე`,
+          type: "REPLY", 
+          isRead: false,
+          createdAt: Date.now(),
+        });
+      }
+    } else if (memorial.creatorId !== args.authorId) {
+      
+      await ctx.db.insert("notifications", {
+        userId: memorial.creatorId,
+        memorialId: args.memorialId,
+        message: `${args.authorName}-მ დატოვა სამძიმარი თქვენს მემორიალზე`,
+        type: "CONDOLENCE",
+        isRead: false,
+        createdAt: Date.now(),
+      });
+    }
+
+    return shouldApproveImmediately;
   },
 });
 
