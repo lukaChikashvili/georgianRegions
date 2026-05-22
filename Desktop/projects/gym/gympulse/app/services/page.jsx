@@ -6,15 +6,14 @@ import { api } from '@/convex/_generated/api';
 import dynamic from 'next/dynamic';
 
 
-const ToastRecorder = dynamic(() => import('@/components/ToastRecorder'), {
-  ssr: false,
-  loading: () => <p className="text-gray-500 italic">იტვირთება ჩამწერი...</p>
-});
-
+const ToastRecorder = dynamic(() => import('@/components/ToastRecorder'), { ssr: false });
+const InvitationDesigner = dynamic(() => import('@/components/InvitationDesigner'), { ssr: false });
+const QRCodeGenerator = dynamic(() => import('@/components/QRCodeGenerator'), { ssr: false });
 
 function ServicesContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMemorial, setSelectedMemorial] = useState(null);
+  const [activeTab, setActiveTab] = useState('record');
 
   const memorials = useQuery(api.memorials.getAllPublicMemorials);
 
@@ -28,6 +27,7 @@ function ServicesContent() {
       <h1 className="text-3xl font-serif text-[#FFF5D6] mb-8">სამგლოვიარო სერვისები</h1>
       
       {!selectedMemorial ? (
+   
         <div className="bg-[#121214]/50 p-8 border border-[#D4AF37]/20 rounded-2xl">
           <h2 className="text-[#D4AF37] mb-4">მოძებნეთ მემორიალი:</h2>
           <input 
@@ -51,16 +51,47 @@ function ServicesContent() {
           </div>
         </div>
       ) : (
-        <div className="bg-[#121214]/50 p-8 border border-[#D4AF37]/20 rounded-2xl animate-in fade-in">
-          <button onClick={() => setSelectedMemorial(null)} className="text-sm text-gray-500 mb-4 hover:text-[#D4AF37]">← უკან დაბრუნება</button>
-          <h2 className="text-xl text-[#FFF5D6] mb-6">სადღეგრძელო: {selectedMemorial.firstName} {selectedMemorial.lastName}-სთვის</h2>
-          <ToastRecorder memorialId={selectedMemorial._id} />
-        </div>
+      
+        <>
+          <button 
+            onClick={() => setSelectedMemorial(null)} 
+            className="text-sm text-gray-500 mb-4 hover:text-[#D4AF37]"
+          >
+            ← უკან დაბრუნება
+          </button>
+          
+          <div className="flex gap-4 mb-8 border-b border-white/10 pb-4">
+            {['record', 'invite', 'qr'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`capitalize px-4 py-2 rounded-full text-sm transition ${
+                  activeTab === tab 
+                    ? 'bg-[#D4AF37] text-black font-bold' 
+                    : 'text-gray-500 hover:text-white'
+                }`}
+              >
+                {tab === 'record' ? 'აუდიო' : tab === 'invite' ? 'მოსაწვევი' : 'QR კოდი'}
+              </button>
+            ))}
+          </div>
+
+          <div className="bg-[#121214]/50 p-8 border border-[#D4AF37]/20 rounded-2xl min-h-[400px]">
+             <h2 className="text-xl text-[#FFF5D6] mb-6">
+                {activeTab === 'record' ? 'აუდიო სადღეგრძელო' : 
+                 activeTab === 'invite' ? 'მოსაწვევი ბარათი' : 'QR კოდის გენერაცია'}
+             </h2>
+             
+            
+             {activeTab === 'record' && <ToastRecorder memorialId={selectedMemorial._id} />}
+             {activeTab === 'invite' && <InvitationDesigner memorial={selectedMemorial} />}
+             {activeTab === 'qr' && <QRCodeGenerator memorial={selectedMemorial} />}
+          </div>
+        </>
       )}
     </div>
   );
 }
-
 
 export default function ServicesPage() {
   return (
