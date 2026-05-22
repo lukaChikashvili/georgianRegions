@@ -482,4 +482,6 @@ export const incrementVisits = mutation({
       visits: (memorial.visits || 0) + 1,
     });
   }
-})
+});
+
+

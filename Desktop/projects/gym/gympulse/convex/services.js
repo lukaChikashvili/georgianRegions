@@ -10,19 +10,44 @@ export const generateUploadUrl = mutation(async (ctx) => {
 
 
 export const saveToast = mutation({
-  args: {
-    memorialId: v.id("memorials"),
-    audioUrl: v.string(),
-    authorName: v.string(),
-    privacy: v.string(),
-  },
-  handler: async (ctx, args) => {
-    return await ctx.db.insert("toasts", {
-      ...args,
-      createdAt: Date.now(),
-    });
-  },
-});
+    args: {
+      memorialId: v.id("memorials"),
+      audioUrl: v.string(),
+      authorName: v.string(),
+    },
+    handler: async (ctx, args) => {
+      
+      const toastId = await ctx.db.insert("toasts", {
+        ...args,
+        privacy: "public",
+        isApproved: false, 
+      });
+  
+      
+      const memorial = await ctx.db.get(args.memorialId);
+      if (memorial) {
+       
+        await ctx.db.insert("notifications", {
+          userId: memorial.creatorId,
+          memorialId: args.memorialId,
+          message: `${args.authorName}-მ გამოგზავნა სადღეგრძელო დასამტკიცებლად`,
+          type: "REPLY", 
+          isRead: false,
+          createdAt: Date.now(),
+        });
+      }
+      return toastId;
+    },
+  });
+
+  export const approveToast = mutation({
+    args: { toastId: v.id("toasts") },
+    handler: async (ctx, args) => {
+      await ctx.db.patch(args.toastId, { isApproved: true });
+    },
+  });
+
+
 
 
 export const getToasts = query({

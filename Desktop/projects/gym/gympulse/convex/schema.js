@@ -103,10 +103,10 @@ export default defineSchema({
 
 toasts: defineTable({
   memorialId: v.id("memorials"),
-  audioUrl: v.string(), 
+  audioUrl: v.string(),
   authorName: v.string(),
   createdAt: v.number(),
-  privacy: v.string(), 
+  privacy: v.string(),
+  isApproved: v.boolean(), 
 }).index("by_memorialId", ["memorialId"]),
-
 });
