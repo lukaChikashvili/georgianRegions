@@ -65,9 +65,53 @@ export const getToasts = query({
 });
 
 
-export const getToastUrl = mutation({
-    args: { storageId: v.string() },
+export const getToastUrl = query({
+    args: { storageId: v.id("_storage") },
     handler: async (ctx, args) => {
       return await ctx.storage.getUrl(args.storageId);
+    },
+  });
+
+ 
+  export const getAllPendingToastsForUser = query({
+    args: { userId: v.string() },
+    handler: async (ctx, args) => {
+     
+      const userMemorials = await ctx.db
+        .query("memorials")
+        .withIndex("by_creatorId", (q) => q.eq("creatorId", args.userId))
+        .collect();
+  
+      const memorialIds = userMemorials.map(m => m._id);
+  
+ 
+      const allToasts = [];
+      for (const memorialId of memorialIds) {
+        const toasts = await ctx.db
+          .query("toasts")
+          .withIndex("by_memorialId", (q) => q.eq("memorialId", memorialId))
+          .filter((q) => q.eq(q.field("isApproved"), false))
+          .collect();
+  
+        const memorial = userMemorials.find(m => m._id === memorialId);
+        
+        toasts.forEach(toast => {
+          allToasts.push({
+            toast,
+            memorial
+          });
+        });
+      }
+  
+    
+      return allToasts.sort((a, b) => b.toast.createdAt - a.toast.createdAt);
+    },
+  });
+  
+
+  export const rejectToast = mutation({
+    args: { toastId: v.id("toasts") },
+    handler: async (ctx, args) => {
+      await ctx.db.delete(args.toastId);
     },
   });
