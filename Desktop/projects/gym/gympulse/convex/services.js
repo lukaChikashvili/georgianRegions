@@ -52,6 +52,16 @@ export const saveToast = mutation({
   });
 
 
+  export const getApprovedToasts = query({
+    args: { memorialId: v.id("memorials") },
+    handler: async (ctx, args) => {
+      return await ctx.db
+        .query("toasts")
+        .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
+        .filter((q) => q.eq(q.field("isApproved"), true))
+        .collect();
+    },
+  });
 
 
 export const getToasts = query({
