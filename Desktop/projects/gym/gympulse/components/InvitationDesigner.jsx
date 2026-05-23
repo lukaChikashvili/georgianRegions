@@ -3,6 +3,8 @@ import floralBg from '../public/invitation.png';
 import blackGoldBg from '../public/invitation1.png'; 
 import invitation2 from '../public/invitation2.png';
 import * as htmlToImage from 'html-to-image';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 const TEMPLATES = [
   { id: 1, name: 'Elegant Floral', bg: floralBg },
@@ -11,7 +13,7 @@ const TEMPLATES = [
   { id: 4, name: 'Minimalist Gold', bg: invitation2 },
 ];
 
-const InvitationDesigner = () => {
+const InvitationDesigner = ({ memorial }) => {
   const [view, setView] = useState('selector');
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [formData, setFormData] = useState({ 
@@ -20,20 +22,50 @@ const InvitationDesigner = () => {
     location: 'მისამართი' 
   });
 
-  const handleDownload = () => {
+  const generateUploadUrl = useMutation(api.services.generateUploadUrl); 
+  const saveInvitation = useMutation(api.services.saveInvitationImage); 
+
+  const handleSaveToDatabase = async () => {
     const cardElement = document.getElementById('invitation-card');
     
-    htmlToImage.toPng(cardElement, { pixelRatio: 2 })
-      .then((dataUrl) => {
-        const link = document.createElement('a');
-        link.download = 'funeral-invitation.png';
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch((error) => {
-        console.error('oops, something went wrong!', error);
-      });
+   
+    const dataUrl = await htmlToImage.toPng(cardElement, { 
+      pixelRatio: 2,
+      skipFonts: true, 
+      filter: (node) => {
+        
+        if (node.tagName === 'LINK') return false; 
+        return true;
+      }
+    });
+    
+  
+    const response = await fetch(dataUrl);
+    const blob = await response.blob();
+    
+    
+    const uploadUrl = await generateUploadUrl();
+    const result = await fetch(uploadUrl, {
+      method: "POST",
+      headers: { "Content-Type": blob.type },
+      body: blob,
+    });
+    const { storageId } = await result.json();
+    
+    
+    await saveInvitation({ 
+      memorialId: memorial._id,
+      storageId 
+    });
+    
+    alert("მოწვევა წარმატებით შეინახა მემორიალურ გვერდზე!");
   };
+
+
+
+
+
+  
 
   const goldTextStyle = {
     background: 'linear-gradient(to bottom, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c)',
@@ -85,12 +117,25 @@ const InvitationDesigner = () => {
         ))}
         
         
-        <button onClick={handleDownload} style={{ marginTop: '20px', cursor: 'pointer', background: '#D4AF37', color: '#000', border: 'none', padding: '12px 20px', borderRadius: '4px', fontWeight: 'bold', width: '100%' }}>
-          სურათის ჩამოტვირთვა
-        </button>
+        <button 
+    onClick={handleSaveToDatabase} 
+    style={{ 
+      marginTop: '20px', 
+      cursor: 'pointer', 
+      background: '#D4AF37', 
+      color: '#000', 
+      border: 'none', 
+      padding: '12px 20px', 
+      borderRadius: '4px', 
+      fontWeight: 'bold', 
+      width: '100%' 
+    }}
+  >
+    შენახვა მემორიალურ გვერდზე
+  </button>
       </div>
 
-      {/* Preview Card */}
+   
       <div style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center' }}>
         <div id="invitation-card" style={{ 
           width: '350px', height: '500px', padding: '40px', 

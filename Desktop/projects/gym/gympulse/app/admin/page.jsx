@@ -6,6 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { useUser } from '@clerk/nextjs';
 import { Trash2, Edit3, Eye, MapPin, Calendar, X, Check, Bell, Play } from 'lucide-react';
 import Link from 'next/link';
+import InvitationDisplay from '../../components/InvitationDisplay';
 
 
 function AudioPlayer({ storageId }) {
@@ -190,16 +191,46 @@ const AdminDashboard = () => {
           </div>
         )}
 
+
+{myMemorials.length > 0 && (
+    <div className="mt-20 border-t border-white/10 pt-12">
+      <h2 className="font-serif text-2xl text-[#FFF5D6] font-light mb-8">
+        გენერირებული მოსაწვევები
+      </h2>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {myMemorials.map((memorial) => (
+          <div key={`inv-${memorial._id}`} className="bg-[#121214]/40 border border-white/5 p-4 rounded-2xl hover:border-[#D4AF37]/30 transition group">
+            <p className="text-[#FFF5D6] text-sm mb-3 font-medium truncate">
+              {memorial.firstName} {memorial.lastName}
+            </p>
+            
+            <div className="aspect-[3/4] w-full bg-black/40 rounded-lg overflow-hidden border border-white/5">
+              <InvitationDisplay memorialId={memorial._id} />
+            </div>
+            
+            <Link 
+              href={`/discover/${memorial.urlSlug}`}
+              className="mt-4 block text-center text-[10px] uppercase tracking-widest text-gray-500 hover:text-[#D4AF37] transition"
+            >
+              მემორიალზე გადასვლა
+            </Link>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+
       
         {myMemorials.length === 0 ? (
-          <div className="text-center py-20 bg-[#121214]/20 border border-white/5 rounded-2xl max-w-xl">
+          <div className=" text-center py-20 bg-[#121214]/20 border border-white/5 rounded-2xl max-w-xl">
             <p className="text-gray-500 text-sm font-light mb-4">თქვენ ჯერ არ შეგიქმნიათ არცერთი მემორიალი.</p>
             <Link href="/memorial" className="text-xs uppercase tracking-wider text-[#D4AF37] hover:underline">
               შექმენი პირველი მემორიალი →
             </Link>
           </div>
         ) : (
-          <div>
+          <div className='mt-12'>
             <h2 className="font-serif text-2xl text-[#FFF5D6] font-light mb-6">
               ჩემი მემორიალები
             </h2>
@@ -232,6 +263,10 @@ const AdminDashboard = () => {
                       "{memorial.epitaph}"
                     </p>
                   </div>
+
+                 
+
+
 
                   <div className="mt-6 pt-4 border-t border-white/[0.03] flex items-center justify-between gap-2">
                     <Link 
@@ -330,6 +365,9 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+
+
+
       </div>
 
       <style jsx global>{`

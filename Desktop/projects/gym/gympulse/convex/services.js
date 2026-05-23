@@ -128,12 +128,30 @@ export const getToastUrl = query({
 
 
   export const saveInvitationImage = mutation({
-    args: {
-      memorialId: v.id("memorials"),
-      storageId: v.id("_storage"),
+    args: { 
+      memorialId: v.id("memorials"), 
+      storageId: v.id("_storage") 
     },
     handler: async (ctx, args) => {
-      return await ctx.db.insert("invitations", {
+     
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) {
+        throw new Error("დაუსაბუთებელი მომხმარებელი (Unauthorized)");
+      }
+  
+     
+      const memorial = await ctx.db.get(args.memorialId);
+      if (!memorial) {
+        throw new Error("მემორიალი ვერ მოიძებნა");
+      }
+  
+     
+      if (memorial.creatorId !== identity.subject) {
+        throw new Error("თქვენ არ გაქვთ ამ მემორიალის რედაქტირების უფლება");
+      }
+  
+   
+      await ctx.db.insert("invitations", {
         memorialId: args.memorialId,
         storageId: args.storageId,
         createdAt: Date.now(),

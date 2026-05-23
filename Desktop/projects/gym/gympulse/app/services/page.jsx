@@ -4,6 +4,7 @@ import React, { useState, Suspense } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import dynamic from 'next/dynamic';
+import { useUser } from '@clerk/nextjs';
 
 
 const ToastRecorder = dynamic(() => import('@/components/ToastRecorder'), { ssr: false });
@@ -14,6 +15,8 @@ function ServicesContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMemorial, setSelectedMemorial] = useState(null);
   const [activeTab, setActiveTab] = useState('record');
+
+  const { user } = useUser();
 
   const memorials = useQuery(api.memorials.getAllPublicMemorials);
 
@@ -84,7 +87,13 @@ function ServicesContent() {
              
             
              {activeTab === 'record' && <ToastRecorder memorialId={selectedMemorial._id} />}
-             {activeTab === 'invite' && <InvitationDesigner memorial={selectedMemorial} />}
+             {activeTab === 'invite' && selectedMemorial?.creatorId === user?.id && (
+  <InvitationDesigner memorial={selectedMemorial} />
+)}
+
+{activeTab === 'invite' && selectedMemorial?.creatorId !== user?.id && (
+  <p className="text-gray-500">მხოლოდ მემორიალის შემქმნელს შეუძლია მოსაწვევის დიზაინის შექმნა.</p>
+)}
              {activeTab === 'qr' && <QRCodeGenerator memorial={selectedMemorial} />}
           </div>
         </>
