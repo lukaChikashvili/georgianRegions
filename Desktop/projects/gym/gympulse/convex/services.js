@@ -140,3 +140,18 @@ export const getToastUrl = query({
       });
     },
   });
+
+  export const getInvitationForMemorial = query({
+    args: { memorialId: v.id("memorials") },
+    handler: async (ctx, args) => {
+      const invitation = await ctx.db
+        .query("invitations")
+        .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
+        .first();
+        
+      if (!invitation) return null;
+      
+    
+      return await ctx.storage.getUrl(invitation.storageId);
+    },
+  });
