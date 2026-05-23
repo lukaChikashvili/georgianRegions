@@ -125,3 +125,18 @@ export const getToastUrl = query({
       await ctx.db.delete(args.toastId);
     },
   });
+
+
+  export const saveInvitationImage = mutation({
+    args: {
+      memorialId: v.id("memorials"),
+      storageId: v.id("_storage"),
+    },
+    handler: async (ctx, args) => {
+      return await ctx.db.insert("invitations", {
+        memorialId: args.memorialId,
+        storageId: args.storageId,
+        createdAt: Date.now(),
+      });
+    },
+  });

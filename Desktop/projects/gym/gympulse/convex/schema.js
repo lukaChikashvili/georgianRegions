@@ -109,4 +109,12 @@ toasts: defineTable({
   privacy: v.string(),
   isApproved: v.boolean(), 
 }).index("by_memorialId", ["memorialId"]),
+
+
+invitations: defineTable({
+  memorialId: v.id("memorials"),
+  storageId: v.id("_storage"),
+  createdAt: v.number(),
+}).index("by_memorialId", ["memorialId"]),
+
 });
