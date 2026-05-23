@@ -114,6 +114,7 @@ toasts: defineTable({
 invitations: defineTable({
   memorialId: v.id("memorials"),
   storageId: v.id("_storage"),
+  isPublished: v.boolean(),
   createdAt: v.number(),
 }).index("by_memorialId", ["memorialId"]),
 

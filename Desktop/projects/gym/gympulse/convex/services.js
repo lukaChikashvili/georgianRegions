@@ -154,6 +154,7 @@ export const getToastUrl = query({
       await ctx.db.insert("invitations", {
         memorialId: args.memorialId,
         storageId: args.storageId,
+        isPublished: false,
         createdAt: Date.now(),
       });
     },
@@ -169,7 +170,46 @@ export const getToastUrl = query({
         
       if (!invitation) return null;
       
-    
-      return await ctx.storage.getUrl(invitation.storageId);
+      const url = await ctx.storage.getUrl(invitation.storageId);
+      
+      
+      return {
+        url,
+        isPublished: invitation.isPublished
+      };
+    },
+  });
+
+  export const publishInvitation = mutation({
+    args: { memorialId: v.id("memorials") },
+    handler: async (ctx, args) => {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("Unauthorized");
+  
+      const invitation = await ctx.db
+        .query("invitations")
+        .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
+        .first();
+  
+      if (!invitation) throw new Error("Invitation not found");
+  
+     
+      const memorial = await ctx.db.get(args.memorialId);
+      if (memorial?.creatorId !== identity.subject) {
+        throw new Error("No permission");
+      }
+  
+      await ctx.db.patch(invitation._id, { isPublished: true });
+    },
+  });
+
+  export const migrateInvitations = mutation({
+    handler: async (ctx) => {
+      const invitations = await ctx.db.query("invitations").collect();
+      for (const inv of invitations) {
+        if (inv.isPublished === undefined) {
+          await ctx.db.patch(inv._id, { isPublished: false });
+        }
+      }
     },
   });

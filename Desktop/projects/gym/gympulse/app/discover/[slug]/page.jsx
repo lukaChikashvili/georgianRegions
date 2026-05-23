@@ -18,7 +18,6 @@ const MemorialPage = () => {
 
 
 
-
   const memorial = useQuery(api.memorials.getMemorialBySlug, { urlSlug: slug });
   const lightCandleMutation = useMutation(api.memorials.lightCandle);
   const attendFuneralMutation = useMutation(api.memorials.attendFuneral);
@@ -27,7 +26,10 @@ const MemorialPage = () => {
   const addCondolenceMutation = useMutation(api.memorials.addCondolence);
 
   
-  
+  const invitationData = useQuery(api.services.getInvitationForMemorial, { 
+    memorialId: memorial?._id 
+  });
+
 
   // Edit and delete condolence 
   const deleteCondolenceMutation = useMutation(api.memorials.deleteCondolence);
@@ -435,6 +437,7 @@ const MemorialPage = () => {
             </section>
           )}
 
+
           <section className="bg-gradient-to-br from-[#121214]/80 to-[#1A150F]/40 border border-[#D4AF37]/10 rounded-2xl p-5 flex flex-col items-center text-center space-y-4">
             <div className="space-y-1">
               <h4 className="text-xs font-serif text-[#FFF5D6] tracking-wide">პანაშვიდსა და დაკრძალვაზე დასწრება</h4>
@@ -462,8 +465,24 @@ const MemorialPage = () => {
               {isRSVPing ? 'ფიქსირდება...' : hasRSVPed ? <><CheckCircle size={14} className="text-gray-500" /> დასწრება დადასტურებულია</> : 'დავესწრები პანაშვიდს'}
             </button>
           </section>
+
+          {invitationData?.isPublished && (
+  <div className="my-12 p-6 bg-[#121214]/50 border border-[#D4AF37]/20 rounded-2xl">
+    <h3 className="font-serif text-[#FFF5D6] text-xl mb-6">სამგლოვიარო მოსაწვევი</h3>
+    <div className="max-w-md mx-auto">
+      <img 
+        src={invitationData.url} 
+        alt="Funeral Invitation" 
+        className="w-full h-auto rounded-lg shadow-2xl border border-white/5" 
+      />
+    </div>
+  </div>
+)}
+
         </div>
       </main>
+
+     
 
   
     
