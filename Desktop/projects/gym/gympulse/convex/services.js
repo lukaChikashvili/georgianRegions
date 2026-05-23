@@ -163,45 +163,56 @@ export const getToastUrl = query({
   export const getInvitationForMemorial = query({
     args: { memorialId: v.id("memorials") },
     handler: async (ctx, args) => {
-      const invitation = await ctx.db
+     
+      const invitations = await ctx.db
         .query("invitations")
         .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
-        .first();
+        .collect();
         
-      if (!invitation) return null;
-      
-      const url = await ctx.storage.getUrl(invitation.storageId);
-      
-      
-      return {
-        url,
-        isPublished: invitation.isPublished
-      };
+      if (invitations.length === 0) return [];
+  
+  
+      return Promise.all(
+        invitations.map(async (inv) => ({
+          ...inv,
+          url: await ctx.storage.getUrl(inv.storageId),
+        }))
+      );
     },
   });
 
+
   export const publishInvitation = mutation({
-    args: { memorialId: v.id("memorials") },
+    args: { invitationId: v.id("invitations") },
     handler: async (ctx, args) => {
       const identity = await ctx.auth.getUserIdentity();
       if (!identity) throw new Error("Unauthorized");
   
-      const invitation = await ctx.db
-        .query("invitations")
-        .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
-        .first();
+      const targetInvitation = await ctx.db.get(args.invitationId);
+      if (!targetInvitation) throw new Error("Invitation not found");
   
-      if (!invitation) throw new Error("Invitation not found");
-  
-     
-      const memorial = await ctx.db.get(args.memorialId);
+      const memorial = await ctx.db.get(targetInvitation.memorialId);
       if (memorial?.creatorId !== identity.subject) {
         throw new Error("No permission");
       }
   
-      await ctx.db.patch(invitation._id, { isPublished: true });
+   
+      const existingPublished = await ctx.db
+        .query("invitations")
+        .withIndex("by_memorialId", (q) => q.eq("memorialId", targetInvitation.memorialId))
+        .filter((q) => q.eq(q.field("isPublished"), true))
+        .collect();
+  
+      
+      for (const inv of existingPublished) {
+        await ctx.db.patch(inv._id, { isPublished: false });
+      }
+  
+    
+      await ctx.db.patch(targetInvitation._id, { isPublished: true });
     },
   });
+
 
   export const migrateInvitations = mutation({
     handler: async (ctx) => {
@@ -212,4 +223,19 @@ export const getToastUrl = query({
         }
       }
     },
+  });
+
+  export const fixDuplicatePublished = mutation({
+    args: { memorialId: v.id("memorials") },
+    handler: async (ctx, args) => {
+      const all = await ctx.db
+        .query("invitations")
+        .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
+        .collect();
+  
+    
+      for (const inv of all) {
+        await ctx.db.patch(inv._id, { isPublished: false });
+      }
+    }
   });

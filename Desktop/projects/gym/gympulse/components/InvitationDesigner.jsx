@@ -5,6 +5,7 @@ import invitation2 from '../public/invitation2.png';
 import * as htmlToImage from 'html-to-image';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { useRouter } from 'next/navigation';
 
 const TEMPLATES = [
   { id: 1, name: 'Elegant Floral', bg: floralBg },
@@ -14,6 +15,9 @@ const TEMPLATES = [
 ];
 
 const InvitationDesigner = ({ memorial }) => {
+    
+  const router = useRouter();
+
   const [view, setView] = useState('selector');
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [formData, setFormData] = useState({ 
@@ -59,6 +63,9 @@ const InvitationDesigner = ({ memorial }) => {
     });
     
     alert("მოწვევა წარმატებით შეინახა მემორიალურ გვერდზე!");
+
+    router.push('/admin');
+    
   };
 
 

@@ -193,33 +193,36 @@ const AdminDashboard = () => {
 
 
 {myMemorials.length > 0 && (
-    <div className="mt-20 border-t border-white/10 pt-12">
-      <h2 className="font-serif text-2xl text-[#FFF5D6] font-light mb-8">
-        გენერირებული მოსაწვევები
-      </h2>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {myMemorials.map((memorial) => (
-          <div key={`inv-${memorial._id}`} className="bg-[#121214]/40 border border-white/5 p-4 rounded-2xl hover:border-[#D4AF37]/30 transition group">
-            <p className="text-[#FFF5D6] text-sm mb-3 font-medium truncate">
+  <div className="mt-20 border-t border-white/10 pt-12">
+    <h2 className="font-serif text-2xl text-[#FFF5D6] font-light mb-8">
+      გენერირებული მოსაწვევები
+    </h2>
+    
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {myMemorials.map((memorial) => (
+        <div key={`inv-${memorial._id}`} className="bg-[#121214]/40 border border-white/5 p-6 rounded-2xl hover:border-[#D4AF37]/30 transition group">
+          <div className="flex justify-between items-start mb-6">
+            <p className="text-[#FFF5D6] text-lg font-serif font-medium truncate">
               {memorial.firstName} {memorial.lastName}
             </p>
-            
-            <div className="aspect-[3/4] w-full bg-black/40 rounded-lg overflow-hidden border border-white/5">
-              <InvitationDisplay memorialId={memorial._id} />
-            </div>
-            
             <Link 
               href={`/discover/${memorial.urlSlug}`}
-              className="mt-4 block text-center text-[10px] uppercase tracking-widest text-gray-500 hover:text-[#D4AF37] transition"
+              className="text-[10px] uppercase tracking-widest text-gray-500 hover:text-[#D4AF37] transition border border-white/5 px-3 py-1 rounded-full"
             >
-              მემორიალზე გადასვლა
+              ნახვა
             </Link>
           </div>
-        ))}
-      </div>
+          
+         
+          <div className="w-full">
+            <InvitationDisplay memorialId={memorial._id} />
+          </div>
+        </div>
+      ))}
     </div>
-  )}
+  </div>
+)}
 
       
         {myMemorials.length === 0 ? (

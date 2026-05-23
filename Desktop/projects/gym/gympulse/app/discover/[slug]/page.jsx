@@ -26,10 +26,12 @@ const MemorialPage = () => {
   const addCondolenceMutation = useMutation(api.memorials.addCondolence);
 
   
-  const invitationData = useQuery(api.services.getInvitationForMemorial, { 
-    memorialId: memorial?._id 
-  });
-
+  const invitations = useQuery(
+    api.services.getInvitationForMemorial, 
+    memorial ? { memorialId: memorial._id } : "skip"
+  );
+  
+  const publishedInv = invitations?.find(inv => inv.isPublished === true);
 
   // Edit and delete condolence 
   const deleteCondolenceMutation = useMutation(api.memorials.deleteCondolence);
@@ -466,16 +468,10 @@ const MemorialPage = () => {
             </button>
           </section>
 
-          {invitationData?.isPublished && (
+          {publishedInv && (
   <div className="my-12 p-6 bg-[#121214]/50 border border-[#D4AF37]/20 rounded-2xl">
     <h3 className="font-serif text-[#FFF5D6] text-xl mb-6">სამგლოვიარო მოსაწვევი</h3>
-    <div className="max-w-md mx-auto">
-      <img 
-        src={invitationData.url} 
-        alt="Funeral Invitation" 
-        className="w-full h-auto rounded-lg shadow-2xl border border-white/5" 
-      />
-    </div>
+    <img src={publishedInv.url} className="w-full max-w-md mx-auto rounded-lg" />
   </div>
 )}
 
