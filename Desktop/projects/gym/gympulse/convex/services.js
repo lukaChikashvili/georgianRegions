@@ -239,3 +239,22 @@ export const getToastUrl = query({
       }
     }
   });
+
+
+
+  export const getMemorialForAdmin = query({
+    args: { memorialId: v.id("memorials") },
+    handler: async (ctx, args) => {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) return null;
+  
+      const memorial = await ctx.db.get(args.memorialId);
+      
+   
+      if (memorial && memorial.creatorId === identity.subject) {
+        return memorial;
+      }
+      
+      return null; 
+    },
+  });
