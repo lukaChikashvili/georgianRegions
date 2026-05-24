@@ -31,23 +31,34 @@ export default function ToastRecorder({ memorialId }) {
       const source = audioContextRef.current.createMediaStreamSource(stream);
       source.connect(analyserRef.current);
       analyserRef.current.fftSize = 256;
-
+      analyserRef.current.smoothingTimeConstant = 0.8; 
+  
+      const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+  
       const updateLevel = () => {
-        const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
         analyserRef.current.getByteFrequencyData(dataArray);
+        
+      
         let sum = 0;
-        for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-        setAudioLevel(sum / dataArray.length);
+        for (let i = 0; i < dataArray.length; i++) {
+          sum += dataArray[i];
+        }
+        const average = sum / dataArray.length;
+        setAudioLevel(average); 
+        
         animationFrameRef.current = requestAnimationFrame(updateLevel);
       };
       updateLevel();
-
+  
       mediaRecorderRef.current = new MediaRecorder(stream);
       chunks.current = [];
       mediaRecorderRef.current.ondataavailable = (e) => chunks.current.push(e.data);
       mediaRecorderRef.current.onstop = () => {
         setBlob(new Blob(chunks.current, { type: 'audio/webm' }));
         cancelAnimationFrame(animationFrameRef.current);
+        if (audioContextRef.current) {
+          audioContextRef.current.close();
+        }
         stream.getTracks().forEach(track => track.stop());
       };
       mediaRecorderRef.current.start();
@@ -127,16 +138,23 @@ export default function ToastRecorder({ memorialId }) {
 
      
       {recording && (
-        <div className="flex items-end gap-1 h-12">
-          {[...Array(10)].map((_, i) => (
-            <div 
-              key={i}
-              className="w-2 bg-[#D4AF37] transition-all duration-75"
-              style={{ height: `${Math.min(audioLevel * 1.5 + 5, 100)}%` }}
-            />
-          ))}
-        </div>
-      )}
+  <div className="flex items-end gap-1 h-12">
+    {[...Array(10)].map((_, i) => {
+  
+      const variation = Math.random() * 0.3 + 0.85;
+      const height = Math.min((audioLevel / 255) * 100 * variation, 100);
+      
+      return (
+        <div 
+          key={i}
+          className="w-2 bg-[#D4AF37] transition-all duration-100"
+          style={{ height: `${Math.max(height, 5)}%` }}
+        />
+      );
+    })}
+  </div>
+)}
+
 
       
       <div className="flex gap-4">
