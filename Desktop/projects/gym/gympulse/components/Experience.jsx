@@ -9,10 +9,14 @@ import { grassFragment } from "../shaders/fragment";
 import SingleGraveInstance from "./SingleGraveInstance";
 
 const Experience = ({ graveRecords = [] }) => {
+
+  
   const uniforms = useRef({
     uTime: { value: 0 },
     uSeason: { value: 1.5 },
   });
+
+
 
   useFrame((state) => {
     uniforms.current.uTime.value += 0.25;
