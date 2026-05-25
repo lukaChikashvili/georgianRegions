@@ -8,7 +8,7 @@ import { grassVertex } from "../shaders/vertex";
 import { grassFragment } from "../shaders/fragment";
 import SingleGraveInstance from "./SingleGraveInstance";
 
-const Experience = ({ graveRecords = [] }) => {
+const Experience = ({ graveRecords = []  }) => {
 
   
   const uniforms = useRef({
@@ -23,6 +23,9 @@ const Experience = ({ graveRecords = [] }) => {
   });
 
   const graveModel = useGLTF("/grave.glb");
+  const fenceModel = useGLTF('/iron_fence.glb');
+
+  const fenceStyle = graveRecords[0]?.fenceStyle || "none";
 
   const textures = useTexture({
     granite: "/black.avif",
@@ -77,6 +80,44 @@ const Experience = ({ graveRecords = [] }) => {
           );
         })}
       </group>
+
+     
+      {fenceStyle === "iron" && (
+        <>
+        
+         <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[20, -5, 6]} />
+                    <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[20, -5, -8]} />
+                     <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[20, -5, -23]} />
+                     <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[20, -5, -38]} />
+
+          <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[9, -5, -51]} rotation = {[0, 1.6, 0]} />  
+                    <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[-4.5, -5, -51]} rotation = {[0, 1.6, 0]} />  
+                    <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[-17.5, -5, -51]} rotation = {[0, 1.6, 0]} /> 
+                    <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[22, -5, -51]} rotation = {[0, 1.6, 0]} />  
+
+<primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[-30, -5, 6]} />
+                    <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[-30, -5, -8]} />
+                     <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[-30, -5, -23]} />
+                     <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[-30, -5, -38]} />
+
+
+
+                    </>
+      )}
+
+
 
    
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -20, 0]}>
