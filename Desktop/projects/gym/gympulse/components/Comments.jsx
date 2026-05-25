@@ -70,6 +70,7 @@ const Comments = ({ postId }) => {
                         ))
                     )}
                 </div>
+                
             </section>
         </div>
     )

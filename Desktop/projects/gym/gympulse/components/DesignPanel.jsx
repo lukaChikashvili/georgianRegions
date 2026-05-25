@@ -8,7 +8,6 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
     { id: "fence", label: "ღობე & ბაქანი", icon: "🚧" },
     { id: "flowers", label: "ყვავილები", icon: "💐" },
     { id: "wine", label: "ღვინის დასხმა", icon: "🍷" },
-    { id: "voice", label: "ხმოვანი ტოსტი", icon: "🎙️" },
     { id: "text", label: "წარწერა ქვაზე", icon: "📝" },
   ];
 
@@ -136,23 +135,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
         )}
 
         
-        {activeCategory === "voice" && (
-          <div className="space-y-3 animate-fadeIn max-w-lg mx-auto">
-            <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">ხმოვანი ჩანაწერი</p>
-            <div className="p-4 rounded-xl bg-white/[0.01] border border-white/5 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <span className="text-xl">🎙️</span>
-                <div>
-                  <p className="text-xs font-medium">ჩაწერეთ ხმოვანი მოგონება</p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">სტუმრები მოუსმენენ ჩანაწერს მონახულებისას</p>
-                </div>
-              </div>
-              <button className="py-2 px-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-light transition-all whitespace-nowrap">
-                🔴 ჩაწერა
-              </button>
-            </div>
-          </div>
-        )}
+       
 
         
         {activeCategory === "text" && (
