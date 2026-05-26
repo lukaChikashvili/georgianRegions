@@ -68,7 +68,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
               {[
                 { id: "none", name: "ღობის გარეშე", desc: "მწვანე ველი" },
                 { id: "iron", name: "ჭედური რკინა", desc: "ტრადიციული" },
-                { id: "stone", name: "ქვის ბორდიური", desc: "თანამედროვე" },
+                { id: "wood", name: "ხის ღობე", desc: "თანამედროვე" },
               ].map((f) => (
                 <button
                   key={f.id}
