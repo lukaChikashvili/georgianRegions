@@ -113,7 +113,14 @@ const Experience = ({ graveRecords = []  }) => {
                      <primitive object={fenceModel.scene.clone()} scale = {6}
                     position = {[-30, -5, -38]} />
 
-
+<primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[9, -5, 8]} rotation = {[0, 1.6, 0]} />  
+                    <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[-4.5, -5, 8]} rotation = {[0, 1.6, 0]} />  
+                    <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[-17.5, -5, 8]} rotation = {[0, 1.6, 0]} /> 
+                    <primitive object={fenceModel.scene.clone()} scale = {6}
+                    position = {[22, -5, 8]} rotation = {[0, 1.6, 0]} />  
 
                     </>
       )}
