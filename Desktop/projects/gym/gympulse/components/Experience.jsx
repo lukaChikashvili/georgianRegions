@@ -28,6 +28,7 @@ const Experience = ({ graveRecords = []  }) => {
   const fenceModel = useGLTF('/iron_fence.glb');
   const woodFenceModel = useGLTF('/fence.glb');
   const smallTable = useGLTF('/side_table.glb');
+  const wineBottle = useGLTF('/wine_bottle.glb');
 
 
   const fenceStyle = graveRecords[0]?.fenceStyle || "none";
@@ -165,6 +166,7 @@ const Experience = ({ graveRecords = []  }) => {
 
 
    <primitive object={smallTable.scene} scale = {4} position = {[-10, -2, -13]}  />
+   <primitive object={wineBottle.scene} scale = {0.5}  position = {[-10, 0.5, -13]} />
 
    
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -20, 0]}>
