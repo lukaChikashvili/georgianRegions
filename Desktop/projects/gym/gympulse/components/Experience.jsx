@@ -18,6 +18,8 @@ const Experience = ({ graveRecords = []  }) => {
 
 
 
+
+
   useFrame((state) => {
     uniforms.current.uTime.value += 0.25;
   });
@@ -25,6 +27,8 @@ const Experience = ({ graveRecords = []  }) => {
   const graveModel = useGLTF("/grave.glb");
   const fenceModel = useGLTF('/iron_fence.glb');
   const woodFenceModel = useGLTF('/fence.glb');
+  const smallTable = useGLTF('/side_table.glb');
+
 
   const fenceStyle = graveRecords[0]?.fenceStyle || "none";
 
@@ -159,6 +163,8 @@ const Experience = ({ graveRecords = []  }) => {
       )}
 
 
+
+   <primitive object={smallTable.scene} scale = {4} position = {[-10, -2, -13]}  />
 
    
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -20, 0]}>
