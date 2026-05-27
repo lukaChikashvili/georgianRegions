@@ -129,12 +129,14 @@ const DesignGrave = () => {
               stoneType: designSettings.stoneType,
               fenceStyle: designSettings.fenceStyle,
               flowers: designSettings.flowers,
+              winePoured: designSettings.winePoured,
               fullName: designSettings.fullName,
               birthYear: designSettings.birthYear,
               deathYear: designSettings.deathYear,
               portraitImg: designSettings.portraitImg,
             }
           ]} 
+          designSettings={designSettings}
         />
       </Canvas>
 
