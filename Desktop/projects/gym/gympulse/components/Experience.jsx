@@ -29,9 +29,11 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
   const woodFenceModel = useGLTF('/fence.glb');
   const smallTable = useGLTF('/side_table.glb');
   const { scene: bottleScene } = useGLTF('/wine_bottle.glb');
+  const flowers = useGLTF('/flowers.glb');
 
 
   const fenceStyle = graveRecords[0]?.fenceStyle || "none";
+  const flowerStyle = graveRecords[0]?.flowers || "none";
 
   const textures = useTexture({
     granite: "/black.avif",
@@ -86,6 +88,20 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
           );
         })}
       </group>
+
+
+    {flowerStyle === "roses" && (
+       <primitive object={flowers.scene} position = {[-1.5, 0, -10]}    scale = {0.1} />
+    )}
+
+
+
+
+
+
+
+
+
 
      
       {fenceStyle === "iron" && (
