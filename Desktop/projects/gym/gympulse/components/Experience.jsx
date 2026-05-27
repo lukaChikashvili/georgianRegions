@@ -122,32 +122,29 @@ const Experience = ({ graveRecords = []  }) => {
 {fenceStyle === "wood" && (
         <>
         
-         <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[22, -5, 6]} />
+           <primitive object={woodFenceModel.scene.clone()} scale = {6}
+                    position = {[36, -5, 6]} rotation = {[0, -0.3, 0]} />
                     <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[22, -5, -8]} />
-                     <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[22, -5, -23]} />
-                     <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[22, -5, -38]} />
+                    position = {[34, -5,-19.5]} rotation = {[0, -0.3, 0]} />
+                    <primitive object={woodFenceModel.scene.clone()} scale = {6}
+                    position = {[37, -5,-45]} rotation = {[0, -0.3, 0]} />
+
+       
 
           <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[9, -5, -51]} rotation = {[0, 1.6, 0]} />  
+                    position = {[19, -5, -51]} rotation = {[0, 1.2, 0]} />  
                     <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[-4.5, -5, -51]} rotation = {[0, 1.6, 0]} />  
-                    <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[-17.5, -5, -51]} rotation = {[0, 1.6, 0]} /> 
-                    <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[22, -5, -51]} rotation = {[0, 1.6, 0]} />  
+                    position = {[-33, -5, -49]} rotation = {[0, 1.2, 0]} /> 
+                   <primitive object={woodFenceModel.scene.clone()} scale = {6}
+                    position = {[-7, -5, -49]} rotation = {[0, 1.2, 0]} />   
+                  
 
 <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[-30, -5, 6]} />
+                    position = {[-30, -5, 6]} rotation = {[0, -0.3, 0]} />
                     <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[-30, -5, -8]} />
-                     <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[-30, -5, -23]} />
-                     <primitive object={woodFenceModel.scene.clone()} scale = {6}
-                    position = {[-30, -5, -38]} />
+                    position = {[-31, -5,-19.5]} rotation = {[0, -0.3, 0]} />
+                    <primitive object={woodFenceModel.scene.clone()} scale = {6}
+                    position = {[-32, -5,-45]} rotation = {[0, -0.3, 0]} />
 
 
 
