@@ -30,6 +30,8 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
   const smallTable = useGLTF('/side_table.glb');
   const { scene: bottleScene } = useGLTF('/wine_bottle.glb');
   const flowers = useGLTF('/flowers.glb');
+  const tulip = useGLTF('/simple_tulip.glb');
+
 
 
   const fenceStyle = graveRecords[0]?.fenceStyle || "none";
@@ -93,6 +95,11 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
     {flowerStyle === "roses" && (
        <primitive object={flowers.scene} position = {[-1.5, 0, -10]}    scale = {0.1} />
     )}
+
+{flowerStyle === "tulips" && (
+       <primitive object={tulip.scene} rotation = {[-1.5, 0, 0]} position = {[-6.5, -0.7, -7]}    scale = {0.7} />
+    )}
+
 
 
 

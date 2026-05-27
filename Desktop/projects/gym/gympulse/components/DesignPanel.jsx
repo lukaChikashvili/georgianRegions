@@ -93,7 +93,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
               {[
                 { id: "none", name: "ცარიელი", icon: "⚪" },
                 { id: "roses", name: "ვარდები", icon: "🌹" },
-                { id: "carnations", name: "მიხაკები", icon: "🪻" },
+                { id: "tulips", name: "ტიტები", icon: "🪻" },
               ].map((fl) => (
                 <button
                   key={fl.id}
