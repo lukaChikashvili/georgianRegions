@@ -386,7 +386,9 @@ export const saveMyGraveDesign = mutation({
   args: {
     stoneType: v.string(),
     fenceStyle: v.string(),
+    floorStyle: v.string(),
     flowers: v.string(),
+
     winePoured: v.boolean(),
     fullName: v.string(),
     birthYear: v.string(),
@@ -410,6 +412,7 @@ export const saveMyGraveDesign = mutation({
       await ctx.db.patch(existingDesign._id, {
         stoneType: args.stoneType,
         fenceStyle: args.fenceStyle,
+        floorStyle: args.floorStyle,
         flowers: args.flowers,
         winePoured: args.winePoured,
         fullName: args.fullName,
@@ -425,6 +428,7 @@ export const saveMyGraveDesign = mutation({
         userId,
         stoneType: args.stoneType,
         fenceStyle: args.fenceStyle,
+        floorStyle: args.floorStyle,
         flowers: args.flowers,
         winePoured: args.winePoured,
         fullName: args.fullName,

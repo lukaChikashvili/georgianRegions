@@ -67,7 +67,8 @@ export default defineSchema({
     graveDesigns: defineTable({
       userId: v.string(), 
       stoneType: v.string(),      
-      fenceStyle: v.string(),      
+      fenceStyle: v.string(),  
+      floorStyle: v.string(),    
       flowers: v.string(),         
       winePoured: v.boolean(),     
       fullName: v.string(),
