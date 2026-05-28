@@ -132,19 +132,19 @@ const SingleGraveInstance = ({ record, position, modelScene, baseTextures }) => 
       </mesh>
 
      
-      <primitive object={tableScene.clone()} scale={4} position={[8, 2, 18]} />
+      <primitive object={tableScene.clone()} scale={8} position={[-13, 2, -10]} />
 
      
       {winePoured && (
-        <primitive object={bottleScene.clone()} scale={0.5} position={[8, 5, 18]} />
+        <primitive object={bottleScene.clone()} scale={0.9} position={[-13, 7, -10]}  />
       )}
 
       
       {flowerStyle === "roses" && (
-        <primitive object={flowersScene.clone()} scale={0.1} position={[-8, 0, 15]} />
+        <primitive object={flowersScene.clone()} scale={0.2} position={[1, 7, -10]}  />
       )}
       {flowerStyle === "tulips" && (
-        <primitive object={tulipScene.clone()} scale={0.7} rotation={[-1.5, 0, 0]} position={[-8, -0.7, 15]} />
+        <primitive object={tulipScene.clone()} scale={1.5} rotation={[-1.5, 0, 0]} position={[-10, 5.6, -1]} />
       )}
 
       

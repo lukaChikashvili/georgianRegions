@@ -44,7 +44,7 @@ const Experience = ({ graveRecords = [], designSettings }) => {
 
   const columnsCount = 4;
   const spacingX = 75;
-  const spacingZ = 24;
+  const spacingZ = 75;
 
   return (
     <>
