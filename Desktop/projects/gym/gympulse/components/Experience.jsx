@@ -38,20 +38,35 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
 
   const fenceStyle = graveRecords[0]?.fenceStyle || "none";
   const flowerStyle = graveRecords[0]?.flowers || "none";
+  const floorStyle = designSettings?.floorStyle || "grass";
+
 
   const textures = useTexture({
     granite: "/black.avif",
-    marble: "/gray.avif",
+    marble: "/gray.avif",   
     grass: "/grass.avif",
     brick: "/brick.avif",
     stone: "/stone.webp",
-    marble: "/marble.jpg"
+    marble_tile: "/marble.jpg"
+
   });
 
   Object.values(textures).forEach((texture) => {
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(1, 1);
+
+    const tilingTextures = ["grass", "brick", "stone", "marble_tile"];
+    
+    Object.entries(textures).forEach(([name, texture]) => { 
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+    
+      if (tilingTextures.includes(name)) {
+        texture.repeat.set(6, 6);
+      } else {
+        texture.repeat.set(1, 1);
+      }
+    });
   });
 
 
@@ -63,16 +78,7 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
     <>
       <fog attach="fog" args={["#0b0d12", 40, 200]} />
 
-      <Grid
-        position={[0, -3.95, 0]}
-        args={[100, 100]}
-        cellSize={1}
-        cellThickness={0.5}
-        cellColor="#1d1f22"
-        sectionSize={5}
-        sectionColor="#ffd700"
-        fadeDistance={60}
-      />
+   
 
       
       <group position={[16, -4, 0]}>
@@ -216,9 +222,14 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
         />
       </mesh>
 
-      <mesh>
-         <planeGeometry />
-      </mesh>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-2, -3.95, -20]}>
+  <planeGeometry args={[50, 57]} />
+  <meshStandardMaterial 
+    map={textures[floorStyle]} 
+    side={THREE.DoubleSide} 
+    roughness={0.8}
+  />
+</mesh>
 
       <ambientLight intensity={0.2} />
       <directionalLight position={[20, 30, 10]} intensity={1.2} color="#8ea3ff" />

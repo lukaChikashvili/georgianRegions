@@ -93,8 +93,8 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
               {[
                 { id: "grass", name: "ბალახი", icon: "🌱", desc: "ბუნებრივი" },
                 { id: "brick", name: "აგური", icon: "🧱", desc: "წითელი აგური" },
-                { id: "stone_tile", name: "ქვის ფილა", icon: "⬛", desc: "მუქი ნაცრისფერი" },
-                { id: "marble_floor", name: "მარმარილო", icon: "⚪", desc: "თეთრი პრიალა" },
+                { id: "stone", name: "ქვის ფილა", icon: "⬛", desc: "მუქი ნაცრისფერი" },
+                { id: "marble_tile", name: "მარმარილო", icon: "⚪", desc: "თეთრი პრიალა" },
               ].map((fl) => (
                 <button
                   key={fl.id}
@@ -112,7 +112,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
           </div>
         )}
 
-        
+
      
         {activeCategory === "flowers" && (
           <div className="space-y-3 animate-fadeIn">
