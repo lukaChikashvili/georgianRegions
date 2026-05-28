@@ -113,7 +113,7 @@ const DesignGrave = () => {
 
   return (
     <div className="relative w-full h-[calc(100vh-3rem)] mt-12 bg-[#0b0d12] overflow-hidden select-none flex flex-col">
-      <Canvas camera={{ position: [0, 2, 6], fov: 45 }} className="w-full flex-grow">
+      <Canvas camera={{ position: [0, 2, 6], fov: 45 }}  className="w-full flex-grow">
         <OrbitControls 
           enableDamping 
           maxPolarAngle={Math.PI / 2 - 0.05}
@@ -141,6 +141,7 @@ const DesignGrave = () => {
             }
           ]} 
           designSettings={designSettings}
+          isPreview={true}
         />
       </Canvas>
 
