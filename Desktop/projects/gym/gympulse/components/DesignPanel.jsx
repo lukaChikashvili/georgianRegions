@@ -6,6 +6,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
   const categories = [
     { id: "stone", label: "ქვის სტილი", icon: "💎" },
     { id: "fence", label: "ღობე & ბაქანი", icon: "🚧" },
+    { id: "floor", label: "იატაკი", icon: "🧱" },
     { id: "flowers", label: "ყვავილები", icon: "💐" },
     { id: "wine", label: "ღვინის დასხმა", icon: "🍷" },
     { id: "text", label: "წარწერა ქვაზე", icon: "📝" },
@@ -85,6 +86,33 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
           </div>
         )}
 
+{activeCategory === "floor" && (
+          <div className="space-y-3 animate-fadeIn">
+            <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">აირჩიეთ საფარის ტიპი</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto">
+              {[
+                { id: "grass", name: "ბალახი", icon: "🌱", desc: "ბუნებრივი" },
+                { id: "brick", name: "აგური", icon: "🧱", desc: "წითელი აგური" },
+                { id: "stone_tile", name: "ქვის ფილა", icon: "⬛", desc: "მუქი ნაცრისფერი" },
+                { id: "marble_floor", name: "მარმარილო", icon: "⚪", desc: "თეთრი პრიალა" },
+              ].map((fl) => (
+                <button
+                  key={fl.id}
+                  onClick={() => updateSetting("floorStyle", fl.id)}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    designSettings.floorStyle === fl.id ? "border-[#ffd700] bg-[#ffd700]/5 text-[#ffd700]" : "border-white/5 bg-white/[0.01]"
+                  }`}
+                >
+                  <span className="text-lg block mb-1">{fl.icon}</span>
+                  <span className="block font-medium text-white text-[11px]">{fl.name}</span>
+                  <span className="text-[9px] text-gray-500 block">{fl.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        
      
         {activeCategory === "flowers" && (
           <div className="space-y-3 animate-fadeIn">
