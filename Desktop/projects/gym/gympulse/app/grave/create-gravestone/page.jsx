@@ -22,7 +22,8 @@ const DesignGrave = () => {
 
   const defaultSettings = {
     stoneType: "black_granite",
-    fenceStyle: "none",        
+    fenceStyle: "none",   
+    floorStyle: "grass",     
     flowers: "none",       
     winePoured: false,
     voiceToast: null,
@@ -39,6 +40,7 @@ const DesignGrave = () => {
       setDesignSettings({
         stoneType: savedDesignData.stoneType || "black_granite",
         fenceStyle: savedDesignData.fenceStyle || "none",
+        floorStyle: savedDesignData.floorStyle || "grass",
         flowers: savedDesignData.flowers || "none",
         winePoured: !!savedDesignData.winePoured,
         voiceToast: savedDesignData.voiceToast || null,
@@ -69,6 +71,7 @@ const DesignGrave = () => {
       await saveDesign({
         stoneType: designSettings.stoneType,
         fenceStyle: designSettings.fenceStyle,
+        floorStyle: designSettings.floorStyle,
         flowers: designSettings.flowers,
         winePoured: designSettings.winePoured,
         voiceToast: designSettings.voiceToast,
@@ -128,6 +131,7 @@ const DesignGrave = () => {
               _id: "preview-id",
               stoneType: designSettings.stoneType,
               fenceStyle: designSettings.fenceStyle,
+              floorStyle: designSettings.floorStyle,
               flowers: designSettings.flowers,
               winePoured: designSettings.winePoured,
               fullName: designSettings.fullName,

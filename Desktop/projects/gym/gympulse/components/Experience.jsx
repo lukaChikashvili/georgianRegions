@@ -20,6 +20,8 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
 
 
 
+
+
   useFrame((state) => {
     uniforms.current.uTime.value += 0.25;
   });
@@ -40,6 +42,10 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
   const textures = useTexture({
     granite: "/black.avif",
     marble: "/gray.avif",
+    grass: "/grass.avif",
+    brick: "/brick.avif",
+    stone: "/stone.webp",
+    marble: "/marble.jpg"
   });
 
   Object.values(textures).forEach((texture) => {
@@ -208,6 +214,10 @@ const Experience = ({ graveRecords = [], designSettings  }) => {
           uniforms={uniforms.current}
           side={THREE.DoubleSide}
         />
+      </mesh>
+
+      <mesh>
+         <planeGeometry />
       </mesh>
 
       <ambientLight intensity={0.2} />
