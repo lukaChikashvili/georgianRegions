@@ -57,7 +57,7 @@ export const grassVertex = `
   modelPosition.y += elevation;
 
   float sway = sin(modelPosition.x * 0.5 + uTime * 2.0) * 0.03;
-  sway += cos(modelPosition.z * 0.8 + uTime * 1.5) * 0.5;
+  sway += cos(modelPosition.z * 0.8 + uTime * 1.5) * 0.02;  
   modelPosition.x += sway;
 
   vElevation = elevation;
