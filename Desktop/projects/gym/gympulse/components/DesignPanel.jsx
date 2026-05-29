@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, updateSetting }) => {
+const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, updateSetting, onClose }) => {
   const categories = [
     { id: "stone", label: "ქვის სტილი", icon: "💎" },
     { id: "fence", label: "ღობე & ბაქანი", icon: "🚧" },
@@ -13,8 +13,18 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
   ];
 
   return (
-    <div className="w-1/2 mx-auto rounded-lg absolute bottom-0 left-0 right-0 bg-[#0d0f14]/95 backdrop-blur-md border-t border-white/5 flex flex-col h-[320px] md:h-[280px] z-10 text-white">
+    <div className="w-full md:w-[600px] lg:w-[800px] mx-auto rounded-t-2xl md:rounded-lg absolute bottom-0 left-0 right-0 bg-[#0d0f14]/95 backdrop-blur-md border-t border-white/10 flex flex-col h-[300px] z-10 text-white shadow-2x">
      
+     <div className="flex items-center justify-between px-4 py-2 border-b border-white/5">
+        <span className="text-[10px] uppercase text-gray-500 tracking-widest">დიზაინის პანელი</span>
+        <button 
+          onClick={onClose} 
+          className="p-1 hover:bg-white/10 rounded-full transition-colors"
+        >
+          ✕
+        </button>
+      </div>
+
       <div className="flex justify-start md:justify-center items-center gap-2 md:gap-6 px-4 py-3 border-b border-white/5 overflow-x-auto scrollbar-none snap-x">
         {categories.map((cat) => (
           <button
@@ -38,7 +48,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
         {activeCategory === "stone" && (
           <div className="space-y-3 animate-fadeIn">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">აირჩიეთ მონუმენტის მასალა</p>
-            <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button
                 onClick={() => updateSetting("stoneType", "black_granite")}
                 className={`p-3 rounded-xl border text-xs text-left transition-all flex items-center gap-3 ${
@@ -65,7 +75,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
         {activeCategory === "fence" && (
           <div className="space-y-3 animate-fadeIn">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">პერიმეტრის მოწყობა</p>
-            <div className="grid grid-cols-3 gap-3 max-w-xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto">
               {[
                 { id: "none", name: "ღობის გარეშე", desc: "მწვანე ველი" },
                 { id: "iron", name: "ჭედური რკინა", desc: "ტრადიციული" },
@@ -117,7 +127,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
         {activeCategory === "flowers" && (
           <div className="space-y-3 animate-fadeIn">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">ყვავილების დასვენება</p>
-            <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {[
                 { id: "none", name: "ცარიელი", icon: "⚪" },
                 { id: "roses", name: "ვარდები", icon: "🌹" },

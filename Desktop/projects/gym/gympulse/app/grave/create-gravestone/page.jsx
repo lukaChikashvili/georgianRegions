@@ -11,6 +11,7 @@ import DesignPanel from "../../../components/DesignPanel";
 
 const DesignGrave = () => {
   const router = useRouter();
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
 
   const savedDesignData = useQuery(api.memorials.getMyGraveDesign);
   const saveDesign = useMutation(api.memorials.saveMyGraveDesign);
@@ -179,12 +180,24 @@ const DesignGrave = () => {
         </button>
       </div>
 
+      {!isPanelOpen && (
+      <button 
+        onClick={() => setIsPanelOpen(true)}
+        className="absolute bottom-6 right-6 z-50 p-4 bg-[#D4AF37] text-black rounded-full shadow-lg hover:scale-105 transition-all"
+      >
+        🎨
+      </button>
+    )}
+
+<div className={isPanelOpen ? "block" : "hidden"}>
       <DesignPanel 
         activeCategory={activeCategory} 
         setActiveCategory={setActiveCategory}
         designSettings={designSettings}
         updateSetting={updateSetting}
+        onClose={() => setIsPanelOpen(false)} 
       />
+    </div>
     </div>
   );
 };
