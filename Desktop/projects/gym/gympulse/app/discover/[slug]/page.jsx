@@ -16,6 +16,11 @@ const MemorialPage = () => {
 
   const visits = useMutation(api.memorials.incrementVisits);
 
+  const portraitUrl = useQuery(
+    api.files.getStorageUrl,
+    memorial?.mainPortraitUrl ? { storageId: memorial.mainPortraitUrl } : "skip"
+  );
+
 
 
   const memorial = useQuery(api.memorials.getMemorialBySlug, { urlSlug: slug });

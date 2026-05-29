@@ -11,6 +11,23 @@ export const generateUploadUrl = mutation({
     },
   });
 
+  export const getStorageUrl = query({
+    args: { storageId: v.id("_storage") },
+    handler: async (ctx, args) => {
+      return await ctx.storage.getUrl(args.storageId);
+    },
+  });
+  
+  export const getStorageUrls = query({
+    args: { storageIds: v.array(v.id("_storage")) },
+    handler: async (ctx, args) => {
+      const urls = await Promise.all(
+        args.storageIds.map((id) => ctx.storage.getUrl(id))
+      );
+      return urls.filter(Boolean); 
+    },
+  });
+
 export const saveToast = mutation({
     args: {
       memorialId: v.id("memorials"),
