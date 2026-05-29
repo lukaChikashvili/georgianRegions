@@ -6,6 +6,23 @@ import { api } from "@/convex/_generated/api";
 import { Search, MapPin, Calendar, ArrowRight, Sparkles, CandlestickChart, Flame } from 'lucide-react';
 import Link from 'next/link';
 
+function MemorialPortrait({ storageId, firstName }) {
+  const url = useQuery(api.services.getStorageUrl, storageId ? { storageId } : "skip");
+  
+  return url ? (
+    <img
+      src={url}
+      alt={firstName}
+      className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+    />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center text-gray-600 bg-white/5">
+      <Sparkles size={16} />
+    </div>
+  );
+}
+
+
 const Discover = () => {
 
   const memorials = useQuery(api.memorials.getAllPublicMemorials);
@@ -80,17 +97,7 @@ const Discover = () => {
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-16 h-16 rounded-full p-[1px] bg-gradient-to-b from-white/10 to-transparent group-hover:from-[#D4AF37]/40 transition-all duration-500">
                       <div className="w-full h-full rounded-full overflow-hidden bg-[#0D0D0F]">
-                        {memorial.mainPortraitUrl ? (
-                          <img 
-                            src={memorial.mainPortraitUrl} 
-                            alt={memorial.firstName} 
-                            className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-600 bg-white/5">
-                            <Sparkles size={16} />
-                          </div>
-                        )}
+                      <MemorialPortrait storageId={memorial.mainPortraitUrl} firstName={memorial.firstName} />
                       </div>
                     </div>
                     <div>

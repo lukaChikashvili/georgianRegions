@@ -5,6 +5,23 @@ import {  useQuery } from "convex/react";
 import { ArrowRight, Calendar, Sparkles } from "lucide-react";
 import Link from "next/link";
 
+function MemorialPortrait({ storageId, firstName, lastName }) {
+  const url = useQuery(api.services.getStorageUrl, storageId ? { storageId } : "skip");
+
+  return url ? (
+    <img
+      src={url}
+      alt={`${firstName} ${lastName}`}
+      className="object-cover w-full h-full scale-100 group-hover:scale-105 transition-transform duration-700 ease-out grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-80"
+    />
+  ) : (
+    <div className="w-full h-full flex flex-col items-center justify-center text-gray-600 bg-white/[0.02] gap-2">
+      <Sparkles size={24} className="opacity-40 text-[#D4AF37]" />
+      <span className="text-xs font-sans font-light tracking-wide opacity-40">მოგონება</span>
+    </div>
+  );
+}
+
 export const RecentMemorials = () => {
    
    const memorials = useQuery(api.memorials.getAllPublicMemorials);
@@ -62,20 +79,11 @@ export const RecentMemorials = () => {
                   >
                    
                     <div className="aspect-[4/5] w-full overflow-hidden relative bg-[#0D0D0F]">
-                      {memorial.mainPortraitUrl ? (
-                        <img 
-                          src={memorial.mainPortraitUrl} 
-                          alt={`${memorial.firstName} ${memorial.lastName}`} 
-                          className="object-cover w-full h-full scale-100 group-hover:scale-105 transition-transform duration-700 ease-out grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-80" 
-                        />
-                      ) : (
-                        
-                        <div className="w-full h-full flex flex-col items-center justify-center text-gray-600 bg-white/[0.02] gap-2">
-                          <Sparkles size={24} className="opacity-40 text-[#D4AF37]" />
-                          <span className="text-xs font-sans font-light tracking-wide opacity-40">მოგონება</span>
-                        </div>
-                      )}
-                      
+                    <MemorialPortrait 
+                        storageId={memorial.mainPortraitUrl} 
+                        firstName={memorial.firstName} 
+                        lastName={memorial.lastName} 
+/>
                       
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0F] via-[#0D0D0F]/40 to-transparent" />
                     </div>
