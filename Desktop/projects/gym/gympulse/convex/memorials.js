@@ -160,7 +160,8 @@ export const updateMemorial = mutation({
     epitaph: v.string(),
     biography: v.string(),
     location: v.string(),
-    mainPortraitUrl: v.optional(v.string()),
+    mainPortraitUrl: v.optional(v.id("_storage")),
+    galleryUrls: v.optional(v.array(v.id("_storage"))),
     privacyType: v.string(),
   },
   handler: async (ctx, args) => {

@@ -16,11 +16,7 @@ const MemorialPage = () => {
 
   const visits = useMutation(api.memorials.incrementVisits);
 
-  const portraitUrl = useQuery(
-    api.files.getStorageUrl,
-    memorial?.mainPortraitUrl ? { storageId: memorial.mainPortraitUrl } : "skip"
-  );
-
+ 
 
 
   const memorial = useQuery(api.memorials.getMemorialBySlug, { urlSlug: slug });
@@ -31,6 +27,18 @@ const MemorialPage = () => {
   const addCondolenceMutation = useMutation(api.memorials.addCondolence);
 
   
+  const portraitUrl = useQuery(
+    api.services.getStorageUrl,
+    memorial?.mainPortraitUrl ? { storageId: memorial.mainPortraitUrl } : "skip"
+  );
+
+  const galleryUrls = useQuery(
+    api.services.getStorageUrls,
+    memorial?.galleryUrls?.length > 0 ? { storageIds: memorial.galleryUrls } : "skip"
+  );
+
+
+
   const invitations = useQuery(
     api.services.getInvitationForMemorial, 
     memorial ? { memorialId: memorial._id } : "skip"
@@ -279,13 +287,13 @@ const MemorialPage = () => {
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#AA7C11] via-[#D4AF37] to-transparent opacity-30 blur-md" />
           <div className="relative w-44 h-44 md:w-52 md:h-52 rounded-full p-[1.5px] bg-gradient-to-b from-[#FFF5D6] via-[#D4AF37] to-[#1A1A1A]">
             <div className="w-full h-full rounded-full overflow-hidden bg-[#121214]">
-              {memorial.mainPortraitUrl ? (
-                <img src={memorial.mainPortraitUrl} alt={memorial.firstName} className="w-full h-full object-cover grayscale contrast-110 opacity-90" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-700 bg-white/5">
-                  <Heart size={32} className="opacity-40" />
-                </div>
-              )}
+            {portraitUrl ? (
+               <img src={portraitUrl} alt={memorial.firstName} className="w-full h-full object-cover grayscale contrast-110 opacity-90" />
+                )  :   (
+      <div className="w-full h-full flex items-center justify-center text-gray-700 bg-white/5">
+         <Heart size={32} className="opacity-40" />
+      </div>
+     )}
             </div>
           </div>
         </div>
@@ -327,35 +335,36 @@ const MemorialPage = () => {
             </p>
           </section>
 
-          {memorial.galleryUrls && memorial.galleryUrls.length > 0 && (
-            <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
-              <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
-                <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
-                ფოტოგალერეა
-              </h2>
-              
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {memorial.galleryUrls.map((url, index) => (
-                  <div 
-                    key={index}
-                    onClick={() => setActiveLightboxImage(url)}
-                    className="cursor-pointer aspect-square rounded-xl overflow-hidden border border-white/5 bg-[#0D0D0F] group relative"
-                  >
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
-                      <span className="text-[11px] text-[#D4AF37] font-light tracking-wider uppercase border border-[#D4AF37]/30 px-3 py-1.5 rounded-lg bg-black/50 backdrop-blur-xs">
-                        გადიდება
-                      </span>
-                    </div>
-                    <img 
-                      src={url} 
-                      alt={`გალერეა - ${index + 1}`}
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 contrast-105 group-hover:scale-105 transition-all duration-500"
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+         
+{galleryUrls && galleryUrls.length > 0 && (
+  <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
+    <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      ფოტოგალერეა
+    </h2>
+    
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      {galleryUrls.map((url, index) => (
+        <div 
+          key={index}
+          onClick={() => setActiveLightboxImage(url)}
+          className="cursor-pointer aspect-square rounded-xl overflow-hidden border border-white/5 bg-[#0D0D0F] group relative"
+        >
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
+            <span className="text-[11px] text-[#D4AF37] font-light tracking-wider uppercase border border-[#D4AF37]/30 px-3 py-1.5 rounded-lg bg-black/50 backdrop-blur-xs">
+              გადიდება
+            </span>
+          </div>
+          <img 
+            src={url} 
+            alt={`გალერეა - ${index + 1}`}
+            className="w-full h-full object-cover grayscale group-hover:grayscale-0 contrast-105 group-hover:scale-105 transition-all duration-500"
+          />
+        </div>
+      ))}
+    </div>
+  </section>
+)}
         </div>
 
         <div className="space-y-8">
