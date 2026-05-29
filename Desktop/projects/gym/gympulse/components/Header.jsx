@@ -4,7 +4,7 @@ import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import { useConvexAuth, useMutation, useQuery } from 'convex/react';
 import Image from 'next/image';
 import logo from '../public/logo.png';
-import { Bell, LayoutDashboard, User } from 'lucide-react';
+import { Bell, LayoutDashboard, Menu, User, X } from 'lucide-react';
 import Link from 'next/link';
 import { api } from '@/convex/_generated/api';
 import { useState } from 'react';
@@ -14,6 +14,7 @@ const Header = () => {
   const { user, isLoaded } = useUser();
 
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const markAsRead = useMutation(api.memorials.markAsRead);
   const notifications = useQuery(
@@ -46,9 +47,16 @@ const Header = () => {
     >
       <div className="absolute inset-0 z-0 pointer-events-none opacity-30" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E\")" }} />
       
-      <div className="relative z-10 group">
-        <Link href="/"><Image width={140} src={logo} alt="logo" className="opacity-90 transition-opacity group-hover:opacity-100" /></Link> 
-      </div>
+      <button className="md:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        {isMobileMenuOpen ? <X /> : <Menu />}
+      </button>
+
+
+      <div className="relative z-10 group hidden md:block">
+  <Link href="/">
+    <Image width={140} src={logo} alt="logo" className="opacity-90 transition-opacity group-hover:opacity-100" />
+  </Link> 
+</div>
 
       <div className='hidden md:flex items-center gap-8 relative z-10'>
         {links.map((value) => (
@@ -110,6 +118,21 @@ const Header = () => {
           </div>
         )}
       </div>
+
+      {isMobileMenuOpen && (
+        <div className="absolute top-full left-0 w-full bg-[#111114] border-b border-[#D4AF37]/20 p-6 md:hidden flex flex-col gap-4 animate-in slide-in-from-top-5">
+          {links.map((value) => (
+            <Link 
+              key={value.id} 
+              href={value.link} 
+              className="text-lg text-gray-300 py-2 border-b border-white/5"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {value.title}
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
