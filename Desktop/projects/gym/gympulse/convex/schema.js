@@ -26,8 +26,8 @@ export default defineSchema({
         birthDate: v.string(),
         deathDate: v.string(),
         location: v.string(),
-        mainPortraitUrl: v.optional(v.string()),
-        galleryUrls: v.optional(v.array(v.string())),
+        mainPortraitUrl: v.optional(v.id("_storage")),
+        galleryUrls: v.optional(v.array(v.id("_storage"))),
 
         epitaph: v.string(),
         biography: v.string(),

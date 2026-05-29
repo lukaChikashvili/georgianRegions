@@ -9,11 +9,11 @@ export const createMemorial = mutation({
         birthDate: v.string(),
         deathDate: v.string(),
         location: v.string(),
-        mainPortraitUrl: v.optional(v.string()),
+        mainPortraitUrl: v.optional(v.id("_storage")),
         epitaph: v.string(),
         biography: v.string(),
 
-        galleryUrls: v.optional(v.array(v.string())),
+        galleryUrls: v.optional(v.array(v.id("_storage"))),
 
         enableDonations: v.boolean(),
         bankName: v.optional(v.string()),
@@ -57,7 +57,7 @@ export const createMemorial = mutation({
             funeralTime: args.funeralTime,
             cemeteryLocation: args.cemeteryLocation,
 
-            galleryUrls: args.galleryUrls || [],
+            galleryUrls: args.galleryUrls ?? [],
 
             enableDonations: args.enableDonations,
             bankName: args.bankName,
