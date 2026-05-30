@@ -394,7 +394,7 @@ export const saveMyGraveDesign = mutation({
     fullName: v.string(),
     birthYear: v.string(),
     deathYear: v.string(),
-    portraitImg: v.union(v.string(), v.null()),
+    portraitImg: v.union(v.id("_storage"), v.null()),
     voiceToast: v.union(v.string(), v.null()),
   },
   handler: async (ctx, args) => {
@@ -439,6 +439,14 @@ export const saveMyGraveDesign = mutation({
         voiceToast: args.voiceToast,
       });
     }
+  },
+});
+
+export const getPortraitUrl = query({
+  args: { storageId: v.union(v.id("_storage"), v.null()) },
+  handler: async (ctx, { storageId }) => {
+    if (!storageId) return null;
+    return await ctx.storage.getUrl(storageId);
   },
 });
 

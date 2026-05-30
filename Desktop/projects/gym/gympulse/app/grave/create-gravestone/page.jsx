@@ -5,27 +5,29 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api"; 
+import { api } from "../../../convex/_generated/api";
 import Experience from "../../../components/Experience";
-import DesignPanel from "../../../components/DesignPanel"; 
+import DesignPanel from "../../../components/DesignPanel";
 
 const DesignGrave = () => {
   const router = useRouter();
   const [isPanelOpen, setIsPanelOpen] = useState(true);
+  const [uploadProgress, setUploadProgress] = useState("");
 
   const savedDesignData = useQuery(api.memorials.getMyGraveDesign);
   const saveDesign = useMutation(api.memorials.saveMyGraveDesign);
-  const deleteDesign = useMutation(api.memorials.deleteMyGraveDesign); 
+  const deleteDesign = useMutation(api.memorials.deleteMyGraveDesign);
+  const generateUploadUrl = useMutation(api.services.generateUploadUrl);
 
   const [activeCategory, setActiveCategory] = useState("stone");
   const [isPublishing, setIsPublishing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false); 
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const defaultSettings = {
     stoneType: "black_granite",
-    fenceStyle: "none",   
-    floorStyle: "grass",     
-    flowers: "none",       
+    fenceStyle: "none",
+    floorStyle: "grass",
+    flowers: "none",
     winePoured: false,
     voiceToast: null,
     portraitImg: null,
@@ -66,6 +68,34 @@ const DesignGrave = () => {
     setDesignSettings((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handlePortraitUpload = async (file) => {
+    try {
+      setUploadProgress("იტვირთება...");
+
+   
+      const uploadUrl = await generateUploadUrl();
+
+   
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+
+      if (!response.ok) throw new Error("ატვირთვა ვერ მოხერხდა");
+
+      const { storageId } = await response.json();
+
+    
+      updateSetting("portraitImg", storageId);
+      setUploadProgress("");
+    } catch (error) {
+      console.error("პორტრეტის ატვირთვის შეცდომა:", error);
+      setUploadProgress("შეცდომა — სცადეთ თავიდან");
+      setTimeout(() => setUploadProgress(""), 3000);
+    }
+  };
+
   const handlePublish = async () => {
     setIsPublishing(true);
     try {
@@ -81,8 +111,7 @@ const DesignGrave = () => {
         birthYear: designSettings.birthYear,
         deathYear: designSettings.deathYear,
       });
-    
-       router.push('/grave');
+      router.push("/grave");
     } catch (error) {
       console.error("შეცდომა შენახვისას:", error);
       alert(error instanceof Error ? error.message : "დაფიქსირდა შეცდომა.");
@@ -91,18 +120,13 @@ const DesignGrave = () => {
     }
   };
 
-
   const handleDelete = async () => {
     if (!window.confirm("ნამდვილად გსურთ ამ ციფრული მემორიალის წაშლა?")) return;
 
     setIsDeleting(true);
     try {
       await deleteDesign();
-      
       setDesignSettings(defaultSettings);
-      console.log("მონუმენტი წარმატებით წაიშალა.");
-      
-      
       router.push("/grave");
     } catch (error) {
       console.error("შეცდომა წაშლისას:", error);
@@ -114,9 +138,9 @@ const DesignGrave = () => {
 
   return (
     <div className="relative w-full h-[calc(100vh-3rem)] mt-12 bg-[#0b0d12] overflow-hidden select-none flex flex-col">
-      <Canvas camera={{ position: [0, 2, 6], fov: 45 }}  className="w-full flex-grow">
-        <OrbitControls 
-          enableDamping 
+      <Canvas camera={{ position: [0, 2, 6], fov: 45 }} className="w-full flex-grow">
+        <OrbitControls
+          enableDamping
           maxPolarAngle={Math.PI / 2 - 0.05}
           minDistance={3}
           maxDistance={12}
@@ -124,9 +148,8 @@ const DesignGrave = () => {
         <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} fade />
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 10, 5]} intensity={0.8} castShadow />
-        
-        
-        <Experience 
+
+        <Experience
           graveRecords={[
             {
               _id: "preview-id",
@@ -139,8 +162,8 @@ const DesignGrave = () => {
               birthYear: designSettings.birthYear,
               deathYear: designSettings.deathYear,
               portraitImg: designSettings.portraitImg,
-            }
-          ]} 
+            },
+          ]}
           designSettings={designSettings}
           isPreview={true}
         />
@@ -154,7 +177,6 @@ const DesignGrave = () => {
       </div>
 
       <div className="absolute top-6 right-6 flex items-center gap-3 z-20">
-       
         {savedDesignData && (
           <button
             onClick={handleDelete}
@@ -181,23 +203,25 @@ const DesignGrave = () => {
       </div>
 
       {!isPanelOpen && (
-      <button 
-        onClick={() => setIsPanelOpen(true)}
-        className="absolute bottom-6 right-6 z-50 p-4 bg-[#D4AF37] text-black rounded-full shadow-lg hover:scale-105 transition-all"
-      >
-        🎨
-      </button>
-    )}
+        <button
+          onClick={() => setIsPanelOpen(true)}
+          className="absolute bottom-6 right-6 z-50 p-4 bg-[#D4AF37] text-black rounded-full shadow-lg hover:scale-105 transition-all"
+        >
+          🎨
+        </button>
+      )}
 
-<div className={isPanelOpen ? "block" : "hidden"}>
-      <DesignPanel 
-        activeCategory={activeCategory} 
-        setActiveCategory={setActiveCategory}
-        designSettings={designSettings}
-        updateSetting={updateSetting}
-        onClose={() => setIsPanelOpen(false)} 
-      />
-    </div>
+      <div className={isPanelOpen ? "block" : "hidden"}>
+        <DesignPanel
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+          designSettings={designSettings}
+          updateSetting={updateSetting}
+          onClose={() => setIsPanelOpen(false)}
+          onPortraitUpload={handlePortraitUpload}
+          uploadProgress={uploadProgress}
+        />
+      </div>
     </div>
   );
 };

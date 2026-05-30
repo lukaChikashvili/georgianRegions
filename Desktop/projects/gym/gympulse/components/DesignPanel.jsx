@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef } from "react";
 
-const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, updateSetting, onClose }) => {
+const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, updateSetting, onClose, onPortraitUpload, uploadProgress }) => {
+  const fileInputRef = useRef(null);
+
   const categories = [
     { id: "stone", label: "ქვის სტილი", icon: "💎" },
     { id: "fence", label: "ღობე & ბაქანი", icon: "🚧" },
@@ -13,12 +15,12 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
   ];
 
   return (
-    <div className="w-full md:w-[600px] lg:w-[800px] mx-auto rounded-t-2xl md:rounded-lg absolute bottom-0 left-0 right-0 bg-[#0d0f14]/95 backdrop-blur-md border-t border-white/10 flex flex-col h-[300px] z-10 text-white shadow-2x">
-     
-     <div className="flex items-center justify-between px-4 py-2 border-b border-white/5">
+    <div className="w-full md:w-[600px] lg:w-[800px] mx-auto rounded-t-2xl md:rounded-lg absolute bottom-0 left-0 right-0 bg-[#0d0f14]/95 backdrop-blur-md border-t border-white/10 flex flex-col h-[300px] z-10 text-white shadow-2xl">
+
+      <div className="flex items-center justify-between px-4 py-2 border-b border-white/5">
         <span className="text-[10px] uppercase text-gray-500 tracking-widest">დიზაინის პანელი</span>
-        <button 
-          onClick={onClose} 
+        <button
+          onClick={onClose}
           className="p-1 hover:bg-white/10 rounded-full transition-colors"
         >
           ✕
@@ -42,9 +44,8 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
         ))}
       </div>
 
-
       <div className="flex-1 p-5 overflow-y-auto max-w-4xl mx-auto w-full">
-      
+
         {activeCategory === "stone" && (
           <div className="space-y-3 animate-fadeIn">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">აირჩიეთ მონუმენტის მასალა</p>
@@ -71,7 +72,6 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
           </div>
         )}
 
-       
         {activeCategory === "fence" && (
           <div className="space-y-3 animate-fadeIn">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">პერიმეტრის მოწყობა</p>
@@ -96,7 +96,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
           </div>
         )}
 
-{activeCategory === "floor" && (
+        {activeCategory === "floor" && (
           <div className="space-y-3 animate-fadeIn">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">აირჩიეთ საფარის ტიპი</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto">
@@ -122,8 +122,6 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
           </div>
         )}
 
-
-     
         {activeCategory === "flowers" && (
           <div className="space-y-3 animate-fadeIn">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">ყვავილების დასვენება</p>
@@ -148,7 +146,6 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
           </div>
         )}
 
-        
         {activeCategory === "wine" && (
           <div className="space-y-3 animate-fadeIn max-w-md mx-auto">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">ტრადიციული რიტუალი</p>
@@ -158,7 +155,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
                 designSettings.winePoured ? "border-red-500 bg-red-500/5 text-red-400" : "border-white/5 bg-white/[0.01] text-gray-300"
               }`}
             >
-              <div className="flex items-center gap-3 ">
+              <div className="flex items-center gap-3">
                 <span className="text-xl">🍷</span>
                 <div>
                   <p className="font-medium">დაღვარე ღვინო საფლავზე</p>
@@ -172,23 +169,63 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
           </div>
         )}
 
-        
-       
-
-        
         {activeCategory === "text" && (
           <div className="space-y-3 animate-fadeIn">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">მონუმენტის წარწერა</p>
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+
+              {/* Portrait Upload */}
               <div className="flex flex-col space-y-1">
-                <label className="text-[10px] text-gray-400 uppercase font-light">პორტრეტის URL</label>
+                <label className="text-[10px] text-gray-400 uppercase font-light">პორტრეტი</label>
                 <input
-                  type="text"
-                  value={designSettings.portraitImg || ""}
-                  onChange={(e) => updateSetting("portraitImg", e.target.value)}
-                  className="bg-white/[0.02] border border-white/5 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#ffd700] text-white placeholder-gray-700"
-                  placeholder="https://image.link"
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file && onPortraitUpload) onPortraitUpload(file);
+                    // reset so same file can be re-selected
+                    e.target.value = "";
+                  }}
                 />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={!!uploadProgress}
+                  className={`flex flex-col items-center justify-center gap-1.5 rounded-xl border px-3 py-3 text-xs transition-all w-full ${
+                    uploadProgress
+                      ? "border-white/10 bg-white/[0.01] text-gray-500 cursor-wait"
+                      : designSettings.portraitImg
+                      ? "border-[#ffd700]/40 bg-[#ffd700]/5 text-[#ffd700] hover:bg-[#ffd700]/10"
+                      : "border-white/5 bg-white/[0.01] text-gray-400 hover:border-white/20 hover:text-white"
+                  }`}
+                >
+                  {uploadProgress ? (
+                    <>
+                      <span className="text-lg animate-pulse">⏳</span>
+                      <span className="text-[10px]">{uploadProgress}</span>
+                    </>
+                  ) : designSettings.portraitImg ? (
+                    <>
+                      <span className="text-lg">✅</span>
+                      <span className="text-[10px]">ატვირთულია</span>
+                      <span
+                        className="text-[9px] text-gray-500 underline mt-0.5"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateSetting("portraitImg", null);
+                        }}
+                      >
+                        წაშლა
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-lg">📷</span>
+                      <span>ფოტოს ატვირთვა</span>
+                    </>
+                  )}
+                </button>
               </div>
 
               <div className="flex flex-col space-y-1">
