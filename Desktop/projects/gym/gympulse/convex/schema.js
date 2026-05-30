@@ -74,7 +74,7 @@ export default defineSchema({
       fullName: v.string(),
       birthYear: v.string(),
       deathYear: v.string(),
-      portraitImg: v.union(v.id("_storage"), v.null()),
+      portraitImg: v.union(v.string(), v.null()),
       voiceToast: v.union(v.string(), v.null()),
   
     }).index("by_userId", ["userId"]),

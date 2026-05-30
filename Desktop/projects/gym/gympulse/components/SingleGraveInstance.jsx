@@ -45,65 +45,74 @@ const SingleGraveInstance = ({ record, position, modelScene, baseTextures }) => 
   const flowerStyle = record.flowers     || "none";
   const winePoured  = record.winePoured  || false;
 
-  useEffect(() => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 512;
-    canvas.height = 512;
-    const ctx = canvas.getContext("2d");
+  const portraitImg = record.portraitImg;
+const fullName    = record.fullName    || "";
+const birthYear   = record.birthYear   || "";
+const deathYear   = record.deathYear   || "";
+const stoneType   = record.stoneType   || "black_granite";
 
-    const drawDynamicOverlays = () => {
-      const circleX = 256;
-      const circleY = 110;
-      const radius  = 75;
+useEffect(() => {
+  if (portraitImg === undefined) return;
 
-      if (record.portraitImg) {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = record.portraitImg;
-        img.onload = () => {
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
-          ctx.clip();
-          ctx.drawImage(img, circleX - radius, circleY - radius, radius * 2, radius * 2);
-          ctx.restore();
-          ctx.strokeStyle = "#ffd700";
-          ctx.lineWidth = 4;
-          ctx.beginPath();
-          ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
-          ctx.stroke();
-          renderTextLines();
-        };
-        img.onerror = () => renderTextLines();
-      } else {
-        ctx.strokeStyle = "rgba(255, 215, 0, 0.4)";
-        ctx.lineWidth = 2;
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d");
+
+  const drawDynamicOverlays = () => {
+    const circleX = 256;
+    const circleY = 110;
+    const radius  = 75;
+
+    if (portraitImg) {
+      const img = new Image();
+      img.src = portraitImg;
+      img.onload = () => {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(img, circleX - radius, circleY - radius, radius * 2, radius * 2);
+        ctx.restore();
+        ctx.strokeStyle = "#ffd700";
+        ctx.lineWidth = 4;
         ctx.beginPath();
         ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
         ctx.stroke();
         renderTextLines();
-      }
-    };
+      };
+      img.onerror = () => renderTextLines();
+    } else {
+      ctx.strokeStyle = "rgba(255, 215, 0, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      renderTextLines();
+    }
+  };
 
-    const renderTextLines = () => {
-      ctx.fillStyle = "#ffd700";
-      ctx.textAlign = "center";
-      ctx.font = "bold 32px 'Helvetica Neue', Arial, sans-serif";
-      ctx.fillText(record.fullName || "სახელი გვარი", 256, 245);
-      ctx.font = "24px 'Helvetica Neue', Arial, sans-serif";
-      ctx.fillText(`${record.birthYear || "????"} - ${record.deathYear || "????"}`, 256, 295);
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.needsUpdate = true;
-      setDynamicTexture(tex);
-    };
+  const renderTextLines = () => {
+    ctx.fillStyle = "#ffd700";
+    ctx.textAlign = "center";
+    ctx.font = "bold 32px 'Helvetica Neue', Arial, sans-serif";
+    ctx.fillText(fullName || "სახელი გვარი", 256, 245);
+    ctx.font = "24px 'Helvetica Neue', Arial, sans-serif";
+    ctx.fillText(`${birthYear || "????"} - ${deathYear || "????"}`, 256, 295);
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.needsUpdate = true;
+    setDynamicTexture(tex);
+  };
 
-    const bgImage = new Image();
-    bgImage.src = record.stoneType === "gray_marble" ? "/gray.avif" : "/black.avif";
-    bgImage.onload = () => {
-      ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-      drawDynamicOverlays();
-    };
-  }, [record]);
+  const bgImage = new Image();
+  bgImage.src = stoneType === "gray_marble" ? "/gray.avif" : "/black.avif";
+  bgImage.onload = () => {
+    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+    drawDynamicOverlays();
+  };
+  bgImage.onerror = () => drawDynamicOverlays();
+
+}, [portraitImg, fullName, birthYear, deathYear, stoneType]);
 
   useEffect(() => {
     instanceScene.traverse((child) => {

@@ -14,6 +14,8 @@ const Experience = ({ graveRecords = [],  isPreview = false }) => {
     uSeason: { value: 1.5 },
   });
 
+  
+
   useFrame(() => {
     uniforms.current.uTime.value += 0.005;
   });

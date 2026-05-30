@@ -23,6 +23,8 @@ const DesignGrave = () => {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+
+
   const defaultSettings = {
     stoneType: "black_granite",
     fenceStyle: "none",
@@ -37,6 +39,14 @@ const DesignGrave = () => {
   };
 
   const [designSettings, setDesignSettings] = useState(defaultSettings);
+
+
+  const portraitUrl = useQuery(
+    api.services.getStorageUrl,
+    designSettings.portraitImg
+      ? { storageId: designSettings.portraitImg }
+      : "skip"
+  );
 
   useEffect(() => {
     if (savedDesignData !== undefined && savedDesignData !== null) {
@@ -136,6 +146,9 @@ const DesignGrave = () => {
     }
   };
 
+  console.log("portraitUrl:", portraitUrl);
+console.log("designSettings.portraitImg:", designSettings.portraitImg);
+
   return (
     <div className="relative w-full h-[calc(100vh-3rem)] mt-12 bg-[#0b0d12] overflow-hidden select-none flex flex-col">
       <Canvas camera={{ position: [0, 2, 6], fov: 45 }} className="w-full flex-grow">
@@ -161,10 +174,11 @@ const DesignGrave = () => {
               fullName: designSettings.fullName,
               birthYear: designSettings.birthYear,
               deathYear: designSettings.deathYear,
-              portraitImg: designSettings.portraitImg,
+              portraitImg: (portraitUrl && portraitUrl.startsWith("https")) ? portraitUrl : undefined,
             },
           ]}
           designSettings={designSettings}
+          
           isPreview={true}
         />
       </Canvas>
