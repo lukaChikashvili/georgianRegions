@@ -119,4 +119,18 @@ invitations: defineTable({
   createdAt: v.number(),
 }).index("by_memorialId", ["memorialId"]),
 
+
+
+subscriptions: defineTable({
+  userId: v.string(),
+  plan: v.union(v.literal("one_time"), v.literal("monthly")),
+  status: v.union(v.literal("active"), v.literal("expired"), v.literal("cancelled")),
+  bogOrderId: v.string(),
+  amount: v.number(),
+  currency: v.string(),
+  createdAt: v.number(),
+  expiresAt: v.union(v.number(), v.null()),
+}).index("by_userId", ["userId"])
+  .index("by_bogOrderId", ["bogOrderId"]),
+
 });
