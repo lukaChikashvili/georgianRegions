@@ -11,6 +11,7 @@
 import type * as comments from "../comments.js";
 import type * as memorials from "../memorials.js";
 import type * as posts from "../posts.js";
+import type * as pricing from "../pricing.js";
 import type * as services from "../services.js";
 
 import type {
@@ -23,6 +24,7 @@ declare const fullApi: ApiFromModules<{
   comments: typeof comments;
   memorials: typeof memorials;
   posts: typeof posts;
+  pricing: typeof pricing;
   services: typeof services;
 }>;
 
