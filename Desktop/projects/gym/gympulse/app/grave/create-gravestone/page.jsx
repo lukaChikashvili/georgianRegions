@@ -81,23 +81,22 @@ const DesignGrave = () => {
   const handlePortraitUpload = async (file) => {
     try {
       setUploadProgress("იტვირთება...");
-
-   
+  
       const uploadUrl = await generateUploadUrl();
-
-   
+  
       const response = await fetch(uploadUrl, {
         method: "POST",
         headers: { "Content-Type": file.type },
         body: file,
       });
-
+  
       if (!response.ok) throw new Error("ატვირთვა ვერ მოხერხდა");
-
+  
       const { storageId } = await response.json();
+  
 
-    
       updateSetting("portraitImg", storageId);
+      
       setUploadProgress("");
     } catch (error) {
       console.error("პორტრეტის ატვირთვის შეცდომა:", error);
@@ -105,6 +104,14 @@ const DesignGrave = () => {
       setTimeout(() => setUploadProgress(""), 3000);
     }
   };
+
+  const [resolvedPortraitUrl, setResolvedPortraitUrl] = useState(null);
+
+  useEffect(() => {
+    if (portraitUrl && portraitUrl.startsWith("https")) {
+      setResolvedPortraitUrl(portraitUrl);
+    }
+  }, [portraitUrl]);
 
   const handlePublish = async () => {
     setIsPublishing(true);
@@ -146,8 +153,7 @@ const DesignGrave = () => {
     }
   };
 
-  console.log("portraitUrl:", portraitUrl);
-console.log("designSettings.portraitImg:", designSettings.portraitImg);
+  
 
   return (
     <div className="relative w-full h-[calc(100vh-3rem)] mt-12 bg-[#0b0d12] overflow-hidden select-none flex flex-col">
@@ -174,7 +180,7 @@ console.log("designSettings.portraitImg:", designSettings.portraitImg);
               fullName: designSettings.fullName,
               birthYear: designSettings.birthYear,
               deathYear: designSettings.deathYear,
-              portraitImg: (portraitUrl && portraitUrl.startsWith("https")) ? portraitUrl : undefined,
+              portraitImg: resolvedPortraitUrl,
             },
           ]}
           designSettings={designSettings}

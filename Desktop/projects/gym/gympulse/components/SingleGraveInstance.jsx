@@ -3,6 +3,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
 
 const PLOT_SIZE = 20;
 const FENCE_SCALE = 7;
@@ -40,34 +42,57 @@ const SingleGraveInstance = ({ record, position, modelScene, baseTextures }) => 
 
   const instanceScene = useMemo(() => modelScene.clone(), [modelScene]);
 
+  const portraitUrl = useQuery(
+    api.services.getStorageUrl,
+    record.portraitImg && !record.portraitImg.startsWith("http")
+      ? { storageId: record.portraitImg }
+      : "skip"
+  );
+
+  const portraitImg = record.portraitImg?.startsWith("http")
+  ? record.portraitImg
+  : portraitUrl ?? null;
+
   const fenceStyle  = record.fenceStyle  || "none";
   const floorStyle  = record.floorStyle  || "grass";
   const flowerStyle = record.flowers     || "none";
   const winePoured  = record.winePoured  || false;
 
-  const portraitImg = record.portraitImg;
+
 const fullName    = record.fullName    || "";
 const birthYear   = record.birthYear   || "";
 const deathYear   = record.deathYear   || "";
 const stoneType   = record.stoneType   || "black_granite";
 
 useEffect(() => {
-  if (portraitImg === undefined) return;
-
   const canvas = document.createElement("canvas");
   canvas.width = 512;
   canvas.height = 512;
   const ctx = canvas.getContext("2d");
 
-  const drawDynamicOverlays = () => {
+  const renderTextLines = () => {
+    ctx.fillStyle = "#ffd700";
+    ctx.textAlign = "center";
+    ctx.font = "bold 28px Arial, sans-serif";
+    ctx.fillText(fullName || "სახელი გვარი", 256, 245);
+    ctx.font = "22px Arial, sans-serif";
+    ctx.fillText(`${birthYear || "????"} - ${deathYear || "????"}`, 256, 295);
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.needsUpdate = true;
+    setDynamicTexture(tex);
+  };
+
+  const drawPortrait = () => {
     const circleX = 256;
     const circleY = 110;
-    const radius  = 75;
+    const radius = 75;
 
-    if (portraitImg) {
+    if (portraitImg && portraitImg.startsWith("http")) {
       const img = new Image();
+      img.crossOrigin = "anonymous";
       img.src = portraitImg;
       img.onload = () => {
+        
         ctx.save();
         ctx.beginPath();
         ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
@@ -79,55 +104,44 @@ useEffect(() => {
         ctx.beginPath();
         ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
         ctx.stroke();
+       
         renderTextLines();
       };
-      img.onerror = () => renderTextLines();
-    } else {
-      ctx.strokeStyle = "rgba(255, 215, 0, 0.4)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
-      ctx.stroke();
-      renderTextLines();
+      img.onerror = (e) => {
+       
+        renderTextLines();
+      };
     }
   };
 
-  const renderTextLines = () => {
-    ctx.fillStyle = "#ffd700";
-    ctx.textAlign = "center";
-    ctx.font = "bold 32px 'Helvetica Neue', Arial, sans-serif";
-    ctx.fillText(fullName || "სახელი გვარი", 256, 245);
-    ctx.font = "24px 'Helvetica Neue', Arial, sans-serif";
-    ctx.fillText(`${birthYear || "????"} - ${deathYear || "????"}`, 256, 295);
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.needsUpdate = true;
-    setDynamicTexture(tex);
-  };
-
   const bgImage = new Image();
-  bgImage.src = stoneType === "gray_marble" ? "/gray.avif" : "/black.avif";
+  bgImage.crossOrigin = "anonymous"; 
+
+  const bgSrc = stoneType === "gray_marble" ? "/gray.avif" : "/black.avif";
+  bgImage.src = bgSrc;
   bgImage.onload = () => {
     ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-    drawDynamicOverlays();
+    drawPortrait();
   };
-  bgImage.onerror = () => drawDynamicOverlays();
+  bgImage.onerror = () => drawPortrait();
 
 }, [portraitImg, fullName, birthYear, deathYear, stoneType]);
 
-  useEffect(() => {
-    instanceScene.traverse((child) => {
-      if (child.isMesh && child.material) {
-        child.material = child.material.clone();
-        if (child.name === "pCube9_impala_0" && dynamicTexture) {
-          child.material.map = dynamicTexture;
-        } else {
-          child.material.map =
-            record.stoneType === "gray_marble" ? baseTextures.marble : baseTextures.granite;
-        }
-        child.material.needsUpdate = true;
+useEffect(() => {
+  instanceScene.traverse((child) => {
+    if (child.isMesh && child.material) {
+      child.material = child.material.clone();
+      if (child.name === "pCube9_impala_0") {
+        child.material.map = dynamicTexture || 
+          (record.stoneType === "gray_marble" ? baseTextures.marble : baseTextures.granite);
+      } else {
+        child.material.map =
+          record.stoneType === "gray_marble" ? baseTextures.marble : baseTextures.granite;
       }
-    });
-  }, [instanceScene, record, dynamicTexture, baseTextures]);
+      child.material.needsUpdate = true;
+    }
+  });
+}, [instanceScene, record.stoneType, dynamicTexture, baseTextures]);
 
   return (
     <group position={position}>

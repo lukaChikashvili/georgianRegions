@@ -2,19 +2,28 @@
 
 import { OrbitControls, Stars } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from 'convex/react'; 
 import { api } from '../../convex/_generated/api'; 
 import Experience from '../../components/Experience';
 
+
+const useResolvedGraves = (graves) => {
+  const [resolved, setResolved] = useState([]);
+
+
+  useEffect(() => {
+    if (!graves) return;
+    setResolved(graves);
+  }, [graves]);
+
+  return resolved;
+};
+
 const Page = () => {
   const router = useRouter();
-  
- 
   const allGraves = useQuery(api.memorials.getAllGraveDesigns);
-  
-  
   const myGrave = useQuery(api.memorials.getMyGraveDesign);
   const hasDesigned = !!myGrave;
 
@@ -41,23 +50,17 @@ const Page = () => {
           maxDistance={80} 
         />
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        
-       
         <Experience graveRecords={allGraves} />
       </Canvas>
 
-      
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xl px-4 pointer-events-none">
         <div className="flex items-center justify-between p-4 border pointer-events-auto rounded-xl bg-[#16181e]/90 border-white/5 backdrop-blur-md shadow-xl">
           <div className="text-left">
-            <p className="text-xs font-light text-gray-400 tracking-wider">
-              ვირტუალური სივრცე
-            </p>
+            <p className="text-xs font-light text-gray-400 tracking-wider">ვირტუალური სივრცე</p>
             <h3 className="text-sm font-medium text-white tracking-wide mt-0.5">
               {hasDesigned ? myGrave.fullName : "მემორიალი არ არის შექმნილი"}
             </h3>
           </div>
-
           <button 
             onClick={() => router.push("/grave/create-gravestone")}
             className="flex items-center gap-2 py-2 px-4 text-xs font-medium text-[#0b0d12] bg-[#ffd700] hover:bg-[#ffe240] transition-all duration-300 rounded-lg hover:scale-[1.02] active:scale-[0.98]"
