@@ -9,6 +9,50 @@ import { useRouter } from 'next/navigation';
 import ProtectedRoutes from '../../components/ProtectedRoutes';
 
 const CreateMemorial = () => {
+
+  // AI
+  const [aiPanelOpen, setAiPanelOpen] = useState(false);
+  const [aiInputs, setAiInputs] = useState({
+  profession: '',
+  hobbies: '',
+  achievements: '',
+  personalityTraits: '',
+});
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState('');
+
+
+  const handleGenerateBiography = async () => {
+    setAiLoading(true);
+    setAiError('');
+    try {
+      const res = await fetch('/api/generate-biography', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          birthDate: formData.birthDate,
+          deathDate: formData.deathDate,
+          ...aiInputs,
+        }),
+      });
+  
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+  
+      
+      setFormData((prev) => ({ ...prev, biography: data.biography }));
+      setAiPanelOpen(false);
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : 'შეცდომა');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+
+
   const router = useRouter();
   const { user } = useUser();
 
@@ -334,68 +378,187 @@ const CreateMemorial = () => {
             )}
 
           
-            {step === 2 && (
-              <div className="space-y-6 animate-fade-in">
-                <div className="mb-6">
-                  <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-                    <Sparkles size={20} className="text-[#D4AF37]" /> ცხოვრების ისტორია და გალერეა
-                  </h2>
-                  <p className="text-xs text-gray-500 mt-1">აღწერეთ მისი პიროვნება და ატვირთეთ სამახსოვრო ფოტოები.</p>
-                </div>
+{step === 2 && (
+  <div className="space-y-6 animate-fade-in">
+    <div className="mb-6">
+      <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
+        <Sparkles size={20} className="text-[#D4AF37]" /> ცხოვრების ისტორია და გალერეა
+      </h2>
+      <p className="text-xs text-gray-500 mt-1">აღწერეთ მისი პიროვნება და ატვირთეთ სამახსოვრო ფოტოები.</p>
+    </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-gray-400 font-light tracking-wide">მოკლე ეპიტაფია / ციტატა</label>
-                  <input type="text" name="epitaph" value={formData.epitaph} onChange={handleChange} placeholder="მაგ: ადამიანი, რომელმაც სამყარო უფრო ნათელი გახადა..." className="form-input" />
-                </div>
+    <div className="flex flex-col gap-2">
+      <label className="text-xs text-gray-400 font-light tracking-wide">მოკლე ეპიტაფია / ციტატა</label>
+      <input
+        type="text"
+        name="epitaph"
+        value={formData.epitaph}
+        onChange={handleChange}
+        placeholder="მაგ: ადამიანი, რომელმაც სამყარო უფრო ნათელი გახადა..."
+        className="form-input"
+      />
+    </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-gray-400 font-light tracking-wide">ბიოგრაფია / მოგონებები</label>
-                  <textarea name="biography" value={formData.biography} onChange={handleChange} rows={5} placeholder="გააზიარეთ მისი ცხოვრების გზა..." className="form-input resize-none py-3" />
-                </div>
+   
+    <div className="flex flex-col gap-3">
+  <label className="text-xs text-gray-400 font-light tracking-wide">
+    ბიოგრაფია / მოგონებები
+  </label>
 
-              
-                <div className="flex flex-col gap-3 pt-2 border-t border-white/5">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs text-gray-400 font-light tracking-wide">ფოტოგალერეა</label>
-                    {galleryPreviews.length > 0 && (
-                      <span className="text-[11px] text-gray-600">{galleryPreviews.length} ფოტო</span>
-                    )}
-                  </div>
-                  <input
-                    ref={galleryInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleGalleryUpload}
-                    className="hidden"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => galleryInputRef.current?.click()}
-                    className="cursor-pointer w-full flex items-center justify-center gap-2 py-4 rounded-xl border border-dashed border-white/10 hover:border-[#D4AF37]/30 hover:bg-[#1A150F]/20 transition text-gray-500 hover:text-[#D4AF37] text-xs font-light"
-                  >
-                    <Plus size={14} /> სურათების ატვირთვა (შეგიძლიათ რამდენიმე ერთდროულად)
-                  </button>
+  {/* Textarea with AI button overlaid inside */}
+  <div className="relative">
+    <textarea
+      name="biography"
+      value={formData.biography}
+      onChange={handleChange}
+      rows={5}
+      placeholder="გააზიარეთ მისი ცხოვრების გზა ან გამოიყენეთ AI დახმარება..."
+      className="form-input resize-none py-3 pr-12"
+    />
+    <button
+      type="button"
+      onClick={() => setAiPanelOpen((prev) => !prev)}
+      title="AI-ით დაწერა"
+      className="absolute top-3 right-3 p-2 rounded-lg bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 border border-[#D4AF37]/30 hover:border-[#D4AF37]/60 text-[#D4AF37] transition-all"
+    >
+      <Sparkles size={14} />
+    </button>
+  </div>
 
-                  {galleryPreviews.length > 0 && (
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-                      {galleryPreviews.map((url, idx) => (
-                        <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-white/5 bg-[#0D0D0F]">
-                          <img src={url} alt="გალერეა" className="w-full h-full object-cover grayscale opacity-70 group-hover:opacity-90 group-hover:grayscale-0 transition" />
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveGallery(idx)}
-                            className="cursor-pointer absolute top-2 right-2 p-1 rounded-full bg-black/70 hover:bg-red-950/80 border border-white/10 text-gray-400 hover:text-red-400 transition"
-                          >
-                            <X size={12} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+  {formData.biography && (
+    <p className="text-[11px] text-gray-600 text-right">
+      {formData.biography.length} სიმბოლო
+    </p>
+  )}
+
+  {/* AI Panel — opens below textarea */}
+  {aiPanelOpen && (
+    <div className="bg-[#1A150F]/30 border border-[#D4AF37]/20 rounded-2xl p-5 flex flex-col gap-4 animate-fade-in">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Sparkles size={14} className="text-[#D4AF37]" />
+          <p className="text-xs text-gray-300 font-medium">AI ბიოგრაფიის გენერატორი</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setAiPanelOpen(false)}
+          className="text-gray-600 hover:text-gray-400 transition-colors"
+        >
+          <X size={14} />
+        </button>
+      </div>
+
+      <p className="text-xs text-gray-500 font-light leading-relaxed">
+        შეავსეთ რამდენიმე დეტალი — AI დაწერს თბილ ბიოგრაფიას. შემდეგ შეძლებთ დაარედაქტიროთ.
+      </p>
+
+      <div className="bg-black/20 rounded-xl px-3 py-2">
+        <p className="text-[11px] text-gray-500">
+          ავტომატურად:{' '}
+          <span className="text-gray-300">
+            {formData.firstName} {formData.lastName}
+            {formData.birthDate && ` • ${formData.birthDate}`}
+            {formData.deathDate && ` — ${formData.deathDate}`}
+          </span>
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {[
+          { key: 'profession', label: 'პროფესია', placeholder: 'მასწავლებელი, ექიმი...' },
+          { key: 'hobbies', label: 'ჰობი', placeholder: 'მუსიკა, მებაღეობა...' },
+          { key: 'achievements', label: 'მიღწევები', placeholder: 'ოჯახი, კარიერა...' },
+          { key: 'personalityTraits', label: 'ხასიათი', placeholder: 'თბილი, მზრუნველი...' },
+        ].map((field) => (
+          <div key={field.key} className="flex flex-col gap-1.5">
+            <label className="text-[11px] text-gray-500">{field.label}</label>
+            <input
+              type="text"
+              placeholder={field.placeholder}
+              value={aiInputs[field.key]}
+              onChange={(e) =>
+                setAiInputs((prev) => ({ ...prev, [field.key]: e.target.value }))
+              }
+              className="form-input text-xs py-2"
+            />
+          </div>
+        ))}
+      </div>
+
+      {aiError && (
+        <p className="text-xs text-red-400 bg-red-500/10 px-3 py-2 rounded-lg">
+          {aiError}
+        </p>
+      )}
+
+      <button
+        type="button"
+        onClick={handleGenerateBiography}
+        disabled={aiLoading}
+        className="w-full py-2.5 bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] hover:brightness-110 text-black text-xs font-semibold rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+      >
+        {aiLoading ? (
+          <>
+            <Loader2 size={13} className="animate-spin" />
+            იწერება...
+          </>
+        ) : (
+          <>
+            <Sparkles size={13} />
+            ბიოგრაფიის დაწერა
+          </>
+        )}
+      </button>
+    </div>
+  )}
+</div>
+   
+    <div className="flex flex-col gap-3 pt-2 border-t border-white/5">
+      <div className="flex items-center justify-between">
+        <label className="text-xs text-gray-400 font-light tracking-wide">ფოტოგალერეა</label>
+        {galleryPreviews.length > 0 && (
+          <span className="text-[11px] text-gray-600">{galleryPreviews.length} ფოტო</span>
+        )}
+      </div>
+      <input
+        ref={galleryInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleGalleryUpload}
+        className="hidden"
+      />
+      <button
+        type="button"
+        onClick={() => galleryInputRef.current?.click()}
+        className="cursor-pointer w-full flex items-center justify-center gap-2 py-4 rounded-xl border border-dashed border-white/10 hover:border-[#D4AF37]/30 hover:bg-[#1A150F]/20 transition text-gray-500 hover:text-[#D4AF37] text-xs font-light"
+      >
+        <Plus size={14} /> სურათების ატვირთვა (შეგიძლიათ რამდენიმე ერთდროულად)
+      </button>
+
+      {galleryPreviews.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+          {galleryPreviews.map((url, idx) => (
+            <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-white/5 bg-[#0D0D0F]">
+              <img
+                src={url}
+                alt="გალერეა"
+                className="w-full h-full object-cover grayscale opacity-70 group-hover:opacity-90 group-hover:grayscale-0 transition"
+              />
+              <button
+                type="button"
+                onClick={() => handleRemoveGallery(idx)}
+                className="cursor-pointer absolute top-2 right-2 p-1 rounded-full bg-black/70 hover:bg-red-950/80 border border-white/10 text-gray-400 hover:text-red-400 transition"
+              >
+                <X size={12} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
            
             {step === 3 && (
