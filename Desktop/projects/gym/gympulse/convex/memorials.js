@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { checkIsPremium } from "./pricing";
 
 export const createMemorial = mutation({
     
@@ -37,6 +38,41 @@ export const createMemorial = mutation({
       },
 
       handler: async(ctx, args) => {
+
+        const premium = await checkIsPremium(ctx, args.creatorId);
+
+        if (!premium) {
+          const existingMemorials = await ctx.db
+            .query("memorials")
+            .withIndex("by_creatorId", (q) => q.eq("creatorId", args.creatorId))
+            .collect();
+     
+          if (existingMemorials.length >= 1) {
+            throw new Error(
+              "უფასო პაკეტში მხოლოდ 1 მემორიალის შექმნაა შესაძლებელი. განაახლეთ პაკეტი."
+            );
+          }
+        }
+
+        if (!premium && args.galleryUrls && args.galleryUrls.length > 3) {
+          throw new Error(
+            "უფასო პაკეტში მაქსიმუმ 3 ფოტოა დაშვებული. განაახლეთ პაკეტი."
+          );
+        }
+
+        if (!premium && args.biography && args.biography.length > 500) {
+          throw new Error(
+            "უფასო პაკეტში ბიოგრაფია მაქსიმუმ 500 სიმბოლოა. განაახლეთ პაკეტი."
+          );
+        }
+
+        if (!premium && args.favoriteSongUrl) {
+          throw new Error(
+            "მუსიკის დამატება მხოლოდ პრემიუმ პაკეტშია ხელმისაწვდომი."
+          );
+        }
+
+
     
         const existingMemorial = await ctx.db
       .query("memorials")
@@ -182,11 +218,31 @@ export const updateMemorial = mutation({
     privacyType: v.string(),
   },
   handler: async (ctx, args) => {
+
+
     const { id, ...updateData } = args;
     const memorial = await ctx.db.get(id);
     if (!memorial) {
       throw new Error("მემორიალი ვერ მოიძებნა.");
     }
+
+
+    const premium = await checkIsPremium(ctx, memorial.creatorId);
+
+    if (!premium && updateData.biography && updateData.biography.length > 500) {
+      throw new Error(
+        "უფასო პაკეტში ბიოგრაფია მაქსიმუმ 500 სიმბოლოა. განაახლეთ პაკეტი."
+      );
+    }
+
+    if (!premium && updateData.galleryUrls && updateData.galleryUrls.length > 3) {
+      throw new Error(
+        "უფასო პაკეტში მაქსიმუმ 3 ფოტოა დაშვებული. განაახლეთ პაკეტი."
+      );
+    }
+
+
+
     await ctx.db.patch(id, updateData);
     return true;
   },
