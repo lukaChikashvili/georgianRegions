@@ -19,8 +19,8 @@ export const createMemorial = mutation({
         bankName: v.optional(v.string()),
         bankAccountIban: v.optional(v.string()),
         
-        funeralLocation: v.string(),
-        funeralTime: v.string(),
+        funeralLocation: v.optional(v.string()),
+        funeralTime: v.optional(v.string()),
         cemeteryLocation: v.optional(v.string()),
 
         
