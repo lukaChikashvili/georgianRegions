@@ -16,6 +16,28 @@ const MemorialPage = () => {
 
   const visits = useMutation(api.memorials.incrementVisits);
 
+  // share feature
+  const [shareTooltip, setShareTooltip] = useState("");
+  const memorialUrl = typeof window !== "undefined" ? window.location.href : "";
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(memorialUrl);
+    setShareTooltip("ბმული დაკოპირდა!");
+    setTimeout(() => setShareTooltip(""), 2500);
+  };
+  
+  const shareToFacebook = () => {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(memorialUrl)}`, "_blank");
+  };
+  
+  const shareToWhatsApp = () => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(`${memorial.firstName} ${memorial.lastName} - მემორიალური გვერდი: ${memorialUrl}`)}`, "_blank");
+  };
+  
+  const shareToTelegram = () => {
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(memorialUrl)}&text=${encodeURIComponent(`${memorial.firstName} ${memorial.lastName} - მემორიალური გვერდი`)}`, "_blank");
+  };
+
  
 // favorite music
 const [isMusicModalOpen, setIsMusicModalOpen] = useState(false);
@@ -286,7 +308,7 @@ const convertYouTube = (url) => {
   return (
     <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans pb-24 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-[#1A150F] to-transparent opacity-40 blur-3xl pointer-events-none" />
-
+ 
   
 
       <header className="relative z-10 pt-28 pb-16 text-center max-w-3xl mx-auto px-6 flex flex-col items-center">
@@ -628,6 +650,54 @@ const convertYouTube = (url) => {
     </div>
   )}
 </div>
+</section>
+
+
+<section className="max-w-4xl mx-auto mt-12 px-6">
+  <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-6 backdrop-blur-xl">
+    <h2 className="font-serif text-xl text-[#FFF5D6] mb-6 flex items-center gap-3">
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      მემორიალის გაზიარება
+    </h2>
+
+    <div className="flex flex-wrap gap-3">
+      
+      <button
+        onClick={handleCopyLink}
+        className="cursor-pointer flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-[#0D0D0F]/60 hover:border-[#D4AF37]/30 text-sm text-gray-300 hover:text-[#D4AF37] transition-all duration-200"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        {shareTooltip || "ბმულის კოპირება"}
+      </button>
+
+     
+      <button
+        onClick={shareToFacebook}
+        className="cursor-pointer flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-[#1877F2]/10 hover:bg-[#1877F2]/20 hover:border-[#1877F2]/40 text-sm text-[#1877F2] transition-all duration-200"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </button>
+
+      
+      <button
+        onClick={shareToWhatsApp}
+        className="cursor-pointer flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-[#25D366]/10 hover:bg-[#25D366]/20 hover:border-[#25D366]/40 text-sm text-[#25D366] transition-all duration-200"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.528 5.859L.057 23.928l6.232-1.635A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.523-5.188-1.432l-.372-.221-3.862 1.013 1.033-3.77-.242-.389A9.936 9.936 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        WhatsApp
+      </button>
+
+     
+      <button
+        onClick={shareToTelegram}
+        className="cursor-pointer flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-[#229ED9]/10 hover:bg-[#229ED9]/20 hover:border-[#229ED9]/40 text-sm text-[#229ED9] transition-all duration-200"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Telegram
+      </button>
+    </div>
+  </div>
 </section>
 
 <section className="max-w-4xl mx-auto mt-12 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
