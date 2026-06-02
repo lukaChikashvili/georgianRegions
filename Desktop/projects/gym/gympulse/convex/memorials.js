@@ -14,6 +14,9 @@ export const createMemorial = mutation({
         biography: v.string(),
 
         galleryUrls: v.optional(v.array(v.id("_storage"))),
+        favoriteSongUrl: v.optional(v.string()),
+
+       
 
         enableDonations: v.boolean(),
         bankName: v.optional(v.string()),
@@ -63,7 +66,7 @@ export const createMemorial = mutation({
             bankName: args.bankName,
             bankAccountIban: args.bankAccountIban,
 
-            
+            favoriteSongUrl: args.favoriteSongUrl,
 
            
             enableCandle: args.enableCandle,

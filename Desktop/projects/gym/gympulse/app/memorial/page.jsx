@@ -10,6 +10,51 @@ import ProtectedRoutes from '../../components/ProtectedRoutes';
 
 const CreateMemorial = () => {
 
+  const convertYouTube = (url) => {
+    if (!url) return "";
+  
+    try {
+      const parsedUrl = new URL(url);
+  
+      
+      if (parsedUrl.hostname.includes("youtu.be")) {
+        const id = parsedUrl.pathname.slice(1);
+        return `https://www.youtube.com/embed/${id}`;
+      }
+  
+  
+      if (parsedUrl.searchParams.get("v")) {
+        const id = parsedUrl.searchParams.get("v");
+        return `https://www.youtube.com/embed/${id}`;
+      }
+  
+    
+      if (url.includes("youtube.com/embed/")) {
+        return url;
+      }
+  
+      return "";
+    } catch (e) {
+      return "";
+    }
+  };
+
+  const getYouTubeVideoId = (url) => {
+    if (!url) return undefined;
+  
+    try {
+      const parsed = new URL(url);
+  
+      if (parsed.hostname.includes("youtu.be")) {
+        return parsed.pathname.slice(1);
+      }
+  
+      return parsed.searchParams.get("v") || undefined;
+    } catch {
+      return undefined;
+    }
+  };
+
   // AI
   const [aiPanelOpen, setAiPanelOpen] = useState(false);
   const [aiInputs, setAiInputs] = useState({
@@ -90,12 +135,13 @@ const CreateMemorial = () => {
     privacyType: 'public',
     requireModeration: false,
     enableDonations: false,
+    favoriteSongUrl: '',
     bankName: 'bog',
     bankAccountIban: '',
     showFuneralDetails: false, 
   });
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, 5));
+  const nextStep = () => setStep((prev) => Math.min(prev + 1, 6));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   const handleChange = (e) => {
@@ -230,6 +276,7 @@ const CreateMemorial = () => {
         funeralTime: formData.showFuneralDetails ? formData.funeralTime : undefined,
         cemeteryLocation: formData.showFuneralDetails ? formData.cemeteryLocation : undefined,
         enableCandle: formData.enableCandle,
+        favoriteSongUrl: formData.favoriteSongUrl || undefined,
         urlSlug: formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-'),
         privacyType: formData.privacyType,
         requireModeration: formData.requireModeration,
@@ -261,7 +308,7 @@ const CreateMemorial = () => {
 
           
           <div className="mb-12 flex items-center justify-between max-w-xl mx-auto relative">
-            {[1, 2, 3, 4, 5].map((num) => (
+            {[1, 2, 3, 4, 5, 6].map((num) => (
               <div key={num} className="flex items-center relative z-10">
                 <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-medium transition-all duration-500 ${
                   step >= num
@@ -270,7 +317,7 @@ const CreateMemorial = () => {
                 }`}>
                   {num}
                 </div>
-                {num < 5 && (
+                {num < 6 && (
                   <div className={`w-12 md:w-20 h-px mx-2 transition-all duration-500 ${
                     step > num ? 'bg-[#D4AF37]/50' : 'bg-white/5'
                   }`} />
@@ -620,7 +667,7 @@ const CreateMemorial = () => {
       )}
     </div>
 
-    {/* Candle toggle (unchanged) */}
+   
     <div className="flex items-center justify-between p-4 rounded-xl bg-[#161619]/30 border border-white/5">
       <div>
         <h4 className="text-sm font-medium text-gray-300">ციფრული სანთლის გააქტიურება</h4>
@@ -632,7 +679,7 @@ const CreateMemorial = () => {
       </label>
     </div>
 
-    {/* Invite card — disabled when no funeral details */}
+    
     <div className={`p-5 rounded-xl border mt-4 backdrop-blur-xs flex flex-col sm:flex-row items-center justify-between gap-4 transition-opacity ${
       formData.showFuneralDetails ? 'bg-[#161619]/40 border-[#D4AF37]/20 opacity-100' : 'bg-[#161619]/20 border-white/5 opacity-40 pointer-events-none'
     }`}>
@@ -759,6 +806,74 @@ const CreateMemorial = () => {
               </div>
             )}
 
+{step === 6 && (
+  <div className="space-y-6 animate-fade-in">
+    <div className="mb-6">
+      <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
+        🎵 მუსიკალური მოგონება
+      </h2>
+      <p className="text-xs text-gray-500 mt-1">
+        დაამატეთ YouTube ბმული — სიმღერა, რომელიც მის ხსოვნას უკავშირდება.
+      </p>
+    </div>
+
+    <div className="flex flex-col gap-2">
+      <label className="text-xs text-gray-400">
+        YouTube მუსიკის ბმული
+      </label>
+      <input
+        type="text"
+        name="favoriteSongUrl"
+       value={formData.favoriteSongUrl}
+        onChange={handleChange}
+        placeholder="https://www.youtube.com/watch?v=..."
+        className="form-input"
+      />
+    </div>
+
+    {formData.favoriteSongUrl && (
+      <div className="flex flex-col items-center gap-8 pt-8 animate-fade-in">
+
+      
+        <div className="relative group">
+          <div className="w-44 h-44 rounded-full bg-zinc-900 border-4 border-zinc-800 shadow-2xl flex items-center justify-center animate-[spin_8s_linear_infinite] group-hover:[animation-play-state:paused]">
+
+            
+            <div className="w-[92%] h-[92%] rounded-full border border-zinc-700/40"></div>
+            <div className="absolute w-[70%] h-[70%] rounded-full border border-zinc-700/30"></div>
+
+            
+            <div className="absolute w-16 h-16 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
+              <div className="w-3 h-3 bg-black rounded-full"></div>
+            </div>
+
+          </div>
+
+          
+          <div className="absolute inset-0 rounded-full bg-[#D4AF37]/10 blur-xl opacity-40 group-hover:opacity-60 transition"></div>
+        </div>
+
+       
+        <div className="w-full max-w-md overflow-hidden rounded-xl border border-white/10 shadow-xl">
+          <iframe
+            className="w-full aspect-video"
+            src={convertYouTube(formData.favoriteSongUrl)}
+            title="მუსიკალური მოგონება"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+
+       
+        <p className="text-[11px] uppercase tracking-widest text-[#D4AF37]/70 text-center">
+          მუსიკა, რომელიც დარჩა
+        </p>
+      </div>
+    )}
+  </div>
+)}
+
+
            
             <div className="mt-10 pt-6 border-t border-white/5 flex justify-between">
               <button
@@ -771,7 +886,7 @@ const CreateMemorial = () => {
                 <ChevronLeft size={14} /> უკან
               </button>
 
-              {step < 5 ? (
+              {step < 6 ? (
                 <button
                   onClick={nextStep}
                   className="px-6 py-2 rounded-xl bg-linear-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-[0.98] hover:brightness-110 cursor-pointer shadow-lg shadow-[#D4AF37]/5"
