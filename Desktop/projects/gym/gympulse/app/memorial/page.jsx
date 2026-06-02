@@ -307,24 +307,24 @@ const CreateMemorial = () => {
         <div className="max-w-4xl mx-auto relative z-10">
 
           
-          <div className="mb-12 ml-26 flex items-center justify-between max-w-xl mx-auto relative">
-            {[1, 2, 3, 4, 5, 6].map((num) => (
-              <div key={num} className="flex items-center relative z-10">
-                <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-medium transition-all duration-500 ${
-                  step >= num
-                    ? 'bg-linear-to-r from-[#AA7C11] to-[#D4AF37] border-transparent text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.2)]'
-                    : 'bg-[#121214]/60 border-white/5 text-gray-500'
-                }`}>
-                  {num}
-                </div>
-                {num < 6 && (
-                  <div className={`w-12 md:w-20 h-px mx-2 transition-all duration-500 ${
-                    step > num ? 'bg-[#D4AF37]/50' : 'bg-white/5'
-                  }`} />
-                )}
-              </div>
-            ))}
-          </div>
+        <div className="mb-12 flex items-center justify-center max-w-xl mx-auto relative px-4">
+  {[1, 2, 3, 4, 5, 6].map((num) => (
+    <div key={num} className="flex items-center relative z-10">
+      <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full border flex items-center justify-center text-[10px] md:text-xs font-medium transition-all duration-500 ${
+        step >= num
+          ? 'bg-linear-to-r from-[#AA7C11] to-[#D4AF37] border-transparent text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.2)]'
+          : 'bg-[#121214]/60 border-white/5 text-gray-500'
+      }`}>
+        {num}
+      </div>
+      {num < 6 && (
+        <div className={`w-4 sm:w-8 md:w-20 h-px mx-1 md:mx-2 transition-all duration-500 ${
+          step > num ? 'bg-[#D4AF37]/50' : 'bg-white/5'
+        }`} />
+      )}
+    </div>
+  ))}
+       </div>
 
           {error && (
             <div className="mb-6 max-w-3xl mx-auto p-4 rounded-xl bg-red-950/20 border border-red-500/20 text-red-400 text-sm font-light text-center backdrop-blur-md">

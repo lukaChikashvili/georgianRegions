@@ -523,7 +523,7 @@ const convertYouTube = (url) => {
 
 
       {memorial.favoriteSongUrl && (
-  <section className="max-w-4xl mx-auto mt-20 px-6 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl flex flex-col items-center gap-4">
+  <section className="max-w-4xl  mx-auto  mt-20 px-6 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl flex flex-col items-center gap-4">
     <h2 className="font-serif text-xl text-[#FFF5D6] self-start flex items-center gap-3">
       <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
       მუსიკალური მოგონება
