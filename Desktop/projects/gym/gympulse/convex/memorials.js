@@ -150,6 +150,20 @@ export const deleteMemorial = mutation({
     if (!memorial) {
       throw new Error("მემორიალი ვერ მოიძებნა.");
     }
+
+    
+    if (memorial.mainPortraitUrl) {
+      await ctx.storage.delete(memorial.mainPortraitUrl);
+    }
+
+   
+    if (memorial.galleryUrls && memorial.galleryUrls.length > 0) {
+      await Promise.all(
+        memorial.galleryUrls.map((storageId) => ctx.storage.delete(storageId))
+      );
+    }
+
+    
     await ctx.db.delete(args.id);
     return true;
   },
