@@ -24,7 +24,7 @@ export const HowItWorks = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="text-center max-w-2xl mx-auto mb-20">
           <span className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium font-sans">პროცესი</span>
-          <h2 className="text-3xl md:text-4xl font-light text-[#FFF5D6] font-serif mt-3">როგორ მუშაობს GoldenMemory?</h2>
+          <h2 className="text-3xl md:text-4xl font-light text-[#FFF5D6] font-serif mt-3">როგორ მუშაობს GoldenMemorial?</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">

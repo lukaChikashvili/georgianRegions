@@ -19,7 +19,7 @@ export const Footer = () => {
     
         <div className="flex flex-col items-center md:items-start gap-1">
           <span className="font-serif text-base tracking-wider text-[#FFF5D6] font-light">
-            Golden<span className="text-[#D4AF37]">Memory</span>
+            Golden<span className="text-[#D4AF37]">Memorial</span>
           </span>
           <span className="text-[10px] text-gray-500 font-light">
             სამუდამო ციფრული ხსოვნის სივრცე
@@ -37,7 +37,7 @@ export const Footer = () => {
         
         <div className="flex flex-col-reverse sm:flex-row items-center gap-6 md:gap-8">
           <div className="text-[10px] text-gray-600 tracking-wide font-light text-center md:text-right">
-            &copy; 2026 GoldenMemory. ყველა უფლება დაცულია.
+            &copy; 2026 GoldenMemorial. ყველა უფლება დაცულია.
           </div>
 
           
