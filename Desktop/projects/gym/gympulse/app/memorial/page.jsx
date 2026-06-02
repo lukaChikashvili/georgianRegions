@@ -307,7 +307,7 @@ const CreateMemorial = () => {
         <div className="max-w-4xl mx-auto relative z-10">
 
           
-          <div className="mb-12 flex items-center justify-between max-w-xl mx-auto relative">
+          <div className="mb-12 ml-26 flex items-center justify-between max-w-xl mx-auto relative">
             {[1, 2, 3, 4, 5, 6].map((num) => (
               <div key={num} className="flex items-center relative z-10">
                 <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-medium transition-all duration-500 ${
@@ -332,7 +332,7 @@ const CreateMemorial = () => {
             </div>
           )}
 
-          <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 md:p-10 backdrop-blur-xl shadow-2xl transition-all duration-300">
+          <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 md:p-10 backdrop-blur-xl shadow-2xl transition-all duration-300 ">
 
            
             {step === 1 && (

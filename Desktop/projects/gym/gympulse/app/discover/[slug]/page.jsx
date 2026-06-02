@@ -17,7 +17,14 @@ const MemorialPage = () => {
   const visits = useMutation(api.memorials.incrementVisits);
 
  
+// favorite music
+const [isMusicModalOpen, setIsMusicModalOpen] = useState(false);
 
+const convertYouTube = (url) => {
+  if (!url) return "";
+  const match = url.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+  return match ? `https://www.youtube.com/embed/${match[1]}?autoplay=1` : url;
+};
 
   const memorial = useQuery(api.memorials.getMemorialBySlug, { urlSlug: slug });
   const lightCandleMutation = useMutation(api.memorials.lightCandle);
@@ -492,6 +499,87 @@ const MemorialPage = () => {
         </div>
       </main>
 
+
+      {memorial.favoriteSongUrl && (
+  <section className="max-w-4xl mx-auto mt-20 px-6 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl flex flex-col items-center gap-4">
+    <h2 className="font-serif text-xl text-[#FFF5D6] self-start flex items-center gap-3">
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      მუსიკალური მოგონება
+    </h2>
+
+    <button
+      onClick={() => setIsMusicModalOpen(true)}
+      className="cursor-pointer relative group mt-2"
+    >
+      
+      <div className="absolute inset-0 rounded-full bg-[#D4AF37]/20 blur-xl opacity-40 group-hover:opacity-70 transition duration-500" />
+      
+      
+      <div className="relative w-44 h-44 rounded-full bg-zinc-900 border-4 border-zinc-800 shadow-2xl flex items-center justify-center animate-[spin_8s_linear_infinite] group-hover:[animation-play-state:paused] transition-all duration-300">
+        <div className="w-[92%] h-[92%] rounded-full border border-zinc-700/40" />
+        <div className="absolute w-[70%] h-[70%] rounded-full border border-zinc-700/30" />
+        
+        <div className="absolute w-16 h-16 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
+          <div className="w-3 h-3 bg-black rounded-full" />
+        </div>
+      </div>
+
+     
+      <p className="text-[11px] uppercase tracking-widest text-[#D4AF37]/70 text-center mt-4">
+        დააჭირეთ მოსასმენად
+      </p>
+    </button>
+  </section>
+)}
+
+{isMusicModalOpen && memorial.favoriteSongUrl && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in"
+    onClick={() => setIsMusicModalOpen(false)}
+  >
+    <div
+      className="bg-[#121214] border border-white/10 w-full max-w-lg rounded-2xl p-6 relative shadow-2xl space-y-4"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        onClick={() => setIsMusicModalOpen(false)}
+        className="absolute top-4 right-4 text-gray-500 hover:text-white cursor-pointer"
+      >
+        <X size={18} />
+      </button>
+
+      <h3 className="font-serif text-lg text-[#FFF5D6] flex items-center gap-2">
+        🎵 მუსიკალური მოგონება
+      </h3>
+
+   
+      <div className="flex justify-center py-2">
+        <div className="relative w-24 h-24 rounded-full bg-zinc-900 border-4 border-zinc-800 shadow-xl flex items-center justify-center animate-[spin_8s_linear_infinite]">
+          <div className="w-[92%] h-[92%] rounded-full border border-zinc-700/40" />
+          <div className="absolute w-[70%] h-[70%] rounded-full border border-zinc-700/30" />
+          <div className="absolute w-10 h-10 bg-[#D4AF37] rounded-full flex items-center justify-center">
+            <div className="w-2 h-2 bg-black rounded-full" />
+          </div>
+        </div>
+      </div>
+
+      
+      <div className="w-full overflow-hidden rounded-xl border border-white/10 shadow-xl">
+        <iframe
+          className="w-full aspect-video"
+          src={convertYouTube(memorial.favoriteSongUrl)}
+          title="მუსიკალური მოგონება"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+
+      <p className="text-[11px] uppercase tracking-widest text-[#D4AF37]/70 text-center">
+        მუსიკა, რომელიც დარჩა
+      </p>
+    </div>
+  </div>
+)}
      
 
   
