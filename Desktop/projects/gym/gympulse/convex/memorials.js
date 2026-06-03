@@ -60,9 +60,9 @@ export const createMemorial = mutation({
           );
         }
 
-        if (!premium && args.biography && args.biography.length > 500) {
+        if (!premium && args.biography && args.biography.length > 1000) {
           throw new Error(
-            "უფასო პაკეტში ბიოგრაფია მაქსიმუმ 500 სიმბოლოა. განაახლეთ პაკეტი."
+            "უფასო პაკეტში ბიოგრაფია მაქსიმუმ 1000 სიმბოლოა. განაახლეთ პაკეტი."
           );
         }
 
@@ -229,9 +229,9 @@ export const updateMemorial = mutation({
 
     const premium = await checkIsPremium(ctx, memorial.creatorId);
 
-    if (!premium && updateData.biography && updateData.biography.length > 500) {
+    if (!premium && updateData.biography && updateData.biography.length > 1000) {
       throw new Error(
-        "უფასო პაკეტში ბიოგრაფია მაქსიმუმ 500 სიმბოლოა. განაახლეთ პაკეტი."
+        "უფასო პაკეტში ბიოგრაფია მაქსიმუმ 1000 სიმბოლოა. განაახლეთ პაკეტი."
       );
     }
 

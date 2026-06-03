@@ -23,7 +23,7 @@ const FEATURE_LABELS = {
   },
   biography: {
     title: 'სრული ბიოგრაფია',
-    description: 'უფასო პაკეტში ბიოგრაფია 500 სიმბოლოთია შეზღუდული.',
+    description: 'უფასო პაკეტში ბიოგრაფია 1000 სიმბოლოთია შეზღუდული.',
     icon: '📖',
   },
   memorial: {
@@ -172,8 +172,11 @@ const CreateMemorial = () => {
     } catch { return ""; }
   };
 
-
+  const { user } = useUser();
   const isPremium = useQuery(api.pricing.isPremium) ?? false;
+  const myMemorials = useQuery(api.memorials.getMyMemorials, 
+    user ? { creatorId: user.id } : "skip"
+  );
   const [upgradeModal, setUpgradeModal] = useState(null);
   const [isUpgrading, setIsUpgrading] = useState(false);
 
@@ -220,7 +223,7 @@ const CreateMemorial = () => {
   };
 
   const router = useRouter();
-  const { user } = useUser();
+
 
   const createMemorialMutation = useMutation(api.memorials.createMemorial);
   const generateUploadUrl = useMutation(api.services.generateUploadUrl);
@@ -257,7 +260,7 @@ const CreateMemorial = () => {
  
   const handleBiographyChange = (e) => {
     const val = e.target.value;
-    if (!isPremium && val.length > 500) {
+    if (!isPremium && val.length > 1000) {
       setUpgradeModal('biography');
       return;
     }
@@ -320,6 +323,13 @@ const CreateMemorial = () => {
 
   const handleSubmit = async () => {
     if (!user) { setError('მემორიალის გამოსაქვეყნებლად საჭიროა ავტორიზაცია.'); return; }
+
+    if (!isPremium && myMemorials && myMemorials.length >= 1) {
+      setUpgradeModal('memorial');
+      return;
+    }
+
+
     if (!formData.firstName.trim() || !formData.lastName.trim()) { setError('გთხოვთ, შეავსოთ სახელი და გვარი.'); setStep(1); return; }
     if (!formData.birthDate || !formData.deathDate) { setError('გთხოვთ, მიუთითოთ როგორც დაბადების, ისე გარდაცვალების თარიღი.'); setStep(1); return; }
     if (formData.enableDonations && !formData.bankAccountIban.trim()) { setError('საფინანსო მხარდაჭერის ჩართვისას საბანკო ანგარიშის (IBAN) შევსება სავალდებულოა.'); setStep(4); return; }
@@ -510,7 +520,7 @@ const CreateMemorial = () => {
                     <label className="text-xs text-gray-400 font-light tracking-wide">ბიოგრაფია / მოგონებები</label>
                     {!isPremium && (
                       <button type="button" onClick={() => setUpgradeModal('biography')} className="flex items-center gap-1 text-[11px] text-[#D4AF37]/60 hover:text-[#D4AF37] transition">
-                        <Lock size={10} /> 500 სიმბოლო / უფასო
+                        <Lock size={10} /> 1000 სიმბოლო / უფასო
                       </button>
                     )}
                   </div>
@@ -528,9 +538,9 @@ const CreateMemorial = () => {
                     </button>
                   </div>
                   <div className="flex items-center justify-between">
-                    {!isPremium && formData.biography.length > 400 && (
-                      <p className={`text-[11px] ${formData.biography.length >= 500 ? 'text-red-400' : 'text-yellow-600'}`}>
-                        {formData.biography.length}/500 სიმბოლო
+                    {!isPremium && formData.biography.length > 900 && (
+                      <p className={`text-[11px] ${formData.biography.length >= 900 ? 'text-red-400' : 'text-yellow-600'}`}>
+                        {formData.biography.length}/1000 სიმბოლო
                       </p>
                     )}
                     {isPremium && formData.biography && (
