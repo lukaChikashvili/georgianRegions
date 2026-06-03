@@ -135,4 +135,22 @@ subscriptions: defineTable({
 }).index("by_userId", ["userId"])
   .index("by_bogOrderId", ["bogOrderId"]),
 
+  reports: defineTable({
+    memorialId: v.id("memorials"),
+    reporterId: v.optional(v.string()),     
+    reporterName: v.optional(v.string()),
+    reason: v.string(),                       
+    details: v.optional(v.string()),         
+    status: v.union(
+      v.literal("pending"),                  
+      v.literal("reviewed"),                 
+      v.literal("dismissed"),                
+      v.literal("actioned")                   
+    ),
+    createdAt: v.number(),
+  })
+    .index("by_memorialId", ["memorialId"])
+    .index("by_status", ["status"])
+    .index("by_reporterId", ["reporterId"]),
+
 });
