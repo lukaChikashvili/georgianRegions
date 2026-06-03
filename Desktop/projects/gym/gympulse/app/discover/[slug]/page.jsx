@@ -413,41 +413,56 @@ const convertYouTube = (url) => {
             </section>
           )}
 
-          <section className="bg-[#121214]/30 border border-white/5 rounded-2xl p-6 space-y-6">
-            <h3 className="font-serif text-base text-[#FFF5D6] border-b border-white/5 pb-3 tracking-wide">საორგანიზაციო ინფორმაცია</h3>
-            <div className="space-y-5">
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><MapPin size={16} /></div>
-                <div>
-                  <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">ცხოვრების ადგილი</h4>
-                  <p className="text-sm text-gray-300 font-light mt-0.5">{memorial.location}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><MapPin size={16} /></div>
-                <div>
-                  <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">სამძიმრის ადგილი</h4>
-                  <p className="text-sm text-gray-300 font-light mt-0.5">{memorial.funeralLocation}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><Calendar size={16} /></div>
-                <div>
-                  <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">გამოსვენების დრო</h4>
-                  <p className="text-sm text-gray-300 font-light mt-0.5">{formatGeorgianDate(memorial.funeralTime)}</p>
-                </div>
-              </div>
-              {memorial.cemeteryLocation && (
-                <div className="flex items-start gap-4">
-                  <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><MapPin size={16} /></div>
-                  <div>
-                    <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">საფლავის / ქელეხის ლოკაცია</h4>
-                    <p className="text-sm text-gray-300 font-light mt-0.5">{memorial.cemeteryLocation}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
+<section className="bg-[#121214]/30 border border-white/5 rounded-2xl p-6 space-y-6">
+  <h3 className="font-serif text-base text-[#FFF5D6] border-b border-white/5 pb-3 tracking-wide">საორგანიზაციო ინფორმაცია</h3>
+  <div className="space-y-5">
+
+    {memorial.location && (
+      <div className="flex items-start gap-4">
+        <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><MapPin size={16} /></div>
+        <div>
+          <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">ცხოვრების ადგილი</h4>
+          <p className="text-sm text-gray-300 font-light mt-0.5">{memorial.location}</p>
+        </div>
+      </div>
+    )}
+
+    {memorial.funeralLocation && (
+      <div className="flex items-start gap-4">
+        <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><MapPin size={16} /></div>
+        <div>
+          <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">სამძიმრის ადგილი</h4>
+          <p className="text-sm text-gray-300 font-light mt-0.5">{memorial.funeralLocation}</p>
+        </div>
+      </div>
+    )}
+
+    {memorial.funeralTime && (
+      <div className="flex items-start gap-4">
+        <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><Calendar size={16} /></div>
+        <div>
+          <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">გამოსვენების დრო</h4>
+          <p className="text-sm text-gray-300 font-light mt-0.5">{formatGeorgianDate(memorial.funeralTime)}</p>
+        </div>
+      </div>
+    )}
+
+    {memorial.cemeteryLocation && (
+      <div className="flex items-start gap-4">
+        <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><MapPin size={16} /></div>
+        <div>
+          <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">საფლავის / ქელეხის ლოკაცია</h4>
+          <p className="text-sm text-gray-300 font-light mt-0.5">{memorial.cemeteryLocation}</p>
+        </div>
+      </div>
+    )}
+
+    {!memorial.location && !memorial.funeralLocation && !memorial.funeralTime && !memorial.cemeteryLocation && (
+      <p className="text-sm text-gray-600 font-light italic">ინფორმაცია არ არის მითითებული.</p>
+    )}
+
+  </div>
+</section>
 
           {memorial.enableDonations && memorial.bankAccountIban && (
             <section className="bg-gradient-to-b from-[#1A150F]/50 to-[#121214]/60 border border-[#D4AF37]/20 rounded-2xl p-6 relative overflow-hidden space-y-4 animate-fade-in">
@@ -483,33 +498,35 @@ const convertYouTube = (url) => {
           )}
 
 
-          <section className="bg-gradient-to-br from-[#121214]/80 to-[#1A150F]/40 border border-[#D4AF37]/10 rounded-2xl p-5 flex flex-col items-center text-center space-y-4">
-            <div className="space-y-1">
-              <h4 className="text-xs font-serif text-[#FFF5D6] tracking-wide">პანაშვიდსა და დაკრძალვაზე დასწრება</h4>
-              <p className="text-[11px] text-gray-500 max-w-xs font-light">დაადასტურეთ თქვენი მოსვლა, რათა დაეხმაროთ ორგანიზატორებს საორგანიზაციო დეტალების დაგეგმვაში.</p>
-            </div>
+{(memorial.funeralLocation || memorial.funeralTime) && (
+  <section className="bg-gradient-to-br from-[#121214]/80 to-[#1A150F]/40 border border-[#D4AF37]/10 rounded-2xl p-5 flex flex-col items-center text-center space-y-4">
+    <div className="space-y-1">
+      <h4 className="text-xs font-serif text-[#FFF5D6] tracking-wide">პანაშვიდსა და დაკრძალვაზე დასწრება</h4>
+      <p className="text-[11px] text-gray-500 max-w-xs font-light">დაადასტურეთ თქვენი მოსვლა, რათა დაეხმაროთ ორგანიზატორებს საორგანიზაციო დეტალების დაგეგმვაში.</p>
+    </div>
 
-            <button 
-              onClick={() => setIsListModalOpen(true)}
-              className="group cursor-pointer bg-[#0D0D0F]/60 hover:bg-[#121215] border border-white/5 hover:border-[#D4AF37]/30 rounded-xl px-4 py-2 flex items-center gap-3 transition-all duration-200"
-            >
-              <Users size={14} className="text-gray-500 group-hover:text-[#D4AF37] transition-colors" />
-              <span className="text-sm font-light text-gray-400">დასწრებას ადასტურებს:</span>
-              <span className="text-base font-medium text-[#D4AF37] underline decoration-dotted underline-offset-4">
-                {memorial.attendeesCount || 0} ადამიანი
-              </span>
-            </button>
+    <button 
+      onClick={() => setIsListModalOpen(true)}
+      className="group cursor-pointer bg-[#0D0D0F]/60 hover:bg-[#121215] border border-white/5 hover:border-[#D4AF37]/30 rounded-xl px-4 py-2 flex items-center gap-3 transition-all duration-200"
+    >
+      <Users size={14} className="text-gray-500 group-hover:text-[#D4AF37] transition-colors" />
+      <span className="text-sm font-light text-gray-400">დასწრებას ადასტურებს:</span>
+      <span className="text-base font-medium text-[#D4AF37] underline decoration-dotted underline-offset-4">
+        {memorial.attendeesCount || 0} ადამიანი
+      </span>
+    </button>
 
-            <button 
-              onClick={handleAttendButtonClick}
-              disabled={hasRSVPed || isRSVPing}
-              className={`w-full py-3 px-4 rounded-xl text-xs uppercase tracking-wider font-semibold transition-all duration-300 transform active:scale-[0.98] flex items-center justify-center gap-2 ${
-                hasRSVPed ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5' : 'cursor-pointer bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black hover:brightness-110 shadow-md'
-              }`}
-            >
-              {isRSVPing ? 'ფიქსირდება...' : hasRSVPed ? <><CheckCircle size={14} className="text-gray-500" /> დასწრება დადასტურებულია</> : 'დავესწრები პანაშვიდს'}
-            </button>
-          </section>
+    <button 
+      onClick={handleAttendButtonClick}
+      disabled={hasRSVPed || isRSVPing}
+      className={`w-full py-3 px-4 rounded-xl text-xs uppercase tracking-wider font-semibold transition-all duration-300 transform active:scale-[0.98] flex items-center justify-center gap-2 ${
+        hasRSVPed ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5' : 'cursor-pointer bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black hover:brightness-110 shadow-md'
+      }`}
+    >
+      {isRSVPing ? 'ფიქსირდება...' : hasRSVPed ? <><CheckCircle size={14} className="text-gray-500" /> დასწრება დადასტურებულია</> : 'დავესწრები პანაშვიდს'}
+    </button>
+  </section>
+)}
 
           {publishedInv && (
   <div className="my-12 p-6 bg-[#121214]/50 border border-[#D4AF37]/20 rounded-2xl">
