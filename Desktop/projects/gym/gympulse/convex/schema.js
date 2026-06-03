@@ -40,6 +40,8 @@ export default defineSchema({
 
         visits: v.optional(v.float64()),
 
+        isFlagged: v.optional(v.boolean()),
+
         
         funeralLocation: v.optional(v.string()),
         funeralTime: v.optional(v.string()),
@@ -98,7 +100,7 @@ export default defineSchema({
     userId: v.string(),
     memorialId: v.id("memorials"),
     message: v.string(),
-    type: v.union(v.literal("CANDLE"), v.literal("ATTENDANCE"), v.literal("CONDOLENCE"), v.literal("REPLY")),
+    type: v.union(v.literal("CANDLE"), v.literal("ATTENDANCE"), v.literal("CONDOLENCE"), v.literal("REPLY"), v.literal("REPORT"),),
     isRead: v.boolean(),
     createdAt: v.number(),
 }).index("by_userId", ["userId"]),

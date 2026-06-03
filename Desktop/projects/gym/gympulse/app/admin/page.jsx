@@ -4,9 +4,19 @@ import React, { useState, useRef } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from "@/convex/_generated/api";
 import { useUser } from '@clerk/nextjs';
-import { Trash2, Edit3, Eye, MapPin, Calendar, X, Check, Bell, Upload, Plus, ImageIcon, Loader2 } from 'lucide-react';
+import { Trash2, Edit3, Eye, MapPin, Calendar, X, Check, Bell, Upload, Plus, Loader2, Flag, AlertTriangle, CheckCircle, XCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
 import InvitationDisplay from '../../components/InvitationDisplay';
+
+
+const REASON_LABELS = {
+  fake_memorial: "ყალბი მემორიალი",
+  wrong_person: "პიროვნების ვინაობა არასწორია",
+  inappropriate_content: "შეუფერებელი კონტენტი",
+  spam_or_scam: "სპამი / თაღლითობა",
+  family_objects: "ოჯახის პროტესტი",
+  other: "სხვა",
+};
 
 
 function AudioPlayer({ storageId }) {
@@ -16,6 +26,7 @@ function AudioPlayer({ storageId }) {
     <audio controls src={url} className="w-full h-9 rounded-lg" style={{ filter: 'invert(0.85) hue-rotate(180deg)' }} />
   );
 }
+
 
 function ToastNotificationCard({ toast, memorial, onApprove, onReject }) {
   const [isApproving, setIsApproving] = useState(false);
@@ -56,9 +67,119 @@ function StorageImage({ storageId, className }) {
   return <img src={url} className={className} />;
 }
 
+
+function ReportCard({ report, onDismiss, onAction }) {
+  const memorial = useQuery(api.memorials.getMemorialBySlug,
+    report.memorialId ? { urlSlug: "_lookup_by_id" } : "skip"
+  );
+
+  const [isDismissing, setIsDismissing] = useState(false);
+  const [isActioning, setIsActioning] = useState(false);
+
+  const handleDismiss = async () => {
+    setIsDismissing(true);
+    await onDismiss(report._id);
+    setIsDismissing(false);
+  };
+
+  const handleAction = async () => {
+    if (!confirm("ნამდვილად გსურთ მემორიალის დახურვა? ის გახდება პირადი და დაიმალება საჯარო ჩამონათვალიდან.")) return;
+    setIsActioning(true);
+    await onAction(report._id, report.memorialId);
+    setIsActioning(false);
+  };
+
+  const statusConfig = {
+    pending: { label: "მოლოდინში", color: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20" },
+    reviewed: { label: "განხილული", color: "text-blue-400 bg-blue-500/10 border-blue-500/20" },
+    dismissed: { label: "უარყოფილი", color: "text-gray-400 bg-white/5 border-white/10" },
+    actioned: { label: "დახურულია", color: "text-red-400 bg-red-500/10 border-red-500/20" },
+  };
+
+  const status = statusConfig[report.status] || statusConfig.pending;
+
+  return (
+    <div className={`bg-[#121214]/60 border rounded-xl p-5 backdrop-blur-sm space-y-4 transition ${
+      report.status === "pending" ? "border-red-500/20" : "border-white/5 opacity-60"
+    }`}>
+      
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
+            <Flag size={13} className="text-red-400" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-[#FFF5D6]">
+              {REASON_LABELS[report.reason] || report.reason}
+            </p>
+            <p className="text-[11px] text-gray-500 mt-0.5 flex items-center gap-1">
+              <Clock size={10} />
+              {new Date(report.createdAt).toLocaleDateString('ka-GE', {
+                year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+              })}
+            </p>
+          </div>
+        </div>
+        <span className={`text-[10px] uppercase tracking-wider px-2 py-1 rounded-full border shrink-0 ${status.color}`}>
+          {status.label}
+        </span>
+      </div>
+
+     
+      <div className="bg-[#0D0D0F]/60 rounded-xl p-3 space-y-1.5 text-xs">
+        <div className="flex items-center justify-between">
+          <span className="text-gray-500">მომხსენებელი:</span>
+          <span className="text-gray-300">{report.reporterName || "ანონიმური"}</span>
+        </div>
+        {report.details && (
+          <div className="pt-1.5 border-t border-white/5">
+            <p className="text-gray-500 mb-1">დეტალები:</p>
+            <p className="text-gray-300 font-light leading-relaxed">{report.details}</p>
+          </div>
+        )}
+      </div>
+
+     
+      <div className="flex items-center justify-between text-xs">
+        <span className="text-gray-500">მემორიალი:</span>
+        <Link
+          href={`/discover/${report.memorialSlug || ""}`}
+          className="text-[#D4AF37] hover:underline flex items-center gap-1"
+          target="_blank"
+        >
+          <Eye size={11} /> გახსნა
+        </Link>
+      </div>
+
+      
+      {report.status === "pending" && (
+        <div className="flex gap-2 pt-1 border-t border-white/5">
+          <button
+            onClick={handleDismiss}
+            disabled={isDismissing}
+            className="flex-1 py-2 rounded-xl border border-white/10 text-xs text-gray-400 hover:text-white hover:bg-white/5 transition disabled:opacity-40 flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            {isDismissing ? <Loader2 size={12} className="animate-spin" /> : <XCircle size={12} />}
+            უარყოფა
+          </button>
+          <button
+            onClick={handleAction}
+            disabled={isActioning}
+            className="flex-1 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-xs text-red-400 font-semibold transition disabled:opacity-40 flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            {isActioning ? <Loader2 size={12} className="animate-spin" /> : <AlertTriangle size={12} />}
+            მემორიალის დახურვა
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 const AdminDashboard = () => {
   const { user, isLoaded } = useUser();
-
 
   const myMemorials = useQuery(api.memorials.getMyMemorials, user?.id ? { creatorId: user.id } : "skip");
   const deleteMemorialMutation = useMutation(api.memorials.deleteMemorial);
@@ -69,14 +190,18 @@ const AdminDashboard = () => {
   const approveToast = useMutation(api.services.approveToast);
   const rejectToast = useMutation(api.services.rejectToast);
 
+  const pendingReports = useQuery(api.reports.getPendingReports);
+  const dismissReportMutation = useMutation(api.reports.dismissReport);
+  const actionReportMutation = useMutation(api.reports.actionReport);
+
+  const [reportsFilter, setReportsFilter] = useState("pending"); 
+
   const [editingMemorial, setEditingMemorial] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
-
 
   const [newPortraitFile, setNewPortraitFile] = useState(null);
   const [newPortraitPreview, setNewPortraitPreview] = useState('');
   const portraitInputRef = useRef(null);
-
 
   const [newGalleryFiles, setNewGalleryFiles] = useState([]);
   const [newGalleryPreviews, setNewGalleryPreviews] = useState([]);
@@ -139,22 +264,12 @@ const AdminDashboard = () => {
     e.preventDefault();
     setIsUpdating(true);
     try {
-      
       let portraitId = editingMemorial.mainPortraitUrl;
-      if (newPortraitFile) {
-        portraitId = await uploadFile(newPortraitFile);
-      }
+      if (newPortraitFile) portraitId = await uploadFile(newPortraitFile);
 
-      
       const newGalleryIds = [];
-      for (const file of newGalleryFiles) {
-        const id = await uploadFile(file);
-        newGalleryIds.push(id);
-      }
-      const mergedGallery = [
-        ...(editingMemorial.galleryUrls || []),
-        ...newGalleryIds,
-      ];
+      for (const file of newGalleryFiles) newGalleryIds.push(await uploadFile(file));
+      const mergedGallery = [...(editingMemorial.galleryUrls || []), ...newGalleryIds];
 
       await updateMemorialMutation({
         id: editingMemorial._id,
@@ -190,6 +305,14 @@ const AdminDashboard = () => {
     await rejectToast({ toastId });
   };
 
+  const handleDismissReport = async (reportId) => {
+    await dismissReportMutation({ reportId });
+  };
+
+  const handleActionReport = async (reportId, memorialId) => {
+    await actionReportMutation({ reportId, memorialId });
+  };
+
   if (!isLoaded || myMemorials === undefined) {
     return (
       <div className="min-h-screen bg-[#0D0D0F] flex items-center justify-center">
@@ -197,6 +320,8 @@ const AdminDashboard = () => {
       </div>
     );
   }
+
+  const pendingCount = pendingReports?.length ?? 0;
 
   return (
     <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans py-20 px-6 relative overflow-hidden selection:bg-[#D4AF37] selection:text-black">
@@ -208,6 +333,7 @@ const AdminDashboard = () => {
           <p className="text-xs text-gray-500 mt-1">თქვენს მიერ შექმნილი ციფრული მემორიალების სრული სია.</p>
         </div>
 
+        
         {allPendingToasts && allPendingToasts.length > 0 && (
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
@@ -222,6 +348,46 @@ const AdminDashboard = () => {
           </div>
         )}
 
+        
+        <div className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <Flag size={20} className="text-red-400" />
+              <h2 className="font-serif text-2xl text-[#FFF5D6] font-light">
+                მოხსენებები
+                {pendingCount > 0 && (
+                  <span className="ml-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-xs font-bold">
+                    {pendingCount}
+                  </span>
+                )}
+              </h2>
+            </div>
+          </div>
+
+          {pendingReports === undefined ? (
+            <div className="flex items-center justify-center py-10">
+              <div className="w-8 h-8 rounded-full border border-[#D4AF37]/20 border-t-[#D4AF37] animate-spin" />
+            </div>
+          ) : pendingReports.length === 0 ? (
+            <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 text-center">
+              <CheckCircle size={32} className="text-green-400/40 mx-auto mb-3" />
+              <p className="text-sm text-gray-500 font-light">განსახილველი მოხსენებები არ არის.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {pendingReports.map((report) => (
+                <ReportCard
+                  key={report._id}
+                  report={report}
+                  onDismiss={handleDismissReport}
+                  onAction={handleActionReport}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+       
         {myMemorials.length > 0 && (
           <div className="mt-20 border-t border-white/10 pt-12">
             <h2 className="font-serif text-2xl text-[#FFF5D6] font-light mb-8">გენერირებული მოსაწვევები</h2>
@@ -239,6 +405,7 @@ const AdminDashboard = () => {
           </div>
         )}
 
+       
         {myMemorials.length === 0 ? (
           <div className="text-center py-20 bg-[#121214]/20 border border-white/5 rounded-2xl max-w-xl">
             <p className="text-gray-500 text-sm font-light mb-4">თქვენ ჯერ არ შეგიქმნიათ არცერთი მემორიალი.</p>
@@ -252,9 +419,16 @@ const AdminDashboard = () => {
                 <div key={memorial._id} className="bg-[#121214]/40 border border-white/5 rounded-2xl p-6 backdrop-blur-xl flex flex-col justify-between h-72 shadow-xl group hover:border-white/10 transition">
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <span className={`text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${memorial.privacyType === 'public' ? 'bg-emerald-950/20 border-emerald-500/20 text-emerald-400' : 'bg-amber-950/20 border-amber-500/20 text-amber-400'}`}>
-                        {memorial.privacyType === 'public' ? 'საჯარო' : 'პირადი'}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${memorial.privacyType === 'public' ? 'bg-emerald-950/20 border-emerald-500/20 text-emerald-400' : 'bg-amber-950/20 border-amber-500/20 text-amber-400'}`}>
+                          {memorial.privacyType === 'public' ? 'საჯარო' : 'პირადი'}
+                        </span>
+                        {memorial.isFlagged && (
+                          <span className="text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full border bg-red-950/20 border-red-500/20 text-red-400 flex items-center gap-1">
+                            <Flag size={8} /> მოხსენებული
+                          </span>
+                        )}
+                      </div>
                       <div className="flex items-center gap-1.5 text-xs text-gray-500 font-light">
                         <Calendar size={12} className="text-[#D4AF37]/50" />
                         <span>{memorial.birthDate.split('-')[0]} - {memorial.deathDate.split('-')[0]}</span>
@@ -286,7 +460,7 @@ const AdminDashboard = () => {
           </div>
         )}
 
-      
+    
         {editingMemorial && (
           <div className="mt-36 fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-fade-in">
             <div className="bg-[#121214] border border-white/10 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 md:p-8 relative shadow-2xl">
@@ -310,12 +484,9 @@ const AdminDashboard = () => {
                   <input type="text" className="form-input" value={editingMemorial.location} onChange={(e) => setEditingMemorial({...editingMemorial, location: e.target.value})} />
                 </div>
 
-                
                 <div className="flex flex-col gap-2">
                   <label className="text-[11px] text-gray-400">მთავარი პორტრეტი</label>
                   <input ref={portraitInputRef} type="file" accept="image/*" onChange={handlePortraitUpload} className="hidden" />
-
-                  
                   {newPortraitPreview ? (
                     <div className="flex items-center gap-4">
                       <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-[#D4AF37]/20 shrink-0">
@@ -346,12 +517,9 @@ const AdminDashboard = () => {
                   )}
                 </div>
 
-              
                 <div className="flex flex-col gap-2">
                   <label className="text-[11px] text-gray-400">გალერეა</label>
                   <input ref={galleryInputRef} type="file" accept="image/*" multiple onChange={handleGalleryUpload} className="hidden" />
-
-                 
                   {editingMemorial.galleryUrls && editingMemorial.galleryUrls.length > 0 && (
                     <div className="space-y-1.5">
                       <p className="text-[10px] text-gray-500">არსებული ფოტოები ({editingMemorial.galleryUrls.length})</p>
@@ -359,14 +527,7 @@ const AdminDashboard = () => {
                         {editingMemorial.galleryUrls.map((id, idx) => (
                           <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-white/5 group">
                             <StorageImage storageId={id} className="w-full h-full object-cover grayscale opacity-70" />
-                            <button
-                              type="button"
-                              onClick={() => setEditingMemorial(prev => ({
-                                ...prev,
-                                galleryUrls: prev.galleryUrls.filter((_, i) => i !== idx)
-                              }))}
-                              className="cursor-pointer absolute top-1 right-1 p-0.5 rounded-full bg-black/70 border border-white/10 text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition"
-                            >
+                            <button type="button" onClick={() => setEditingMemorial(prev => ({ ...prev, galleryUrls: prev.galleryUrls.filter((_, i) => i !== idx) }))} className="cursor-pointer absolute top-1 right-1 p-0.5 rounded-full bg-black/70 border border-white/10 text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition">
                               <X size={10} />
                             </button>
                           </div>
@@ -374,8 +535,6 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   )}
-
-                 
                   {newGalleryPreviews.length > 0 && (
                     <div className="space-y-1.5">
                       <p className="text-[10px] text-gray-500">ახალი ფოტოები ({newGalleryPreviews.length})</p>
@@ -391,7 +550,6 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   )}
-
                   <button type="button" onClick={() => galleryInputRef.current?.click()} className="cursor-pointer w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-white/10 hover:border-[#D4AF37]/30 hover:bg-[#1A150F]/20 transition text-gray-500 hover:text-[#D4AF37] text-xs font-light">
                     <Plus size={13} /> ფოტოების დამატება
                   </button>

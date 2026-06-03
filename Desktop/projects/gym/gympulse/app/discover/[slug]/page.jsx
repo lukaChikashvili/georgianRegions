@@ -8,6 +8,7 @@ import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock, CreditCar
 import { useUser } from '@clerk/nextjs';
 import AudioPlayer from '../../../components/AudioPlayer';
 import CustomAudioPlayer from '../../../components/CustomAudioPlayer';
+import ReportButton from '../../../components/ReportButton';
 
 const MemorialPage = () => {
   const params = useParams();
@@ -344,11 +345,14 @@ const convertYouTube = (url) => {
           "{memorial.epitaph}"
         </p>
 
-        <div className="flex items-center gap-2 text-gray-400 text-sm mt-4  ">
-  <Eye size={16} />
-  <span>
-    {memorial.visits ?? 0} {memorial.visits === 1 ? 'ნახვა' : 'ნახვა'}
-  </span>
+        <div className="flex items-center gap-3 mt-4">
+  <div className="flex items-center gap-2 text-gray-400 text-sm">
+    <Eye size={16} />
+    <span>{memorial.visits ?? 0} ნახვა</span>
+  </div>
+
+
+  <ReportButton memorialId={memorial._id} isCreator={isCreator} />
 </div>
       </header>
 
