@@ -86,12 +86,15 @@ export const isPremium = query({
 
     if (TEST_USER_IDS.includes(identity.subject)) return true;
     
+    
 
     const sub = await ctx.db
       .query("subscriptions")
       .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
       .order("desc")
       .first();
+
+      console.log("Found Subscription:", sub);
 
     return sub?.plan === "lifetime" && sub?.status === "active";
   },
