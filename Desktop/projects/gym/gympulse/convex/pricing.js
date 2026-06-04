@@ -94,7 +94,7 @@ export const isPremium = query({
       .order("desc")
       .first();
 
-      console.log("Found Subscription:", sub);
+     
 
     return sub?.plan === "lifetime" && sub?.status === "active";
   },

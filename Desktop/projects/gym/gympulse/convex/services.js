@@ -139,6 +139,13 @@ export const getToastUrl = query({
   export const rejectToast = mutation({
     args: { toastId: v.id("toasts") },
     handler: async (ctx, args) => {
+      const toast = await ctx.db.get(args.toastId);
+      if (!toast) return;
+  
+     
+      await ctx.storage.delete(toast.audioUrl);
+  
+      
       await ctx.db.delete(args.toastId);
     },
   });
@@ -273,5 +280,28 @@ export const getToastUrl = query({
       }
       
       return null; 
+    },
+  });
+
+  export const deleteInvitation = mutation({
+    args: { invitationId: v.id("invitations") },
+    handler: async (ctx, args) => {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("Unauthorized");
+  
+      const invitation = await ctx.db.get(args.invitationId);
+      if (!invitation) throw new Error("Invitation not found");
+  
+      
+      const memorial = await ctx.db.get(invitation.memorialId);
+      if (memorial?.creatorId !== identity.subject) {
+        throw new Error("No permission");
+      }
+  
+
+      await ctx.storage.delete(invitation.storageId);
+  
+      
+      await ctx.db.delete(args.invitationId);
     },
   });

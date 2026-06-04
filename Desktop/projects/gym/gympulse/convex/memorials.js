@@ -44,7 +44,7 @@ export const createMemorial = mutation({
         if (!identity) {
           throw new Error("თქვენ არ ხართ ავტორიზებული.");
         }
-        
+
         const premium = await checkIsPremium(ctx, identity.subject);
 
         if (!premium) {
@@ -189,27 +189,43 @@ export const deleteMemorial = mutation({
   args: { id: v.id("memorials") },
   handler: async (ctx, args) => {
     const memorial = await ctx.db.get(args.id);
-    if (!memorial) {
-      throw new Error("მემორიალი ვერ მოიძებნა.");
-    }
-
-    
-    if (memorial.mainPortraitUrl) {
-      await ctx.storage.delete(memorial.mainPortraitUrl);
-    }
+    if (!memorial) throw new Error("მემორიალი ვერ მოიძებნა.");
 
    
-    if (memorial.galleryUrls && memorial.galleryUrls.length > 0) {
-      await Promise.all(
-        memorial.galleryUrls.map((storageId) => ctx.storage.delete(storageId))
-      );
-    }
+    const [timelineEntries, toasts, invitations, condolences, notifications, reports] = await Promise.all([
+      ctx.db.query("timelineEntries").withIndex("by_memorial", (q) => q.eq("memorialId", args.id)).collect(),
+      ctx.db.query("toasts").withIndex("by_memorialId", (q) => q.eq("memorialId", args.id)).collect(),
+      ctx.db.query("invitations").withIndex("by_memorialId", (q) => q.eq("memorialId", args.id)).collect(),
+      ctx.db.query("condolences").withIndex("by_memorialId", (q) => q.eq("memorialId", args.id)).collect(),
+      ctx.db.query("notifications").withIndex("by_userId", (q) => q.eq("userId", args.id)).collect(),
+      ctx.db.query("reports").withIndex("by_memorialId", (q) => q.eq("memorialId", args.id)).collect(),
+    ]);
+
+   
+    const storageDeletions = [
+      ...(memorial.mainPortraitUrl ? [ctx.storage.delete(memorial.mainPortraitUrl)] : []),
+      ...(memorial.galleryUrls?.map((id) => ctx.storage.delete(id)) || []),
+      ...toasts.map((t) => ctx.storage.delete(t.audioUrl)), 
+      ...invitations.map((i) => ctx.storage.delete(i.storageId)), 
+    ];
 
     
-    await ctx.db.delete(args.id);
+    const dbDeletions = [
+      ...timelineEntries.map((e) => ctx.db.delete(e._id)),
+      ...toasts.map((t) => ctx.db.delete(t._id)),
+      ...invitations.map((i) => ctx.db.delete(i._id)),
+      ...condolences.map((c) => ctx.db.delete(c._id)),
+      ...notifications.map((n) => ctx.db.delete(n._id)),
+      ...reports.map((r) => ctx.db.delete(r._id)),
+      ctx.db.delete(args.id),
+    ];
+
+    await Promise.all([...storageDeletions, ...dbDeletions]);
     return true;
   },
 });
+
+
 
 export const updateMemorial = mutation({
   args: {
