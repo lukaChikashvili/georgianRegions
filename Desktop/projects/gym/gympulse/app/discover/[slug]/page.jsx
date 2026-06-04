@@ -17,6 +17,9 @@ const MemorialPage = () => {
 
   const visits = useMutation(api.memorials.incrementVisits);
 
+
+
+
   // share feature
   const [shareTooltip, setShareTooltip] = useState("");
   const memorialUrl = typeof window !== "undefined" ? window.location.href : "";
@@ -88,6 +91,21 @@ const convertYouTube = (url) => {
   const [editText, setEditText] = useState("");
 
 
+    // timeline feature
+    const timelineEntries = useQuery(
+      api.timeline.getByMemorial,
+      memorial ? { memorialId: memorial._id } : "skip"
+    );
+  
+    const CAT_COLORS = {
+      ცხოვრება:        "#D4AF37",
+      ოჯახი:      "#1D9E75",
+      კარიერა:      "#378ADD",
+      მოგზაურობა:      "#D85A30",
+      სიყვარული:        "#D4537E",
+      რწმენა:       "#7F77DD",
+      მიღწევა: "#BA7517",
+  };
   
 
  
@@ -367,6 +385,78 @@ const convertYouTube = (url) => {
               {memorial.biography}
             </p>
           </section>
+
+          {timelineEntries && timelineEntries.length > 0 && (
+  <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl">
+    <h2 className="font-serif text-xl text-[#FFF5D6] mb-8 flex items-center gap-3">
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      ცხოვრების ქრონიკა
+    </h2>
+
+    <div className="relative pl-7">
+      
+      <div
+        className="absolute left-2.5 top-0 bottom-0 w-px"
+        style={{ background: "linear-gradient(to bottom, transparent, rgba(212,175,55,0.25) 8%, rgba(212,175,55,0.25) 92%, transparent)" }}
+      />
+
+      <div className="space-y-6">
+        {timelineEntries.map((entry, index) => {
+          const dotColor = CAT_COLORS[entry.category] ?? "#D4AF37";
+          return (
+            <div
+              key={entry._id}
+              className="relative group"
+              style={{ animationDelay: `${index * 60}ms` }}
+            >
+             
+              <div
+                className="absolute -left-7 top-5 w-2.5 h-2.5 rounded-full border-2 border-[#121214] transition-transform duration-300 group-hover:scale-125"
+                style={{ background: dotColor }}
+              />
+
+              <div className="bg-black/20 border border-[#D4AF37]/8 rounded-xl p-5 hover:border-[#D4AF37]/20 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                 
+                  <div className="min-w-[72px] shrink-0">
+                    {entry.year && (
+                      <span
+                        className="font-serif text-xl font-light"
+                        style={{ color: dotColor }}
+                      >
+                        {entry.year}
+                      </span>
+                    )}
+                    <div
+                      className="text-[10px] uppercase tracking-widest mt-0.5 font-light"
+                      style={{ color: dotColor + "80" }}
+                    >
+                      {entry.category}
+                    </div>
+                  </div>
+
+                  
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-[#FFF5D6] font-medium text-sm leading-snug">
+                      {entry.title}
+                    </h3>
+                    {entry.description && (
+                      <p className="text-gray-500 text-xs font-light leading-relaxed mt-1.5 whitespace-pre-line">
+                        {entry.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+)}
+
+
 
          
 {galleryUrls && galleryUrls.length > 0 && (

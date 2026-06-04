@@ -9,13 +9,13 @@ const CATEGORIES = ["ცხოვრება","ოჯახი","კარი�
 
 
 const CAT_COLORS = {
-  Life:        "#D4AF37",
-  Family:      "#1D9E75",
-  Career:      "#378ADD",
-  Travel:      "#D85A30",
-  Love:        "#D4537E",
-  Faith:       "#7F77DD",
-  Achievement: "#BA7517",
+    ცხოვრება:        "#D4AF37",
+    ოჯახი:      "#1D9E75",
+    კარიერა:      "#378ADD",
+    მოგზაურობა:      "#D85A30",
+    სიყვარული:        "#D4537E",
+    რწმენა:       "#7F77DD",
+    მიღწევა: "#BA7517",
 };
 
 
