@@ -2,7 +2,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
-const TEST_USER_IDS = [process.env.NEXT_PUBLIC_TEST_USER_ID];
+const TEST_USER_IDS = ['user_3CJIuG9yW5QoJa2W3hcAyirAiTj'];
 
 export const activateLifetime = mutation({
   args: {
@@ -87,7 +87,7 @@ export const isPremium = query({
     if (TEST_USER_IDS.includes(identity.subject)) return true;
     
     
-
+    console.log(identity.subject);
     const sub = await ctx.db
       .query("subscriptions")
       .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
