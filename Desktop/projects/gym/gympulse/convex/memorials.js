@@ -496,6 +496,11 @@ export const saveMyGraveDesign = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("მოითხოვება ავტორიზაცია!");
 
+    const isPremium = await checkIsPremium(ctx, userId);
+        if (!isPremium) {
+             throw new Error("3D მონუმენტის შექმნა მხოლოდ პრემიუმ პაკეტშია ხელმისაწვდომი.");
+            }
+
     const userId = identity.subject;
 
     const existingDesign = await ctx.db
