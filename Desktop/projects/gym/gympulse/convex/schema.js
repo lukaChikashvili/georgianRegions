@@ -155,4 +155,14 @@ subscriptions: defineTable({
     .index("by_status", ["status"])
     .index("by_reporterId", ["reporterId"]),
 
+    timelineEntries: defineTable({
+      memorialId: v.id("memorials"),
+      creatorId: v.string(),
+      year: v.string(),
+      title: v.string(),
+      description: v.optional(v.string()),
+      category: v.string(), 
+      order: v.optional(v.number()),
+    }).index("by_memorial", ["memorialId"]),
+
 });
