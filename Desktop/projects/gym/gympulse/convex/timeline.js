@@ -30,3 +30,24 @@ export const getByMemorial = query({
       return await ctx.db.insert("timelineEntries", args);
     },
   });
+
+
+export const update = mutation({
+    args: {
+      id: v.id("timelineEntries"),
+      year: v.optional(v.string()),
+      title: v.optional(v.string()),
+      description: v.optional(v.string()),
+      category: v.optional(v.string()),
+    },
+    handler: async (ctx, { id, ...fields }) => {
+      await ctx.db.patch(id, fields);
+    },
+  });
+  
+  export const remove = mutation({
+    args: { id: v.id("timelineEntries") },
+    handler: async (ctx, { id }) => {
+      await ctx.db.delete(id);
+    },
+  });
