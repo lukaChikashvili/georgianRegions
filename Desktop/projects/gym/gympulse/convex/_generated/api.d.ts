@@ -14,6 +14,7 @@ import type * as posts from "../posts.js";
 import type * as pricing from "../pricing.js";
 import type * as reports from "../reports.js";
 import type * as services from "../services.js";
+import type * as timeline from "../timeline.js";
 
 import type {
   ApiFromModules,
@@ -28,6 +29,7 @@ declare const fullApi: ApiFromModules<{
   pricing: typeof pricing;
   reports: typeof reports;
   services: typeof services;
+  timeline: typeof timeline;
 }>;
 
 /**
