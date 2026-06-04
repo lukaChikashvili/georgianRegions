@@ -39,7 +39,13 @@ export const createMemorial = mutation({
 
       handler: async(ctx, args) => {
 
-        const premium = await checkIsPremium(ctx, args.creatorId);
+        const identity = await ctx.auth.getUserIdentity();
+
+        if (!identity) {
+          throw new Error("თქვენ არ ხართ ავტორიზებული.");
+        }
+        
+        const premium = await checkIsPremium(ctx, identity.subject);
 
         if (!premium) {
           const existingMemorials = await ctx.db

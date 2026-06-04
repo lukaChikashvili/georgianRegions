@@ -8,6 +8,7 @@ import { Bell, LayoutDashboard, Menu, User, X } from 'lucide-react';
 import Link from 'next/link';
 import { api } from '@/convex/_generated/api';
 import { useState } from 'react';
+import { UserStatusBadge } from '../components/UserStatusBadge'
 
 const Header = () => {
   const { isAuthenticated, isLoading } = useConvexAuth();
@@ -114,6 +115,7 @@ const Header = () => {
             </div>
 
             <h1 className='text-sm font-serif italic text-[#FFF5D6]/90 hidden lg:block'>გამარჯობა, <span className="text-[#D4AF37] font-sans not-italic">{user?.firstName}</span></h1>
+            <UserStatusBadge />
             <div className="p-[1px] rounded-full bg-gradient-to-b from-[#D4AF37]/40 to-transparent"><UserButton afterSwitchSessionUrl='/' /></div>
           </div>
         )}

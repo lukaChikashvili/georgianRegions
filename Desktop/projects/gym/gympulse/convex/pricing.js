@@ -2,6 +2,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+const TEST_USER_IDS = [process.env.TEST_USER_ID];
 
 export const activateLifetime = mutation({
   args: {
@@ -83,6 +84,9 @@ export const isPremium = query({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return false;
 
+    if (TEST_USER_IDS.includes(identity.subject)) return true;
+    
+
     const sub = await ctx.db
       .query("subscriptions")
       .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
@@ -95,6 +99,11 @@ export const isPremium = query({
 
 
 export const checkIsPremium = async (ctx, userId) => {
+ 
+
+
+  if (TEST_USER_IDS.includes(userId)) return true;
+
   const sub = await ctx.db
     .query("subscriptions")
     .withIndex("by_userId", (q) => q.eq("userId", userId))
