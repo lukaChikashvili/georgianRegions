@@ -6,6 +6,7 @@ import { api } from '@/convex/_generated/api';
 import dynamic from 'next/dynamic';
 import { useUser } from '@clerk/nextjs';
 import { X, Crown, Loader2, Lock } from 'lucide-react';
+import FamilyTree from '../../components/FamilyTree';
 
 const LifeTimeline = dynamic(() => import('@/components/LifeTimeline'), { ssr: false });
 const ToastRecorder = dynamic(() => import('@/components/ToastRecorder'), { ssr: false });
@@ -114,6 +115,7 @@ const TAB_LABELS = {
   invite: 'მოსაწვევი',
   qr: 'QR კოდი',
   timeline: 'ქრონოლოგია',
+  family: 'გენეალოგიური ხე'
 };
 
 const MODAL_CONTENT = {
@@ -121,6 +123,7 @@ const MODAL_CONTENT = {
   invite:   { title: 'ულიმიტო მოსაწვევი ბარათი',  description: 'უფასო პაკეტში მხოლოდ 1 მოსაწვევის შექმნაა შესაძლებელი. განაახლეთ პაკეტი ულიმიტო მოსაწვევებისთვის.' },
   qr:       { title: 'QR კოდის გენერაცია',          description: 'QR კოდის გენერაცია მხოლოდ პრემიუმ პაკეტშია ხელმისაწვდომი.' },
   timeline: { title: 'ულიმიტო ქრონოლოგია',          description: 'უფასო პაკეტში მაქსიმუმ 2 მოვლენის დამატებაა შესაძლებელი. განაახლეთ პაკეტი ულიმიტო ქრონოლოგიისთვის.' },
+  family:   { title: 'გენეალოგიური ხე — ულიმიტო',         description: 'უფასო პაკეტში მაქსიმუმ 3 წევრის დამატებაა შესაძლებელი. განაახლეთ პაკეტი ულიმიტო ოჯახის ხისთვის.' },
 };
 
 
@@ -229,7 +232,7 @@ function ServicesContent() {
 
           
           <div className="flex gap-4 mb-8 border-b border-white/10 pb-4">
-            {(['record', 'invite', 'qr', 'timeline'] ).map((tab) => {
+            {(['record', 'invite', 'qr', 'timeline', 'family'] ).map((tab) => {
               const isLocked = tab === 'qr' && !isPremium;
               const isActive = activeTab === tab;
               return (
@@ -253,7 +256,8 @@ function ServicesContent() {
             <h2 className="text-xl text-[#FFF5D6] mb-6">
               {activeTab === 'record' ? 'აუდიო სადღეგრძელო' :
                activeTab === 'invite' ? 'მოსაწვევი ბარათი' :
-               activeTab === 'timeline' ? 'ქრონოლოგია' : 'QR კოდის გენერაცია'}
+               activeTab === 'timeline' ? 'ქრონოლოგია' :
+               activeTab === 'family' ? 'გენეალოგიური ხე' : 'QR კოდის გენერაცია'}
             </h2>
 
            
@@ -312,6 +316,14 @@ function ServicesContent() {
                 />
               </>
             )}
+
+{activeTab === 'family' && (
+  <FamilyTree
+    memorial={selectedMemorial}
+    currentUserId={user?.id}
+    isPremium={isPremium}
+  />
+)}
           </div>
         </>
       )}

@@ -10,3 +10,20 @@ body {
 
 
 
+.react-flow__controls-button {
+    background: #0F0F11 !important;
+    border: 1px solid rgba(212,175,55,0.15) !important;
+    border-radius: 8px !important;
+    color: #D4AF37 !important;
+    fill: #D4AF37 !important;
+    margin: 2px !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .react-flow__controls-button:hover {
+    background: #1A150F !important;
+    border-color: rgba(212,175,55,0.4) !important;
+  }
+  .react-flow__controls-button svg {
+    fill: #D4AF37 !important;
+  }
