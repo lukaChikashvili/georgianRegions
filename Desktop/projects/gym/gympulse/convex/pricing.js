@@ -2,7 +2,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
-const TEST_USER_IDS = [process.env.TEST_USER_ID];
+const TEST_USER_IDS = [process.env.NEXT_PUBLIC_TEST_USER_ID];
 
 export const activateLifetime = mutation({
   args: {
