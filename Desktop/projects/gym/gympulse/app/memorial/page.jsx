@@ -180,6 +180,15 @@ const CreateMemorial = () => {
   const [upgradeModal, setUpgradeModal] = useState(null);
   const [isUpgrading, setIsUpgrading] = useState(false);
 
+  const slugAvailable = useQuery(
+    api.memorials.getMemorialBySlug,
+    formData.urlSlug.trim().length > 2
+      ? { urlSlug: formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-') }
+      : "skip"
+  );
+  
+  const isSlugTaken = slugAvailable !== null && slugAvailable !== undefined;
+
   const handleUpgrade = async () => {
     if (!user) return;
     setIsUpgrading(true);
@@ -322,6 +331,12 @@ const CreateMemorial = () => {
   };
 
   const handleSubmit = async () => {
+    if (isSlugTaken) {
+      setError('ეს ბმული უკვე დაკავებულია, გთხოვთ აირჩიოთ სხვა.');
+      setStep(5);
+      return;
+    }
+    
     if (!user) { setError('მემორიალის გამოსაქვეყნებლად საჭიროა ავტორიზაცია.'); return; }
 
     if (!isPremium && myMemorials && myMemorials.length >= 1) {
@@ -727,43 +742,97 @@ const CreateMemorial = () => {
             )}
 
          
-            {step === 5 && (
-              <div className="space-y-6 animate-fade-in">
-                <div className="mb-6">
-                  <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-                    <Shield size={20} className="text-[#D4AF37]" /> კონფიდენციალურობა და ბმული
-                  </h2>
-                  <p className="text-xs text-gray-500 mt-1">დაარეგულირეთ გვერდის წვდომისა და უსაფრთხოების პარამეტრები.</p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs text-gray-400 font-light tracking-wide">გვერდის უნიკალური ბმული (URL Slug)</label>
-                  <input type="text" name="urlSlug" value={formData.urlSlug} onChange={handleChange} placeholder="მაგ: elene-beridze" className="form-input" />
-                </div>
-                <div className="flex flex-col gap-3 pt-2">
-                  <label className="text-xs text-gray-400 font-light tracking-wide">წვდომის ტიპი</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'public' ? 'bg-[#1A150F]/20 border-[#D4AF37]/30' : 'bg-[#161619]/20 border-white/5'}`}>
-                      <div className="flex items-center gap-2"><input type="radio" name="privacyType" value="public" checked={formData.privacyType === 'public'} onChange={handleChange} className="accent-[#D4AF37]" /><span className="text-sm font-medium text-gray-300">საჯარო (Public)</span></div>
-                      <span className="text-xs text-gray-500 pl-5">მემორიალი ხელმისაწვდომია ყველასთვის.</span>
-                    </label>
-                    <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'private' ? 'bg-[#1A150F]/20 border-[#D4AF37]/30' : 'bg-[#161619]/20 border-white/5'}`}>
-                      <div className="flex items-center gap-2"><input type="radio" name="privacyType" value="private" checked={formData.privacyType === 'private'} onChange={handleChange} className="accent-[#D4AF37]" /><span className="text-sm font-medium text-gray-300">პირადი (Private)</span></div>
-                      <span className="text-xs text-gray-500 pl-5">ხელმისაწვდომია მხოლოდ პირდაპირი ბმულით.</span>
-                    </label>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between p-4 rounded-xl bg-[#161619]/30 border border-white/5 mt-4">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-300">სამძიმრის კედლის მოდერაცია</h4>
-                    <p className="text-xs text-gray-500">პოსტები გამოჩნდება მხოლოდ თქვენი დასტურის შემდეგ.</p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" name="requireModeration" checked={formData.requireModeration} onChange={handleChange} className="sr-only peer" />
-                    <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-linear-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
-                  </label>
-                </div>
+{step === 5 && (
+  <div className="space-y-6 animate-fade-in">
+    <div className="mb-6">
+      <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
+        <Shield size={20} className="text-[#D4AF37]" /> კონფიდენციალურობა და ბმული
+      </h2>
+      <p className="text-xs text-gray-500 mt-1">დაარეგულირეთ გვერდის წვდომისა და უსაფრთხოების პარამეტრები.</p>
+    </div>
+
+   
+    <div className="flex flex-col gap-2">
+      <label className="text-xs text-gray-400 font-light tracking-wide">გვერდის უნიკალური ბმული (URL Slug)</label>
+      <div className="relative">
+        <input
+          type="text"
+          name="urlSlug"
+          value={formData.urlSlug}
+          onChange={handleChange}
+          placeholder="მაგ: elene-beridze"
+          className={`form-input pr-10 transition-all ${
+            formData.urlSlug.trim().length > 2 && isSlugTaken
+              ? 'border-red-500/40 focus:border-red-500/60'
+              : formData.urlSlug.trim().length > 2 && !isSlugTaken && slugAvailable !== undefined
+              ? 'border-green-500/40 focus:border-green-500/60'
+              : ''
+          }`}
+        />
+        {formData.urlSlug.trim().length > 2 && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            {slugAvailable === undefined ? (
+              <div className="w-3.5 h-3.5 rounded-full border-2 border-gray-600 border-t-[#D4AF37] animate-spin" />
+            ) : isSlugTaken ? (
+              <div className="w-4 h-4 rounded-full bg-red-500/20 border border-red-500/40 flex items-center justify-center">
+                <X size={9} className="text-red-400" />
+              </div>
+            ) : (
+              <div className="w-4 h-4 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center">
+                <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                  <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#4ade80" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </div>
             )}
+          </div>
+        )}
+      </div>
+      {formData.urlSlug.trim().length > 2 && (
+        <p className={`text-[11px] transition-all ${isSlugTaken ? 'text-red-400' : 'text-gray-600'}`}>
+          {isSlugTaken
+            ? '✗ ეს ბმული უკვე დაკავებულია, სცადეთ სხვა'
+            : slugAvailable === undefined
+            ? ''
+            : `✓ memorialy.ge/discover/${formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-')}`
+          }
+        </p>
+      )}
+    </div>
+
+    
+    <div className="flex flex-col gap-3 pt-2">
+      <label className="text-xs text-gray-400 font-light tracking-wide">წვდომის ტიპი</label>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'public' ? 'bg-[#1A150F]/20 border-[#D4AF37]/30' : 'bg-[#161619]/20 border-white/5'}`}>
+          <div className="flex items-center gap-2">
+            <input type="radio" name="privacyType" value="public" checked={formData.privacyType === 'public'} onChange={handleChange} className="accent-[#D4AF37]" />
+            <span className="text-sm font-medium text-gray-300">საჯარო (Public)</span>
+          </div>
+          <span className="text-xs text-gray-500 pl-5">მემორიალი ხელმისაწვდომია ყველასთვის.</span>
+        </label>
+        <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'private' ? 'bg-[#1A150F]/20 border-[#D4AF37]/30' : 'bg-[#161619]/20 border-white/5'}`}>
+          <div className="flex items-center gap-2">
+            <input type="radio" name="privacyType" value="private" checked={formData.privacyType === 'private'} onChange={handleChange} className="accent-[#D4AF37]" />
+            <span className="text-sm font-medium text-gray-300">პირადი (Private)</span>
+          </div>
+          <span className="text-xs text-gray-500 pl-5">ხელმისაწვდომია მხოლოდ პირდაპირი ბმულით.</span>
+        </label>
+      </div>
+    </div>
+
+    
+    <div className="flex items-center justify-between p-4 rounded-xl bg-[#161619]/30 border border-white/5 mt-4">
+      <div>
+        <h4 className="text-sm font-medium text-gray-300">სამძიმრის კედლის მოდერაცია</h4>
+        <p className="text-xs text-gray-500">პოსტები გამოჩნდება მხოლოდ თქვენი დასტურის შემდეგ.</p>
+      </div>
+      <label className="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" name="requireModeration" checked={formData.requireModeration} onChange={handleChange} className="sr-only peer" />
+        <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
+      </label>
+    </div>
+  </div>
+)}
 
             
             {step === 6 && (
