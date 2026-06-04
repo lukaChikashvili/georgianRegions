@@ -166,4 +166,29 @@ subscriptions: defineTable({
       order: v.optional(v.number()),
     }).index("by_memorial", ["memorialId"]),
 
+    familyMembers: defineTable({
+      memorialId: v.id("memorials"),
+      name: v.string(),
+      role: v.string(),
+      birthYear: v.optional(v.string()),
+      deathYear: v.optional(v.string()),
+      portraitStorageId: v.optional(v.id("_storage")),
+      linkedMemorialId: v.optional(v.id("memorials")),
+      createdBy: v.string(),
+      positionX: v.optional(v.number()),
+      positionY: v.optional(v.number()),
+    }).index("by_memorialId", ["memorialId"]),
+
+    familyRelationships: defineTable({
+      memorialId: v.id("memorials"),
+      fromMemberId: v.id("familyMembers"),
+      toMemberId: v.id("familyMembers"),
+      type: v.union(
+        v.literal("parent"),
+        v.literal("child"),
+        v.literal("spouse"),
+        v.literal("sibling")
+      ),
+    }).index("by_memorialId", ["memorialId"]),
+
 });
