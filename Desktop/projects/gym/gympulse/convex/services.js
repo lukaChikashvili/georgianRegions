@@ -2,6 +2,7 @@
 
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { checkIsPremium } from "./pricing";
 
 
 export const generateUploadUrl = mutation({
@@ -28,39 +29,60 @@ export const generateUploadUrl = mutation({
     },
   });
 
-export const saveToast = mutation({
+  export const saveToast = mutation({
     args: {
       memorialId: v.id("memorials"),
       audioUrl: v.string(),
       authorName: v.string(),
     },
     handler: async (ctx, args) => {
-      
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("მოითხოვება ავტორიზაცია!");
+  
+      const premium = await checkIsPremium(ctx, identity.subject);
+  
+      if (!premium) {
+        const existing = await ctx.db
+          .query("toasts")
+          .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
+          .filter((q) => q.eq(q.field("authorId"), identity.subject))
+          .collect();
+  
+        if (existing.length >= 1) {
+          throw new Error(
+            "უფასო პაკეტში მხოლოდ 1 სადღეგრძელოს ჩაწერაა შესაძლებელი. განაახლეთ პაკეტი."
+          );
+        }
+      }
+  
       const toastId = await ctx.db.insert("toasts", {
         memorialId: args.memorialId,
         audioUrl: args.audioUrl,
         authorName: args.authorName,
+        authorId: identity.subject, 
         privacy: "public",
         isApproved: false,
-        createdAt: Date.now(), 
+        createdAt: Date.now(),
       });
   
-      
       const memorial = await ctx.db.get(args.memorialId);
       if (memorial) {
         await ctx.db.insert("notifications", {
           userId: memorial.creatorId,
           memorialId: args.memorialId,
           message: `${args.authorName}-მ გამოგზავნა სადღეგრძელო დასამტკიცებლად`,
-          type: "REPLY", 
+          type: "REPLY",
           isRead: false,
           createdAt: Date.now(),
         });
       }
-      
+  
       return toastId;
     },
   });
+
+
+
   export const approveToast = mutation({
     args: { toastId: v.id("toasts") },
     handler: async (ctx, args) => {
@@ -152,29 +174,34 @@ export const getToastUrl = query({
 
 
   export const saveInvitationImage = mutation({
-    args: { 
-      memorialId: v.id("memorials"), 
-      storageId: v.id("_storage") 
+    args: {
+      memorialId: v.id("memorials"),
+      storageId: v.id("_storage"),
     },
     handler: async (ctx, args) => {
-     
       const identity = await ctx.auth.getUserIdentity();
-      if (!identity) {
-        throw new Error("დაუსაბუთებელი მომხმარებელი (Unauthorized)");
-      }
+      if (!identity) throw new Error("დაუსაბუთებელი მომხმარებელი (Unauthorized)");
   
-     
       const memorial = await ctx.db.get(args.memorialId);
-      if (!memorial) {
-        throw new Error("მემორიალი ვერ მოიძებნა");
-      }
-  
-     
-      if (memorial.creatorId !== identity.subject) {
+      if (!memorial) throw new Error("მემორიალი ვერ მოიძებნა");
+      if (memorial.creatorId !== identity.subject)
         throw new Error("თქვენ არ გაქვთ ამ მემორიალის რედაქტირების უფლება");
+  
+      const premium = await checkIsPremium(ctx, identity.subject);
+  
+      if (!premium) {
+        const existing = await ctx.db
+          .query("invitations")
+          .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
+          .collect();
+  
+        if (existing.length >= 1) {
+          throw new Error(
+            "უფასო პაკეტში მხოლოდ 1 მოსაწვევის შექმნაა შესაძლებელი. განაახლეთ პაკეტი."
+          );
+        }
       }
   
-   
       await ctx.db.insert("invitations", {
         memorialId: args.memorialId,
         storageId: args.storageId,
@@ -303,5 +330,40 @@ export const getToastUrl = query({
   
       
       await ctx.db.delete(args.invitationId);
+    },
+  });
+
+  export const getMyToastsForMemorial = query({
+    args: { memorialId: v.id("memorials") },
+    handler: async (ctx, args) => {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) return [];
+      return await ctx.db
+        .query("toasts")
+        .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
+        .filter((q) => q.eq(q.field("authorId"), identity.subject))
+        .collect();
+    },
+  });
+  
+  export const getMyInvitationsForMemorial = query({
+    args: { memorialId: v.id("memorials") },
+    handler: async (ctx, args) => {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) return [];
+      return await ctx.db
+        .query("invitations")
+        .withIndex("by_memorialId", (q) => q.eq("memorialId", args.memorialId))
+        .collect();
+    },
+  });
+  
+  export const getTimelineEntries = query({
+    args: { memorialId: v.id("memorials") },
+    handler: async (ctx, args) => {
+      return await ctx.db
+        .query("timelineEntries")
+        .withIndex("by_memorial", (q) => q.eq("memorialId", args.memorialId))
+        .collect();
     },
   });

@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { checkIsPremium } from "./pricing";
 
 
 export const getByMemorial = query({
@@ -27,10 +28,27 @@ export const getByMemorial = query({
       category: v.string(),
     },
     handler: async (ctx, args) => {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error("მოითხოვება ავტორიზაცია!");
+  
+      const premium = await checkIsPremium(ctx, identity.subject);
+  
+      if (!premium) {
+        const existing = await ctx.db
+          .query("timelineEntries")
+          .withIndex("by_memorial", (q) => q.eq("memorialId", args.memorialId))
+          .collect();
+  
+        if (existing.length >= 2) {
+          throw new Error(
+            "უფასო პაკეტში მაქსიმუმ 2 მოვლენის დამატებაა შესაძლებელი. განაახლეთ პაკეტი."
+          );
+        }
+      }
+  
       return await ctx.db.insert("timelineEntries", args);
     },
   });
-
 
 export const update = mutation({
     args: {

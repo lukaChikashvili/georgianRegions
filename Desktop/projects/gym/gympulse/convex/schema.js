@@ -111,6 +111,7 @@ toasts: defineTable({
   audioUrl: v.string(),
   authorName: v.string(),
   createdAt: v.number(),
+  authorId: v.optional(v.string()),
   privacy: v.string(),
   isApproved: v.boolean(), 
 }).index("by_memorialId", ["memorialId"]),
