@@ -6,7 +6,7 @@ import { api } from '@/convex/_generated/api';
 import dynamic from 'next/dynamic';
 import { useUser } from '@clerk/nextjs';
 
-
+const LifeTimeline = dynamic(() => import('@/components/LifeTimeline'), { ssr: false });
 const ToastRecorder = dynamic(() => import('@/components/ToastRecorder'), { ssr: false });
 const InvitationDesigner = dynamic(() => import('@/components/InvitationDesigner'), { ssr: false });
 const QRCodeGenerator = dynamic(() => import('@/components/QRCodeGenerator'), { ssr: false });
@@ -64,7 +64,7 @@ function ServicesContent() {
           </button>
           
           <div className="flex gap-4 mb-8 border-b border-white/10 pb-4">
-            {['record', 'invite', 'qr'].map((tab) => (
+            {['record', 'invite', 'qr', 'timeline'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -74,7 +74,7 @@ function ServicesContent() {
                     : 'text-gray-500 hover:text-white'
                 }`}
               >
-                {tab === 'record' ? 'აუდიო' : tab === 'invite' ? 'მოსაწვევი' : 'QR კოდი'}
+                {tab === 'record' ? 'აუდიო' : tab === 'invite' ? 'მოსაწვევი' : tab === 'timeline' ? 'ქრონოლოგია' : 'QR კოდი'}
               </button>
             ))}
           </div>
@@ -82,7 +82,8 @@ function ServicesContent() {
           <div className="bg-[#121214]/50 p-8 border border-[#D4AF37]/20 rounded-2xl min-h-[400px]">
              <h2 className="text-xl text-[#FFF5D6] mb-6">
                 {activeTab === 'record' ? 'აუდიო სადღეგრძელო' : 
-                 activeTab === 'invite' ? 'მოსაწვევი ბარათი' : 'QR კოდის გენერაცია'}
+                 activeTab === 'invite' ? 'მოსაწვევი ბარათი' :
+                 activeTab === 'timeline' ?  'ქრონოლოგია': 'QR კოდის გენერაცია'}
              </h2>
              
             
@@ -95,6 +96,13 @@ function ServicesContent() {
   <p className="text-gray-500">მხოლოდ მემორიალის შემქმნელს შეუძლია მოსაწვევის დიზაინის შექმნა.</p>
 )}
              {activeTab === 'qr' && <QRCodeGenerator memorial={selectedMemorial} />}
+
+             {activeTab === 'timeline' && (
+  <LifeTimeline
+    memorial={selectedMemorial}
+    currentUserId={user?.id}
+  />
+)}
           </div>
         </>
       )}
