@@ -80,8 +80,18 @@ export default defineSchema({
       deathYear: v.string(),
       portraitImg: v.union(v.string(), v.null()),
       voiceToast: v.union(v.string(), v.null()),
+      city: v.optional(v.string()),
   
-    }).index("by_userId", ["userId"]),
+    }).index("by_userId", ["userId"])
+    .index("by_city", ["city"]),
+
+    cities: defineTable({
+      name: v.string(),
+      plotCount: v.number(),
+      maxPlots: v.number(),
+    })
+      .index("by_name", ["name"]), 
+
 
   condolences: defineTable({
     memorialId: v.id("memorials"),

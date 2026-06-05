@@ -478,13 +478,12 @@ export const getMyGraveDesign = query({
 });
 
 export const saveMyGraveDesign = mutation({
- 
   args: {
+    city: v.string(),          
     stoneType: v.string(),
     fenceStyle: v.string(),
     floorStyle: v.string(),
     flowers: v.string(),
-
     winePoured: v.boolean(),
     fullName: v.string(),
     birthYear: v.string(),
@@ -496,52 +495,81 @@ export const saveMyGraveDesign = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("მოითხოვება ავტორიზაცია!");
 
-    const isPremium = await checkIsPremium(ctx, userId);
-        if (!isPremium) {
-             throw new Error("3D მონუმენტის შექმნა მხოლოდ პრემიუმ პაკეტშია ხელმისაწვდომი.");
-            }
-
     const userId = identity.subject;
+
+    const isPremium = await checkIsPremium(ctx, userId);
+    if (!isPremium) throw new Error("3D მონუმენტის შექმნა მხოლოდ პრემიუმ პაკეტშია ხელმისაწვდომი.");
 
     const existingDesign = await ctx.db
       .query("graveDesigns")
       .withIndex("by_userId", (q) => q.eq("userId", userId))
       .unique();
 
-    if (existingDesign) {
+   
+    if (!existingDesign) {
+      const city = await ctx.db
+        .query("cities")
+        .withIndex("by_name", (q) => q.eq("name", args.city))
+        .unique();
+
+      if (!city) {
+        await ctx.db.insert("cities", {
+          name: args.city,
+          plotCount: 1,
+          maxPlots: 50,
+        });
+      } else {
+        if (city.plotCount >= city.maxPlots) {
+          throw new Error(`${args.city}-ის სასაფლაო სავსეა! მაქსიმუმ ${city.maxPlots} ადგილი.`);
+        }
+        await ctx.db.patch(city._id, { plotCount: city.plotCount + 1 });
+      }
+    } else if (existingDesign.city !== args.city) {
       
-      await ctx.db.patch(existingDesign._id, {
-        stoneType: args.stoneType,
-        fenceStyle: args.fenceStyle,
-        floorStyle: args.floorStyle,
-        flowers: args.flowers,
-        winePoured: args.winePoured,
-        fullName: args.fullName,
-        birthYear: args.birthYear,
-        deathYear: args.deathYear,
-        portraitImg: args.portraitImg,
-        voiceToast: args.voiceToast,
-      });
+      const oldCity = await ctx.db
+        .query("cities")
+        .withIndex("by_name", (q) => q.eq("name", existingDesign.city))
+        .unique();
+      if (oldCity && oldCity.plotCount > 0) {
+        await ctx.db.patch(oldCity._id, { plotCount: oldCity.plotCount - 1 });
+      }
+
+      const newCity = await ctx.db
+        .query("cities")
+        .withIndex("by_name", (q) => q.eq("name", args.city))
+        .unique();
+      if (!newCity) {
+        await ctx.db.insert("cities", { name: args.city, plotCount: 1, maxPlots: 50 });
+      } else {
+        if (newCity.plotCount >= newCity.maxPlots) {
+          throw new Error(`${args.city}-ის სასაფლაო სავსეა!`);
+        }
+        await ctx.db.patch(newCity._id, { plotCount: newCity.plotCount + 1 });
+      }
+    }
+
+    const designData = {
+      city: args.city,
+      stoneType: args.stoneType,
+      fenceStyle: args.fenceStyle,
+      floorStyle: args.floorStyle,
+      flowers: args.flowers,
+      winePoured: args.winePoured,
+      fullName: args.fullName,
+      birthYear: args.birthYear,
+      deathYear: args.deathYear,
+      portraitImg: args.portraitImg,
+      voiceToast: args.voiceToast,
+    };
+
+    if (existingDesign) {
+      await ctx.db.patch(existingDesign._id, designData);
       return existingDesign._id;
     } else {
-     
-      return await ctx.db.insert("graveDesigns", {
-        userId,
-        stoneType: args.stoneType,
-        fenceStyle: args.fenceStyle,
-        floorStyle: args.floorStyle,
-        flowers: args.flowers,
-        winePoured: args.winePoured,
-        fullName: args.fullName,
-        birthYear: args.birthYear,
-        deathYear: args.deathYear,
-        portraitImg: args.portraitImg,
-        voiceToast: args.voiceToast,
-      });
+      return await ctx.db.insert("graveDesigns", { userId, ...designData });
     }
   },
 });
-
 
 
 
@@ -572,6 +600,15 @@ export const deleteMyGraveDesign = mutation({
       throw new Error("მონუმენტის დიზაინი ვერ მოიძებნა.");
     }
 
+    if (existingDesign.city) {
+      const city = await ctx.db
+        .query("cities")
+        .withIndex("by_name", (q) => q.eq("name", existingDesign.city))
+        .unique();
+      if (city && city.plotCount > 0) {
+        await ctx.db.patch(city._id, { plotCount: city.plotCount - 1 });
+      }
+    }
     
     await ctx.db.delete(existingDesign._id);
     return true;
@@ -592,3 +629,19 @@ export const incrementVisits = mutation({
 });
 
 
+export const getCityGraves = query({
+  args: { city: v.string() },
+  handler: async (ctx, { city }) => {
+    return ctx.db
+      .query("graveDesigns")
+      .withIndex("by_city", (q) => q.eq("city", city))
+      .collect();
+  },
+});
+
+export const getAllCities = query({
+  args: {},
+  handler: async (ctx) => {
+    return ctx.db.query("cities").collect();
+  },
+});

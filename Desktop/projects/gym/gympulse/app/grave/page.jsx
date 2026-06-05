@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useUser } from '@clerk/nextjs';
-import { X, Crown, Loader2 } from 'lucide-react';
+import { X, Crown, Loader2, MapPin, Users, ChevronRight } from 'lucide-react';
 import Experience from '../../components/Experience';
 
 
@@ -100,13 +100,14 @@ function UpgradeModal({ onClose, onUpgrade, isUpgrading }) {
 const Page = () => {
   const router = useRouter();
   const { user } = useUser();
-  const allGraves = useQuery(api.memorials.getAllGraveDesigns);
+  const allCities = useQuery(api.memorials.getAllCities);
   const myGrave = useQuery(api.memorials.getMyGraveDesign);
   const userIsPremium = useQuery(api.pricing.isPremium);
   const hasDesigned = !!myGrave;
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [isUpgrading, setIsUpgrading] = useState(false);
+  const [search, setSearch] = useState("");
 
   const handleUpgrade = async () => {
     if (!user) return;
@@ -124,18 +125,20 @@ const Page = () => {
     }
   };
 
-  if (allGraves === undefined) {
+  const filteredCities = allCities?.filter(c =>
+    c.name.toLowerCase().includes(search.toLowerCase())
+  ) ?? [];
+
+  if (allCities === undefined) {
     return (
       <div className="w-full h-[calc(100vh-3rem)] mt-12 bg-[#0b0d12] flex items-center justify-center">
-        <p className="text-sm text-gray-500 font-light tracking-widest animate-pulse">
-          ვირტუალური სასაფლაო იტვირთება...
-        </p>
+        <p className="text-sm text-gray-500 font-light tracking-widest animate-pulse">იტვირთება...</p>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-[calc(100vh-3rem)] mt-12 bg-[#0b0d12]">
+    <div className="w-full min-h-[calc(100vh-3rem)] mt-12 bg-[#0b0d12] text-white">
       {showUpgradeModal && (
         <UpgradeModal
           onClose={() => setShowUpgradeModal(false)}
@@ -144,44 +147,142 @@ const Page = () => {
         />
       )}
 
-      <Canvas
-        camera={{ position: [0, 15, 30], fov: 50 }}
-        className="w-full h-full"
-      >
-        <OrbitControls
-          enableDamping
-          dampingFactor={0.05}
-          maxPolarAngle={Math.PI / 2 - 0.05}
-          maxDistance={80}
-        />
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        <Experience graveRecords={allGraves} />
-      </Canvas>
+      
+      <div className="relative border-b border-white/5 px-6 py-16 text-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#ffd700]/3 to-transparent pointer-events-none" />
+        <p className="text-[11px] uppercase tracking-widest text-[#ffd700]/60 mb-3">ვირტუალური სივრცე</p>
+        <h1 className="text-3xl font-light text-white tracking-wide mb-3">ვირტუალური სასაფლაო</h1>
+        <p className="text-sm text-gray-500 font-light max-w-md mx-auto">
+          აირჩიეთ ქალაქი და ეწვიეთ ვირტუალურ სასაფლაოს, ან შექმენით თქვენი მემორიალი
+        </p>
 
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xl px-4 pointer-events-none">
-        <div className="flex items-center justify-between p-4 border pointer-events-auto rounded-xl bg-[#16181e]/90 border-white/5 backdrop-blur-md shadow-xl">
-          <div className="text-left">
-            <p className="text-xs font-light text-gray-400 tracking-wider">ვირტუალური სივრცე</p>
-            <h3 className="text-sm font-medium text-white tracking-wide mt-0.5">
-              {hasDesigned ? myGrave.fullName : "მემორიალი არ არის შექმნილი"}
-            </h3>
-          </div>
+      
+        {hasDesigned && myGrave.city && (
+          <button
+            onClick={() => router.push(`/grave/${encodeURIComponent(myGrave.city)}`)}
+            className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#ffd700]/10 border border-[#ffd700]/20 text-[#ffd700] text-xs hover:bg-[#ffd700]/15 transition-all"
+          >
+            <MapPin size={12} />
+            ჩემი მემორიალი — {myGrave.city}
+            <ChevronRight size={12} />
+          </button>
+        )}
+      </div>
 
-          {userIsPremium ? (
+      <div className="max-w-4xl mx-auto px-6 py-10 space-y-8">
+
+        
+        <div className="relative">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="ქალაქის ძიება..."
+            className="w-full bg-white/[0.02] border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#ffd700]/30 transition-all"
+          />
+          {search && (
             <button
-              onClick={() => router.push("/grave/create-gravestone")}
-              className="flex items-center gap-2 py-2 px-4 text-xs font-medium text-[#0b0d12] bg-[#ffd700] hover:bg-[#ffe240] transition-all duration-300 rounded-lg hover:scale-[1.02] active:scale-[0.98]"
+              onClick={() => setSearch("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400"
             >
-              {hasDesigned ? "დიზაინის შეცვლა" : "მონუმენტის განთავსება"}
-            </button>
-          ) : (
-            <button
-              onClick={() => setShowUpgradeModal(true)}
-              className="flex items-center gap-2 py-2 px-4 text-xs font-medium text-[#D4AF37] bg-[#1A150F] border border-[#D4AF37]/30 hover:border-[#D4AF37]/60 hover:bg-[#1A150F]/80 transition-all duration-300 rounded-lg hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <Crown size={12} /> პრემიუმი საჭიროა
+              <X size={14} />
             </button>
           )}
+        </div>
+
+     
+        {filteredCities.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {filteredCities.map((city) => {
+              const isMine = myGrave?.city === city.name;
+              const pct = Math.round((city.plotCount / city.maxPlots) * 100);
+              return (
+                <button
+                  key={city._id}
+                  onClick={() => router.push(`/grave/${encodeURIComponent(city.name)}`)}
+                  className={`group relative p-5 rounded-xl border text-left transition-all hover:scale-[1.01] ${
+                    isMine
+                      ? "border-[#ffd700]/30 bg-[#ffd700]/5"
+                      : "border-white/5 bg-white/[0.01] hover:border-white/10 hover:bg-white/[0.03]"
+                  }`}
+                >
+                  {isMine && (
+                    <span className="absolute top-3 right-3 text-[9px] uppercase tracking-widest text-[#ffd700]/70 bg-[#ffd700]/10 px-2 py-0.5 rounded-full">
+                      ჩემი
+                    </span>
+                  )}
+
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center text-base shrink-0">
+                      ⛼
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-white">{city.name}</h3>
+                      <p className="text-[11px] text-gray-500 flex items-center gap-1 mt-0.5">
+                        <Users size={9} /> {city.plotCount} მემორიალი
+                      </p>
+                    </div>
+                  </div>
+
+                 
+                  <div className="space-y-1">
+                    <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          pct >= 90 ? "bg-red-500" : pct >= 60 ? "bg-yellow-500" : "bg-[#ffd700]"
+                        }`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                    <p className="text-[9px] text-gray-600">
+                      {city.plotCount}/{city.maxPlots} ადგილი
+                    </p>
+                  </div>
+
+                  <ChevronRight
+                    size={14}
+                    className="absolute right-4 bottom-4 text-gray-700 group-hover:text-gray-400 transition-colors"
+                  />
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-16 text-gray-600">
+            <p className="text-4xl mb-3">🪦</p>
+            <p className="text-sm">სასაფლაო ვერ მოიძებნა</p>
+            {search && <p className="text-xs mt-1">სცადეთ სხვა სახელი</p>}
+          </div>
+        )}
+
+     
+        <div className="border-t border-white/5 pt-8">
+          <div className="flex items-center justify-between p-5 rounded-xl bg-white/[0.02] border border-white/5">
+            <div>
+              <p className="text-xs text-gray-400 font-light">
+                {hasDesigned ? `${myGrave.fullName} · ${myGrave.city || "ქალაქი არ არის"}` : "მემორიალი არ არის შექმნილი"}
+              </p>
+              <p className="text-[11px] text-gray-600 mt-0.5">
+                {hasDesigned ? "დიზაინის შეცვლა ან ახლის შექმნა" : "შექმენით თქვენი 3D მემორიალი"}
+              </p>
+            </div>
+
+            {userIsPremium ? (
+              <button
+                onClick={() => router.push("/grave/create-gravestone")}
+                className="flex items-center gap-2 py-2 px-4 text-xs font-medium text-[#0b0d12] bg-[#ffd700] hover:bg-[#ffe240] transition-all rounded-lg hover:scale-[1.02]"
+              >
+                {hasDesigned ? "დიზაინის შეცვლა" : "მემორიალის შექმნა"}
+              </button>
+            ) : (
+              <button
+                onClick={() => setShowUpgradeModal(true)}
+                className="flex items-center gap-2 py-2 px-4 text-xs font-medium text-[#D4AF37] bg-[#1A150F] border border-[#D4AF37]/30 hover:border-[#D4AF37]/60 transition-all rounded-lg"
+              >
+                <Crown size={12} /> პრემიუმი საჭიროა
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

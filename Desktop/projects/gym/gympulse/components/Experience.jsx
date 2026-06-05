@@ -47,7 +47,7 @@ const Experience = ({ graveRecords = [],  isPreview = false }) => {
     <>
       <fog attach="fog" args={["#0b0d12", 60, 250]} />
 
-      <group position={isPreview ? [0, -4, 0] : [50, -4, -20]}>
+      <group position={isPreview ? [0, -7, -15] : [50, -11, -20]}>
         {graveRecords.map((record, index) => {
           const row = Math.floor(index / gravesPerRow);
           const indexInRow = index % gravesPerRow;
@@ -71,7 +71,7 @@ const Experience = ({ graveRecords = [],  isPreview = false }) => {
         })}
       </group>
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -13.05, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -20.05, 0]}>
         <planeGeometry args={[500, 500, 350, 350]} />
         <shaderMaterial
           vertexShader={grassVertex}

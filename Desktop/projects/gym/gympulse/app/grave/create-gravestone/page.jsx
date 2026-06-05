@@ -36,9 +36,13 @@ const DesignGrave = () => {
     fullName: "",
     birthYear: "",
     deathYear: "",
+    city: ""
   };
 
   const [designSettings, setDesignSettings] = useState(defaultSettings);
+
+  const allCities = useQuery(api.memorials.getAllCities);
+
 
 
   const portraitUrl = useQuery(
@@ -47,6 +51,15 @@ const DesignGrave = () => {
       ? { storageId: designSettings.portraitImg }
       : "skip"
   );
+
+  
+  const [resolvedPortraitUrl, setResolvedPortraitUrl] = useState(null);
+
+  useEffect(() => {
+    if (portraitUrl && portraitUrl.startsWith("https")) {
+      setResolvedPortraitUrl(portraitUrl);
+    }
+  }, [portraitUrl]);
 
   useEffect(() => {
     if (savedDesignData !== undefined && savedDesignData !== null) {
@@ -61,6 +74,8 @@ const DesignGrave = () => {
         fullName: savedDesignData.fullName || "",
         birthYear: savedDesignData.birthYear || "",
         deathYear: savedDesignData.deathYear || "",
+        city: savedDesignData.city || "",
+
       });
     }
   }, [savedDesignData]);
@@ -105,13 +120,6 @@ const DesignGrave = () => {
     }
   };
 
-  const [resolvedPortraitUrl, setResolvedPortraitUrl] = useState(null);
-
-  useEffect(() => {
-    if (portraitUrl && portraitUrl.startsWith("https")) {
-      setResolvedPortraitUrl(portraitUrl);
-    }
-  }, [portraitUrl]);
 
   const handlePublish = async () => {
     setIsPublishing(true);
@@ -127,6 +135,7 @@ const DesignGrave = () => {
         fullName: designSettings.fullName,
         birthYear: designSettings.birthYear,
         deathYear: designSettings.deathYear,
+        city: designSettings.city,
       });
       router.push("/grave");
     } catch (error) {
@@ -240,6 +249,7 @@ const DesignGrave = () => {
           onClose={() => setIsPanelOpen(false)}
           onPortraitUpload={handlePortraitUpload}
           uploadProgress={uploadProgress}
+          allCities={allCities}
         />
       </div>
     </div>

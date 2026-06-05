@@ -2,8 +2,9 @@
 
 import React, { useRef } from "react";
 
-const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, updateSetting, onClose, onPortraitUpload, uploadProgress }) => {
+const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, updateSetting, onClose, onPortraitUpload, uploadProgress, cityInput, onCityChange, allCities }) => {
   const fileInputRef = useRef(null);
+
 
   const categories = [
     { id: "stone", label: "ქვის სტილი", icon: "💎" },
@@ -12,6 +13,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
     { id: "flowers", label: "ყვავილები", icon: "💐" },
     { id: "wine", label: "ღვინის დასხმა", icon: "🍷" },
     { id: "text", label: "წარწერა ქვაზე", icon: "📝" },
+    { id: "city", label: "ქალაქი", icon: "🏙️" },
   ];
 
   return (
@@ -174,7 +176,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">მონუმენტის წარწერა</p>
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
 
-              {/* Portrait Upload */}
+          
               <div className="flex flex-col space-y-1">
                 <label className="text-[10px] text-gray-400 uppercase font-light">პორტრეტი</label>
                 <input
@@ -185,7 +187,7 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file && onPortraitUpload) onPortraitUpload(file);
-                    // reset so same file can be re-selected
+                   
                     e.target.value = "";
                   }}
                 />
@@ -263,6 +265,54 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
             </div>
           </div>
         )}
+
+{activeCategory === "city" && (
+  <div className="space-y-3 animate-fadeIn max-w-md mx-auto">
+    <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">
+      აირჩიეთ ქალაქი
+    </p>
+    <input
+      type="text"
+      value={designSettings.city || ""}
+      onChange={(e) => updateSetting("city", e.target.value)}
+      placeholder="მაგ: თბილისი, ქუთაისი, ბათუმი..."
+      className="w-full bg-white/[0.02] border border-white/5 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#ffd700] text-white placeholder-gray-700"
+    />
+
+   
+    {allCities?.length > 0 && (
+      <div className="space-y-1">
+        <p className="text-[10px] text-gray-600 uppercase tracking-wider">არსებული სასაფლაოები</p>
+        <div className="flex flex-wrap gap-2">
+          {allCities.map((c) => (
+            <button
+              key={c._id}
+              onClick={() => updateSetting("city", c.name)}
+              className={`text-[11px] px-3 py-1.5 rounded-lg border transition-all ${
+                designSettings.city === c.name
+                  ? "border-[#ffd700]/50 bg-[#ffd700]/10 text-[#ffd700]"
+                  : "border-white/5 bg-white/[0.01] text-gray-400 hover:text-white hover:border-white/20"
+              }`}
+            >
+              {c.name}
+              <span className="ml-1.5 text-[9px] text-gray-600">
+                {c.plotCount}/{c.maxPlots}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+
+  
+    {designSettings.city && allCities?.find(c => c.name === designSettings.city)?.plotCount >= 
+     allCities?.find(c => c.name === designSettings.city)?.maxPlots && (
+      <p className="text-[11px] text-red-400 border border-red-500/20 bg-red-500/5 rounded-lg px-3 py-2">
+        ⚠️ ეს სასაფლაო სავსეა — სხვა ქალაქი აირჩიეთ
+      </p>
+    )}
+  </div>
+)}
       </div>
     </div>
   );
