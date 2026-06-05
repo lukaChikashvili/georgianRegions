@@ -8,7 +8,7 @@ import { grassVertex } from "../shaders/vertex";
 import { grassFragment } from "../shaders/fragment";
 import SingleGraveInstance from "./SingleGraveInstance";
 
-const Experience = ({ graveRecords = [],  isPreview = false }) => {
+const Experience = ({ graveRecords = [],  isPreview = false , visitorWineId = null}) => {
   const uniforms = useRef({
     uTime: { value: 0 },
     uSeason: { value: 1.5 },
@@ -66,6 +66,7 @@ const Experience = ({ graveRecords = [],  isPreview = false }) => {
               position={[xPos, 0.1, zPos]}
               modelScene={graveModel.scene}
               baseTextures={textures}
+              visitorWine={visitorWineId === record._id} 
             />
           );
         })}

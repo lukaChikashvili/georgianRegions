@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
+import { useFrame } from "@react-three/fiber";
 
 const PLOT_SIZE = 20;
 const FENCE_SCALE = 7;
@@ -30,7 +31,7 @@ const ironSides = [
 
 const woodSides = ironSides;
 
-const SingleGraveInstance = ({ record, position, modelScene, baseTextures }) => {
+const SingleGraveInstance = ({ record, position, modelScene, baseTextures, visitorWine = false }) => {
   const [dynamicTexture, setDynamicTexture] = useState(null);
 
   const { scene: ironFenceScene } = useGLTF('/iron_fence.glb');
@@ -39,6 +40,66 @@ const SingleGraveInstance = ({ record, position, modelScene, baseTextures }) => 
   const { scene: bottleScene }    = useGLTF('/wine_bottle.glb');
   const { scene: flowersScene }   = useGLTF('/flowers.glb');
   const { scene: tulipScene }     = useGLTF('/simple_tulip.glb');
+
+  const bottleRef = useRef();
+
+  const bottleCallbackRef = (node) => {
+    bottleRef.current = node;
+    if (node) {
+      
+      node.position.set(START_POS.x, START_POS.y, START_POS.z);
+      node.rotation.set(0, 0, 0);
+      wineProgressRef.current = 0;
+    }
+  };
+
+
+  const wineRef = useRef();
+  const wineProgressRef = useRef(0); 
+
+  const START_POS = { x: -13, y: 7, z: -10 };
+  const POUR_POS  = { x: 0,   y: 18, z: 5  };
+
+
+
+  useFrame((_, delta) => {
+    if (!visitorWine) return;
+    console.log("useFrame running, bottleRef:", bottleRef.current, "progress:", wineProgressRef.current);
+
+  
+    const p = wineProgressRef.current;
+    wineProgressRef.current = Math.min(p + delta * 0.3, 1);
+  
+    if (bottleRef.current) {
+      const phase1 = Math.min(p / 0.3, 1);          
+      const phase2 = Math.min(Math.max((p - 0.3) / 0.3, 0), 1);
+      const phase3 = Math.min(Math.max((p - 0.6) / 0.4, 0), 1); 
+  
+
+      const liftY = THREE.MathUtils.lerp(START_POS.y, START_POS.y + 8, phase1);
+  
+   
+      const moveX = THREE.MathUtils.lerp(START_POS.x, POUR_POS.x, phase2);
+      const moveZ = THREE.MathUtils.lerp(START_POS.z, POUR_POS.z, phase2);
+      const moveY = THREE.MathUtils.lerp(liftY, POUR_POS.y, phase2);
+  
+      bottleRef.current.position.set(moveX, moveY, moveZ);
+  
+      bottleRef.current.rotation.z = THREE.MathUtils.lerp(0, -Math.PI * 0.65, phase3);
+   
+      bottleRef.current.rotation.x = THREE.MathUtils.lerp(0, Math.PI * 0.1, phase3);
+    }
+  
+    if (wineRef.current) {
+      const phase3 = Math.min(Math.max((p - 0.6) / 0.4, 0), 1);
+      const s = THREE.MathUtils.lerp(0.01, 1, phase3);
+      wineRef.current.scale.set(s, 1, s);
+      wineRef.current.material.opacity = THREE.MathUtils.lerp(0, 0.9, phase3);
+    }
+  });
+
+
+
 
   const instanceScene = useMemo(() => modelScene.clone(), [modelScene]);
 
@@ -143,6 +204,9 @@ useEffect(() => {
   });
 }, [instanceScene, record.stoneType, dynamicTexture, baseTextures]);
 
+const showBottle = record.winePoured || visitorWine;
+
+
   return (
     <group position={position}>
      
@@ -157,10 +221,37 @@ useEffect(() => {
      
       <primitive object={tableScene.clone()} scale={8} position={[-13, 2, -10]} />
 
+      {record.winePoured && !visitorWine && (
+  <group position={[-13, 7, -10]}>
+    <primitive object={bottleScene.clone()} scale={0.9} />
+  </group>
+)}
      
-      {winePoured && (
-        <primitive object={bottleScene.clone()} scale={0.9} position={[-13, 7, -10]}  />
-      )}
+   
+
+     {visitorWine && (
+  <group ref={bottleCallbackRef}>
+    <primitive object={bottleScene.clone()} scale={0.9} />
+  </group>
+)}
+
+{visitorWine && (
+  <mesh
+    ref={wineRef}
+    rotation={[-Math.PI / 2, 0, 0]}
+    position={[0, 0.02, 5]}
+    scale={[0.01, 1, 0.01]}
+  >
+    <circleGeometry args={[5, 32]} />
+    <meshStandardMaterial
+      color="#6B0000"
+      transparent
+      opacity={0}
+      roughness={0.15}
+      metalness={0.2}
+    />
+  </mesh>
+)}
 
       
       {flowerStyle === "roses" && (

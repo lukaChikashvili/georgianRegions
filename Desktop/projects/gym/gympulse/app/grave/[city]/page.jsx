@@ -6,7 +6,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import Experience from "../../../components/Experience";
 import { useRouter } from "next/navigation";
-import { use } from "react";
+import { use, useState } from "react";
 import { ArrowLeft, Users } from "lucide-react";
 
 export default function CityPage({ params }) {
@@ -14,9 +14,22 @@ export default function CityPage({ params }) {
   const decodedCity = decodeURIComponent(city);
   const router = useRouter();
 
+
+
   const graves = useQuery(api.memorials.getCityGraves, { city: decodedCity });
   const allCities = useQuery(api.memorials.getAllCities);
   const cityInfo = allCities?.find((c) => c.name === decodedCity);
+
+  const [visitorWineId, setVisitorWineId] = useState(null);
+  const [winePoured, setWinePoured] = useState(false);
+
+  const handlePourWine = (graveId) => {
+    if (winePoured) return;
+    console.log("Pouring wine on:", graveId);
+  console.log("Current graves:", graves.map(g => g._id));
+    setVisitorWineId(graveId);
+    setWinePoured(true);
+  };
 
   if (graves === undefined) {
     return (
@@ -36,7 +49,7 @@ export default function CityPage({ params }) {
           maxDistance={200}
         />
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        <Experience graveRecords={graves ?? []} />
+        <Experience graveRecords={graves ?? []} visitorWineId={visitorWineId} />
       </Canvas>
 
      
@@ -57,6 +70,38 @@ export default function CityPage({ params }) {
       >
         <ArrowLeft size={12} /> სასაფლაოების სია
       </button>
+
+      {graves.length > 0 && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-lg px-4">
+          <div className="bg-black/50 backdrop-blur-md border border-white/5 rounded-xl p-4">
+            <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-3">ღვინის დასხმა</p>
+            <div className="flex flex-wrap gap-2">
+              {graves.map((g) => (
+                <button
+                  key={g._id}
+                  onClick={() => handlePourWine(g._id)}
+                  disabled={winePoured}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs border transition-all ${
+                    visitorWineId === g._id
+                      ? "border-red-500/40 bg-red-500/10 text-red-400"
+                      : winePoured
+                      ? "border-white/5 bg-white/[0.01] text-gray-600 cursor-not-allowed"
+                      : "border-white/10 bg-white/[0.02] text-gray-300 hover:border-red-500/30 hover:text-red-300 hover:bg-red-500/5"
+                  }`}
+                >
+                  🍷 {g.fullName || "უცნობი"}
+                  {visitorWineId === g._id && <span className="text-[10px] text-red-400">✓ დაისხა</span>}
+                </button>
+              ))}
+            </div>
+            {winePoured && (
+              <p className="text-[10px] text-gray-600 mt-2">
+                ღვინო დაისხა — ეს ვიზიტის განმავლობაში ჩანს
+              </p>
+            )}
+          </div>
+        </div>
+      )}
 
       
       {graves.length === 0 && (

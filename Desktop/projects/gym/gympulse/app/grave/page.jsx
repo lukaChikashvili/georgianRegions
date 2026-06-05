@@ -8,7 +8,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useUser } from '@clerk/nextjs';
 import { X, Crown, Loader2, MapPin, Users, ChevronRight } from 'lucide-react';
-import Experience from '../../components/Experience';
+
 
 
 function UpgradeModal({ onClose, onUpgrade, isUpgrading }) {
