@@ -17,7 +17,7 @@ const MemorialPage = () => {
 
   const visits = useMutation(api.memorials.incrementVisits);
 
-
+ 
 
 
   // share feature
@@ -78,6 +78,56 @@ const convertYouTube = (url) => {
   );
   
   const publishedInv = invitations?.find(inv => inv.isPublished === true);
+
+
+    // gifts
+    const sendGiftMutation = useMutation(api.gifts.sendGift);
+    const gifts = useQuery(api.gifts.getGiftsForMemorial, 
+      memorial ? { memorialId: memorial._id } : "skip"
+     );
+ 
+     const GIFT_ITEMS = [
+      { id: "rose",    name: "ვარდი",    emoji: "🌹", price: 5  },
+      { id: "lily",    name: "შროშანი",  emoji: "🌸", price: 6  },
+      { id: "candle",  name: "სანთელი",  emoji: "🕯️", price: 3  },
+      { id: "wreath",  name: "გვირგვინი",emoji: "💐", price: 25 },
+      { id: "bouquet", name: "თაიგული", emoji: "🌺", price: 15 },
+      { id: "dove",    name: "მტრედი",   emoji: "🕊️", price: 10 },
+    ];
+ 
+    const [selectedGift, setSelectedGift] = useState(GIFT_ITEMS[0]);
+    const [giftDedication, setGiftDedication] = useState("");
+    const [isGiftAnonymous, setIsGiftAnonymous] = useState(false);
+    const [isSendingGift, setIsSendingGift] = useState(false);
+    const [giftSent, setGiftSent] = useState(false);
+    
+ 
+    const handleSendGift = async () => {
+      if (!memorial || !user) return;
+      setIsSendingGift(true);
+      try {
+       
+        await sendGiftMutation({
+          memorialId: memorial._id,
+          senderName: isGiftAnonymous ? "ანონიმური" : (user.fullName || user.firstName || "სტუმარი"),
+          senderId: user.id,
+          giftType: selectedGift.id,
+          giftEmoji: selectedGift.emoji,
+          giftName: selectedGift.name,
+          giftPrice: selectedGift.price,
+          dedication: giftDedication.trim() || undefined,
+          isAnonymous: isGiftAnonymous,
+        });
+        setGiftSent(true);
+        setGiftDedication("");
+        setTimeout(() => setGiftSent(false), 4000);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsSendingGift(false);
+      }
+    };
+ 
 
   // Edit and delete condolence 
   const deleteCondolenceMutation = useMutation(api.memorials.deleteCondolence);
@@ -324,6 +374,7 @@ const convertYouTube = (url) => {
   const isCreator = user?.id === memorial.creatorId;
   const visibleCondolences = (condolences || []).filter(c => c.isApproved || isCreator);
 
+ 
   return (
     <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans pb-24 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-[#1A150F] to-transparent opacity-40 blur-3xl pointer-events-none" />
@@ -761,6 +812,94 @@ const convertYouTube = (url) => {
     </div>
   )}
 </div>
+</section>
+
+<section className="max-w-4xl mx-auto mt-20 px-6">
+  <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
+    <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      ყვავილი და საჩუქარი
+    </h2>
+
+  
+    <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+      {GIFT_ITEMS.map((gift) => (
+        <button
+          key={gift.id}
+          onClick={() => setSelectedGift(gift)}
+          className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 ${
+            selectedGift.id === gift.id
+              ? 'border-[#D4AF37]/60 bg-[#1A150F]/60'
+              : 'border-white/5 bg-[#0D0D0F]/40 hover:border-white/10'
+          }`}
+        >
+          <span className="text-2xl">{gift.emoji}</span>
+          <span className="text-[11px] text-gray-400">{gift.name}</span>
+          <span className="text-[11px] font-medium text-[#D4AF37]">{gift.price} ₾</span>
+        </button>
+      ))}
+    </div>
+
+   
+    <div className="bg-[#0D0D0F]/40 border border-white/5 rounded-xl p-5 space-y-4">
+      <textarea
+        rows={3}
+        placeholder="მიძღვნა (არასავალდებულო)..."
+        value={giftDedication}
+        onChange={(e) => setGiftDedication(e.target.value)}
+        className="w-full bg-[#0D0D0F] border border-white/5 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none resize-none"
+      />
+      <div className="flex items-center justify-between">
+        <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={isGiftAnonymous}
+            onChange={(e) => setIsGiftAnonymous(e.target.checked)}
+            className="accent-[#D4AF37] w-3.5 h-3.5"
+          />
+          ანონიმურად გაგზავნა
+        </label>
+        <button
+          onClick={handleSendGift}
+          disabled={isSendingGift || !user}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black text-sm font-semibold hover:brightness-110 transition-all disabled:opacity-40"
+        >
+          {giftSent ? '✓ გაგზავნილია!' : isSendingGift ? 'იგზავნება...' : `${selectedGift.emoji} გაგზავნე — ${selectedGift.price} ₾`}
+        </button>
+      </div>
+      {!user && (
+        <p className="text-xs text-gray-600 text-right">საჩუქრის გასაგზავნად საჭიროა ავტორიზაცია.</p>
+      )}
+    </div>
+
+    
+    {gifts && gifts.length > 0 && (
+      <div className="space-y-3 pt-2 border-t border-white/5">
+        <p className="text-[11px] uppercase tracking-widest text-gray-500">
+          {gifts.length} ადამიანმა გამოხატა პატივისცემა
+        </p>
+        <div className="space-y-3 max-h-80 overflow-y-auto pr-1 custom-scrollbar">
+          {gifts.map((g) => (
+            <div key={g._id} className="flex items-start gap-3 p-4 rounded-xl bg-[#0D0D0F]/40 border border-white/5">
+              <span className="text-xl mt-0.5 shrink-0">{g.giftEmoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm font-medium text-gray-200">{g.isAnonymous ? 'ანონიმური' : g.senderName}</span>
+                  <span className="text-[10px] text-[#D4AF37]/70 bg-[#D4AF37]/10 border border-[#D4AF37]/15 rounded-full px-2 py-0.5">{g.giftName}</span>
+                </div>
+                {g.dedication && (
+                  <p className="text-xs text-gray-500 font-light mt-1 leading-relaxed italic">"{g.dedication}"</p>
+                )}
+                <p className="text-[10px] text-gray-600 mt-1">
+                  {new Date(g.createdAt).toLocaleDateString('ka-GE')}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
 </section>
 
 
