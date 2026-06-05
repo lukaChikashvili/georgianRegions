@@ -156,6 +156,16 @@ function ServicesContent() {
   const inviteLimitReached  = !isPremium && (myInvitations?.length ?? 0) >= 1;
   const timelineLimitReached = !isPremium && (timelineEntries?.length ?? 0) >= 2;
 
+  //transliteration
+  const GEO_TO_LAT = {
+    'ა':'a','ბ':'b','გ':'g','დ':'d','ე':'e','ვ':'v','ზ':'z',
+    'თ':'t','ი':'i','კ':'k','ლ':'l','მ':'m','ნ':'n','ო':'o',
+    'პ':'p','ჟ':'zh','რ':'r','ს':'s','ტ':'t','უ':'u','ფ':'f',
+    'ქ':'q','ღ':'gh','ყ':'q','შ':'sh','ჩ':'ch','ც':'ts','ძ':'dz',
+    'წ':'ts','ჭ':'ch','ხ':'kh','ჯ':'j','ჰ':'h'
+  };
+  
+
   const handleUpgrade = async () => {
     if (!user) return;
     setIsUpgrading(true);
@@ -172,18 +182,19 @@ function ServicesContent() {
     }
   };
 
-  const normalizeSearch = (str) =>
-  str.toLowerCase().replace(/\s+/g, ' ').trim();
+  const geoToLat = (str) =>
+  str.split('').map((c) => GEO_TO_LAT[c] ?? c).join('').toLowerCase();
+
 
 const filteredMemorials = memorials?.filter((m) => {
-  const fullName = normalizeSearch(`${m.firstName} ${m.lastName}`);
-  const latin = m.firstNameLatin && m.lastNameLatin
-    ? normalizeSearch(`${m.firstNameLatin} ${m.lastNameLatin}`)
-    : '';
-  const query = normalizeSearch(searchQuery);
-  return fullName.includes(query) || latin.includes(query);
+  const query = searchQuery.toLowerCase().trim();
+  if (!query) return false;
+
+  const fullGeo = `${m.firstName} ${m.lastName}`.toLowerCase();
+  const fullLat = geoToLat(`${m.firstName} ${m.lastName}`);
+
+  return fullGeo.includes(query) || fullLat.includes(query);
 });
-  
   const handleTabClick = (tab) => {
     if (tab === 'qr' && !isPremium) {
       setUpgradeModal('qr');
