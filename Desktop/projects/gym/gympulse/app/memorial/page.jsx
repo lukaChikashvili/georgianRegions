@@ -180,14 +180,6 @@ const CreateMemorial = () => {
   const [upgradeModal, setUpgradeModal] = useState(null);
   const [isUpgrading, setIsUpgrading] = useState(false);
 
-  const slugAvailable = useQuery(
-    api.memorials.getMemorialBySlug,
-    formData.urlSlug.trim().length > 2
-      ? { urlSlug: formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-') }
-      : "skip"
-  );
-  
-  const isSlugTaken = slugAvailable !== null && slugAvailable !== undefined;
 
   const handleUpgrade = async () => {
     if (!user) return;
@@ -266,6 +258,16 @@ const CreateMemorial = () => {
     setFormData((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
+
+  
+  const slugAvailable = useQuery(
+    api.memorials.getMemorialBySlug,
+    formData.urlSlug.trim().length > 2
+      ? { urlSlug: formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-') }
+      : "skip"
+  );
+  
+  const isSlugTaken = slugAvailable !== null && slugAvailable !== undefined;
  
   const handleBiographyChange = (e) => {
     const val = e.target.value;

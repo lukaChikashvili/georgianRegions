@@ -172,10 +172,17 @@ function ServicesContent() {
     }
   };
 
-  const filteredMemorials = memorials?.filter((m) =>
-    `${m.firstName} ${m.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const normalizeSearch = (str) =>
+  str.toLowerCase().replace(/\s+/g, ' ').trim();
 
+const filteredMemorials = memorials?.filter((m) => {
+  const fullName = normalizeSearch(`${m.firstName} ${m.lastName}`);
+  const latin = m.firstNameLatin && m.lastNameLatin
+    ? normalizeSearch(`${m.firstNameLatin} ${m.lastNameLatin}`)
+    : '';
+  const query = normalizeSearch(searchQuery);
+  return fullName.includes(query) || latin.includes(query);
+});
   
   const handleTabClick = (tab) => {
     if (tab === 'qr' && !isPremium) {
@@ -229,6 +236,18 @@ function ServicesContent() {
           >
             ← უკან დაბრუნება
           </button>
+
+          <div className="flex items-center gap-3 mb-6 p-4 bg-[#1A150F]/60 border border-[#D4AF37]/20 rounded-xl">
+  <div className="w-9 h-9 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] font-bold text-sm shrink-0">
+    {selectedMemorial.firstName?.[0]}
+  </div>
+  <div>
+    <p className="text-[10px] uppercase tracking-widest text-[#D4AF37]/60 mb-0.5">სერვისები შემდეგი პირისთვის</p>
+    <p className="text-[#FFF5D6] font-semibold text-base leading-tight">
+      {selectedMemorial.firstName} {selectedMemorial.lastName}
+    </p>
+  </div>
+</div>
 
           
           <div className="flex gap-4 mb-8 border-b border-white/10 pb-4">
