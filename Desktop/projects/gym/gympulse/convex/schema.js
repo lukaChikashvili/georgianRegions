@@ -191,4 +191,18 @@ subscriptions: defineTable({
       ),
     }).index("by_memorialId", ["memorialId"]),
 
+
+    gifts: defineTable({
+      memorialId: v.id("memorials"),
+      senderName: v.string(),
+      senderId: v.optional(v.string()),
+      giftType: v.string(),    
+      giftEmoji: v.string(),
+      giftName: v.string(),
+      giftPrice: v.number(),
+      dedication: v.optional(v.string()),
+      isAnonymous: v.boolean(),
+      createdAt: v.number(),
+    }).index("by_memorialId", ["memorialId"]),
+
 });
