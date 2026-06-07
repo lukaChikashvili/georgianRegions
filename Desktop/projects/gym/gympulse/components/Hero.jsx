@@ -1,163 +1,99 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { ArrowDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import gsap from "gsap";
 
 const Hero = () => {
-  const sectionRef = useRef(null);
-
-  const taglineRef = useRef(null);
-  const headingRef = useRef(null);
-  const descRef = useRef(null);
-  const ctaRef = useRef(null);
-  const subRef = useRef(null);
-
-  const bannerRef = useRef(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.set(
-        [
-          taglineRef.current,
-          headingRef.current,
-          descRef.current,
-          ctaRef.current,
-          subRef.current,
-        ],
-        { opacity: 0, y: 36 }
-      );
-
-      gsap.set(bannerRef.current, { opacity: 0, scale: 1.05 });
-
-      const tl = gsap.timeline({ delay: 0.1 });
-
-      tl.to(taglineRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      })
-        .to(
-          headingRef.current,
-          { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
-          "-=0.5"
-        )
-        .to(
-          descRef.current,
-          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-          "-=0.5"
-        )
-        .to(
-          ctaRef.current,
-          { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" },
-          "-=0.5"
-        )
-        .to(
-          subRef.current,
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-          "-=0.4"
-        )
-        .to(
-          bannerRef.current,
-          { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" },
-          "-=1"
-        );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
-      className="relative min-h-screen flex items-center overflow-hidden bg-[#0D0D0F] selection:bg-[#D4AF37] selection:text-black"
+      className=" -mt-6 relative min-h-screen flex items-center overflow-hidden bg-[#0D0D0F] selection:bg-[#D4AF37] selection:text-black"
+      aria-label="Hero"
       style={{
-        background:
-          "radial-gradient(ellipse 80% 60% at 30% 50%, #1A150F 0%, #111114 55%, #0D0D0F 100%)",
+        background: 'radial-gradient(ellipse 80% 60% at 30% 50%, #1A150F 0%, #111114 55%, #0D0D0F 100%)',
       }}
     >
       
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none blur-3xl opacity-60 bg-[radial-gradient(circle,rgba(212,175,55,0.08)_0%,transparent_70%)]" />
+      <div
+        className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none blur-3xl opacity-60"
+        style={{
+          background: 'radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%)',
+        }}
+      />
 
-      
-      <div className="absolute inset-0 pointer-events-none opacity-30 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 256 256%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22 opacity=%220.04%22/%3E%3C/svg%3E')]" />
+     
+      <div
+        className="absolute inset-0 z-0 pointer-events-none opacity-30"
+        style={{
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E\")",
+        }}
+      />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full pt-32 pb-24 flex flex-col lg:flex-row items-center justify-between gap-12">
+     
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full pt-32 pb-24 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
         
-        
-        <div className="max-w-2xl flex flex-col items-start lg:w-1/2">
-
+        <div className="max-w-2xl text-left flex flex-col items-start lg:w-1/2">
           
-          <div ref={taglineRef} className="flex items-center gap-3 mb-8">
-            <div className="w-8 h-[1px] bg-gradient-to-r from-[#D4AF37] to-transparent" />
-            <span className="text-xs tracking-widest uppercase text-[#D4AF37]/90">
+          
+          <div
+            className="flex items-center gap-3 mb-8 animate-fade-in"
+            style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
+          >
+            <div className="w-8 h-[1px] bg-gradient-to-r from-[#D4AF37] to-transparent opacity-80" />
+            <span className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium font-sans">
               სამუდამო ხსოვნის სივრცე
             </span>
           </div>
 
-       
+          
           <h1
-            ref={headingRef}
-            className="text-5xl md:text-6xl lg:text-7xl font-light text-[#FFF5D6] leading-[1.2] mb-6 tracking-wide"
+            className="w-full text-5xl md:text-6xl lg:text-7xl font-light text-[#FFF5D6] leading-[1.2] mb-6 tracking-wide font-serif animate-fade-in"
+            style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
           >
             მიაგეთ პატივი.
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF5D6] via-[#D4AF37] to-[#AA7C11] italic">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF5D6] via-[#D4AF37] to-[#AA7C11] font-light italic pr-2">
               სამუდამო
-            </span>{" "}
+            </span>
             ხსოვნას.
           </h1>
 
-         
+          
           <p
-            ref={descRef}
-            className="text-sm md:text-base text-gray-400 font-light leading-relaxed max-w-lg mb-10"
+            className="font-sans text-sm md:text-base text-gray-400 font-light leading-relaxed max-w-lg mb-10 animate-fade-in"
+            style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
           >
-            GoldenMemorial.ge არის მშვიდი და სათუთი სივრცე, სადაც ოჯახებს
-            შეუძლიათ შექმნან სამუდამო ციფრული მემორიალები — ადგილი ერთად
-            შეკრებისთვის, მოსაგონებლად და ისტორიების გასაზიარებლად.
+            GoldenMemorial.ge არის მშვიდი და სათუთი სივრცე, სადაც ოჯახებს შეუძლიათ შექმნან სამუდამო ციფრული მემორიალები — ადგილი ერთად შეკრებისთვის, მოსაგონებლად და იმ ადამიანების ისტორიების გასაზიარებლად, რომელთა ჩანაცვლებაც შეუძლებელია.
           </p>
 
-          
-          <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/memorial"
-              className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-sm uppercase text-center"
-            >
+     
+          <div
+            className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-fade-in"
+            style={{ animationDelay: '800ms', animationFillMode: 'forwards' }}
+          >
+            <Link href="/memorial" className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-sm tracking-wider uppercase transition-all duration-300 hover:brightness-110 shadow-lg hover:shadow-[#D4AF37]/10 active:scale-[0.99] cursor-pointer text-center">
               შექმენი მემორიალი
             </Link>
-
-            <a
-              href="#how-it-works"
-              className="px-8 py-3.5 rounded-xl bg-[#121214]/40 border border-white/5 backdrop-blur-md text-gray-300 text-sm uppercase text-center hover:text-white hover:border-[#D4AF37]/30"
+            <a 
+              href="#how-it-works" 
+              className="px-8 py-3.5 rounded-xl bg-[#121214]/40 border border-white/5 backdrop-blur-md text-gray-300 font-medium text-sm tracking-wider uppercase text-center transition-all duration-300 hover:bg-white/5 hover:text-white hover:border-[#D4AF37]/30 active:scale-[0.99]"
             >
               როგორ მუშაობს?
             </a>
           </div>
 
-         
           <p
-            ref={subRef}
-            className="mt-8 text-xs text-gray-500/80 tracking-wide"
+            className="mt-8 font-sans text-xs text-gray-500/80 tracking-wide animate-fade-in"
+            style={{ animationDelay: '1000ms', animationFillMode: 'forwards' }}
           >
-            დაწყება უფასოა · რეგისტრაციის გარეშე · ნაგულისხმევად პირადი
+            დაწყება უფასოა &nbsp;&middot;&nbsp; რეგისტრაციის გარეშე &nbsp;&middot;&nbsp; ნაგულისხმევად პირადი
           </p>
         </div>
 
         
         <div className="lg:w-1/2 flex justify-center lg:justify-end">
-          <div ref={bannerRef} className="relative w-full max-w-2xl">
-            <Image
-              src="/banner.png"
-              alt="Golden Memorial Banner"
-              width={900}
-              height={900}
-              priority
-              className="w-full h-auto object-contain"
-            />
-          </div>
+           
+              <img src = "/banner.png" className="absolute -z-1 left-36 -mt-[500px]  w-[80rem]"/>
         </div>
       </div>
     </section>
