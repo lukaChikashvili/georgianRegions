@@ -5,8 +5,10 @@ import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import dynamic from 'next/dynamic';
 import { useUser } from '@clerk/nextjs';
-import { X, Crown, Loader2, Lock } from 'lucide-react';
+import { X, Crown, Loader2, Lock,ExternalLink } from 'lucide-react';
 import FamilyTree from '../../components/FamilyTree';
+import Link from 'next/link';
+
 
 const LifeTimeline = dynamic(() => import('@/components/LifeTimeline'), { ssr: false });
 const ToastRecorder = dynamic(() => import('@/components/ToastRecorder'), { ssr: false });
@@ -252,12 +254,20 @@ const filteredMemorials = memorials?.filter((m) => {
   <div className="w-9 h-9 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] font-bold text-sm shrink-0">
     {selectedMemorial.firstName?.[0]}
   </div>
-  <div>
+  <div className="flex-1 min-w-0">
     <p className="text-[10px] uppercase tracking-widest text-[#D4AF37]/60 mb-0.5">სერვისები შემდეგი პირისთვის</p>
     <p className="text-[#FFF5D6] font-semibold text-base leading-tight">
       {selectedMemorial.firstName} {selectedMemorial.lastName}
     </p>
   </div>
+  <Link
+    href={`/discover/${selectedMemorial.urlSlug}`}
+    target="_blank"
+    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/5 text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/20 transition-all text-xs shrink-0"
+  >
+    <ExternalLink size={13} />
+    <span className="hidden sm:inline">მემორიალი</span>
+  </Link>
 </div>
 
           
