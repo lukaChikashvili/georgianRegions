@@ -3,6 +3,7 @@ import { api } from "@/convex/_generated/api";
 import { Calendar, Clock, ArrowLeft } from "lucide-react"; 
 import Link from "next/link";
 import Comments from "../../../components/Comments";
+import PostCoverImage from "../../../components/PostCoverImage";
 
 export default async function BlogDetailPage({ params }) {
   const { id } = await params;
@@ -61,11 +62,10 @@ export default async function BlogDetailPage({ params }) {
 
       
         <div className="relative mb-16">
-          <div className="aspect-[21/9] w-full bg-[#121212] border border-white/5 flex items-center justify-center overflow-hidden">
-            
-             <div className="w-full h-full bg-gradient-to-br from-[#121212] to-[#050505]" />
-          </div>
-        </div>
+  <div className="aspect-[21/9] w-full bg-[#121212] border border-white/5 overflow-hidden">
+    <PostCoverImage imageId={post.imageId} />
+  </div>
+</div>
 
         <div className="max-w-2xl mx-auto">
           <div className="prose prose-invert prose-lg prose-headings:font-serif prose-headings:italic prose-p:font-light prose-p:leading-relaxed text-white/80">

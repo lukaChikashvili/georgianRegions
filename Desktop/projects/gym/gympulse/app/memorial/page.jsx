@@ -651,13 +651,13 @@ const CreateMemorial = () => {
                   <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
                     <MapPin size={22} className="text-[#D4AF37]" /> სამძიმრისა და დაკრძალვის დეტალები
                   </h2>
-                  <p className="text-xs text-gray-500 mt-1">ეს სექცია სურვილისამებრია.</p>
+                  <p className="text-xs text-gray-500 mt-1">ეს სექცია არჩევითია.</p>
                 </div>
                 <div className="p-4 rounded-xl bg-[#161619]/30 border border-white/5">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2">დაკრძალვის ღონისძიება <span className="text-[10px] text-gray-600 border border-white/10 px-2 py-0.5 rounded-md font-light">სურვილისამებრ</span></h4>
-                      <p className="text-xs text-gray-500 mt-0.5">ჩართეთ თუ ახლობლებს გსურთ ცერემონიის შესახებ აცნობოთ</p>
+                      <p className="text-xs text-gray-500 mt-0.5">ჩართეთ თუ გსურთ ახლობლებს ცერემონიის შესახებ აცნობოთ</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer select-none">
                       <input type="checkbox" checked={formData.showFuneralDetails} onChange={(e) => setFormData((prev) => ({ ...prev, showFuneralDetails: e.target.checked }))} className="sr-only peer" />

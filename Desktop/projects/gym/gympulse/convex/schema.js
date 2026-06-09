@@ -10,6 +10,7 @@ export default defineSchema({
         category: v.string(),
         authorName: v.optional(v.string()), 
         authorId: v.string(),
+        imageId: v.optional(v.id("_storage")),
     }),
 
     comments: defineTable({

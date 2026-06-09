@@ -93,7 +93,7 @@ const Hero = () => {
         
         <div className="lg:w-1/2 flex justify-center lg:justify-end">
            
-              <img src = "/banner.png" className="absolute -z-1 left-36 -mt-[500px]  w-[80rem]"/>
+              <img src = "/banner.png" className="absolute -z-1 left-86 w-full -mt-76"/>
         </div>
       </div>
     </section>

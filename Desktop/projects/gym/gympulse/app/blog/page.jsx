@@ -18,7 +18,7 @@ const AllBlogs = async () => {
           <div>
              <div className="inline-flex items-center gap-2 text-[#D4AF37] mb-4 uppercase tracking-[0.2em] text-[10px] font-bold">
                 <BookOpen size={14} />
-                GoldenMemory 
+              GoldenMemorial.ge
              </div>
              <h1 className="text-5xl font-serif italic text-white leading-tight">
                ცხოვრების ისტორიები
