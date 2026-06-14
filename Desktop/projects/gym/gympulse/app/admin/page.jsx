@@ -7,6 +7,8 @@ import { useUser } from '@clerk/nextjs';
 import { Trash2, Edit3, Eye, MapPin, Calendar, X, Check, Bell, Upload, Plus, Loader2, Flag, AlertTriangle, CheckCircle, XCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
 import InvitationDisplay from '../../components/InvitationDisplay';
+import FamilyGroupSection from '../../components/FamilyGroupSection';
+
 
 
 const REASON_LABELS = {
@@ -347,6 +349,9 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+
+
+           <FamilyGroupSection user={user} /> 
 
         
         <div className="mb-12">

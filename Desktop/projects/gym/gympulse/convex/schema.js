@@ -4,6 +4,9 @@ import { v } from "convex/values";
 
 
 export default defineSchema({
+
+  
+
     posts: defineTable({
         title: v.string(),
         body: v.string(),
@@ -29,6 +32,8 @@ export default defineSchema({
         location: v.string(),
         mainPortraitUrl: v.optional(v.id("_storage")),
         galleryUrls: v.optional(v.array(v.id("_storage"))),
+
+        groupId: v.optional(v.id("familyGroups")),
 
         epitaph: v.string(),
         biography: v.string(),
@@ -219,14 +224,24 @@ subscriptions: defineTable({
 
     familyGroups: defineTable({
       name: v.string(),           
-      createdBy: v.id("users"),
+      createdBy: v.string(),
     }),
 
 
     familyGroupMembers: defineTable({
       groupId: v.id("familyGroups"),
-      userId: v.id("users"),
+      userId: v.string(), 
       role: v.union(v.literal("owner"), v.literal("editor"), v.literal("viewer")),
     }).index("by_group", ["groupId"])
       .index("by_user", ["userId"]),
+
+      familyConnectionRequests: defineTable({
+        fromUserId: v.string(),
+        fromUserName: v.string(),
+        toUserId: v.string(),
+        groupId: v.id("familyGroups"),
+        groupName: v.string(),
+        status: v.union(v.literal("pending"), v.literal("accepted"), v.literal("declined")),
+        createdAt: v.number(),
+      }).index("by_to_user", ["toUserId"])
 });
