@@ -8,6 +8,8 @@ const isPublicRoute = createRouteMatcher([
   "/discover/(.*)",
   "/grave",
   "/grave/(.*)",
+  "/services",
+  "/services/(.*)",
   "/robots.txt",
   "/sitemap.xml",
 ]);
