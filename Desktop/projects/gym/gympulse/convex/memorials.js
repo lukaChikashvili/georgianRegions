@@ -165,7 +165,7 @@ export const lightCandle = mutation({
     await ctx.db.insert("notifications", {
       userId: memorial.creatorId,
       memorialId: args.id, 
-      message: `${args.name}-მ აანთო სანთელი თქვენს მემორიალზე`,
+      message: ` თქვენს მემორიალზე აინთო სანთელი`,
       type: "CANDLE",
       isRead: false,
       createdAt: Date.now(),
@@ -711,5 +711,32 @@ export const getMyAccessToMemorial = query({
 
     const access = await getMemorialAccess(ctx, identity.subject, memorial);
     return { canContribute: access.canContribute, isCreator: access.isCreator };
+  },
+});
+
+
+export const addBiographyContribution = mutation({
+  args: {
+    memorialId: v.id("memorials"),
+    text: v.string(),
+    authorName: v.string(),
+  },
+  handler: async (ctx, { memorialId, text, authorName }) => {
+    const memorial = await ctx.db.get(memorialId);
+    if (!memorial) throw new Error("მემორიალი ვერ მოიძებნა");
+
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("ავტორიზაცია საჭიროა");
+
+    const access = await getMemorialAccess(ctx, identity.subject, memorial);
+    if (!access.canContribute) throw new Error("არ გაქვთ დამატების უფლება");
+
+    const trimmed = text.trim();
+    if (!trimmed) throw new Error("ტექსტი არ შეიძლება იყოს ცარიელი");
+
+    const addition = `\n\n— ${authorName}-ის მოგონება:\n${trimmed}`;
+    const updatedBiography = (memorial.biography || "") + addition;
+
+    await ctx.db.patch(memorialId, { biography: updatedBiography });
   },
 });

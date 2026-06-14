@@ -10,6 +10,7 @@ import AudioPlayer from '../../../components/AudioPlayer';
 import CustomAudioPlayer from '../../../components/CustomAudioPlayer';
 import ReportButton from '../../../components/ReportButton';
 import ContributePhotos from '../../../components/Contributephotos';
+import ContributeMemory from '../../../components/ContributeMemory';
 
 const MemorialPage = () => {
   const params = useParams();
@@ -542,6 +543,8 @@ const convertYouTube = (url) => {
 )}
 
 <ContributePhotos memorial={memorial} />
+<ContributeMemory memorial={memorial} />
+
         </div>
 
         <div className="space-y-8">
