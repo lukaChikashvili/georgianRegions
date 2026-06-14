@@ -72,7 +72,8 @@ export default defineSchema({
         creatorId: v.string(),       
         creatorName: v.string(),
     }).index("by_urlSlug", ["urlSlug"]) 
-    .index("by_creatorId", ["creatorId"]),
+    .index("by_creatorId", ["creatorId"])
+    .index("by_groupId", ["groupId"]),
 
     graveDesigns: defineTable({
       userId: v.string(), 
@@ -237,7 +238,7 @@ subscriptions: defineTable({
     }).index("by_group", ["groupId"])
       .index("by_user", ["userId"]),
 
-      
+
       familyConnectionRequests: defineTable({
         fromUserId: v.string(),
         fromUserName: v.string(),

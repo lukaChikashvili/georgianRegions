@@ -13,6 +13,7 @@ import type * as family from "../family.js";
 import type * as familyTree from "../familyTree.js";
 import type * as gifts from "../gifts.js";
 import type * as memorials from "../memorials.js";
+import type * as permissions from "../permissions.js";
 import type * as posts from "../posts.js";
 import type * as pricing from "../pricing.js";
 import type * as reports from "../reports.js";
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   familyTree: typeof familyTree;
   gifts: typeof gifts;
   memorials: typeof memorials;
+  permissions: typeof permissions;
   posts: typeof posts;
   pricing: typeof pricing;
   reports: typeof reports;
