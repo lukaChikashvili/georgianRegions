@@ -10,9 +10,14 @@ function FamilyGroupSection({ user }) {
   const [newGroupName, setNewGroupName] = useState("");
   const [status, setStatus] = useState("");
   const [searchError, setSearchError] = useState("");
+  const [membersGroupId, setMembersGroupId] = useState(null);
 
   const myGroups = useQuery(api.family.getMyFamilyGroups, user?.id ? { userId: user.id } : "skip");
   const pendingRequests = useQuery(api.family.getPendingRequestsForUser, user?.id ? { userId: user.id } : "skip");
+  const groupMembers = useQuery(
+    api.family.getGroupMembers,
+    membersGroupId ? { groupId: membersGroupId } : "skip"
+  );
 
   const searchUserAction = useAction(api.family.searchUserByExact);
   const createGroup = useMutation(api.family.createFamilyGroup);
@@ -35,9 +40,23 @@ function FamilyGroupSection({ user }) {
     }
   };
 
+  const handleRespond = async (requestId, accept) => {
+    await respond({
+      requestId,
+      accept,
+      userName: user.fullName || user.username || "უცნობი",
+      userAvatar: user.imageUrl,
+    });
+  };
+
   const handleCreateGroup = async () => {
     if (!newGroupName.trim()) return;
-    await createGroup({ userId: user.id, name: newGroupName.trim() });
+    await createGroup({
+      userId: user.id,
+      name: newGroupName.trim(),
+      creatorName: user.fullName || user.username || "უცნობი",
+      creatorAvatar: user.imageUrl,
+    });
     setNewGroupName("");
   };
 
@@ -65,15 +84,15 @@ function FamilyGroupSection({ user }) {
 
       {pendingRequests && pendingRequests.length > 0 && (
         <div className="mb-6 space-y-3">
-          <p className="text-xs text-gray-500 uppercase tracking-widest">მოლოდინში მოთხოვნები</p>
+          <p className="text-xs text-gray-500 uppercase tracking-widest">თქვენ გაქვთ შეტყობინება</p>
           {pendingRequests.map((req) => (
             <div key={req._id} className="flex items-center justify-between bg-[#121214]/60 border border-white/5 rounded-xl p-4">
               <p className="text-sm text-gray-300">
                 <span className="text-[#D4AF37]">{req.fromUserName}</span> გეპატიჟებათ ჯგუფში „{req.groupName}"
               </p>
               <div className="flex gap-2">
-                <button onClick={() => respond({ requestId: req._id, accept: true })} className="px-3 py-1.5 rounded-lg bg-[#D4AF37] text-black text-xs font-semibold">დათანხმება</button>
-                <button onClick={() => respond({ requestId: req._id, accept: false })} className="px-3 py-1.5 rounded-lg border border-white/10 text-gray-400 text-xs">უარყოფა</button>
+                <button onClick={() => handleRespond(req._id, true)} className="px-3 py-1.5 rounded-lg bg-[#D4AF37] text-black text-xs font-semibold">დათანხმება</button>
+                <button onClick={() => handleRespond(req._id, false)} className="px-3 py-1.5 rounded-lg border border-white/10 text-gray-400 text-xs">უარყოფა</button>
               </div>
             </div>
           ))}
@@ -85,17 +104,26 @@ function FamilyGroupSection({ user }) {
         {myGroups && myGroups.length > 0 ? (
           <div className="flex flex-wrap gap-2 mb-3">
             {myGroups.map((g) => (
-              <button
-                key={g._id}
-                onClick={() => setSelectedGroupId(g._id)}
-                className={`px-3 py-1.5 rounded-lg text-xs border transition ${
-                  selectedGroupId === g._id
-                    ? "border-[#D4AF37]/40 bg-[#D4AF37]/10 text-[#D4AF37]"
-                    : "border-white/10 text-gray-400 hover:border-white/20"
-                }`}
-              >
-                {g.name} ({g.memberCount})
-              </button>
+              <div key={g._id} className="flex items-center gap-1">
+                <button
+                  onClick={() => setMembersGroupId(g._id)}
+                  className="px-3 py-1.5 rounded-lg text-xs border border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5 transition"
+                  title="წევრების ნახვა"
+                >
+                  {g.name} ({g.memberCount})
+                </button>
+                <button
+                  onClick={() => setSelectedGroupId(g._id)}
+                  className={`px-2.5 py-1.5 rounded-lg text-xs border transition ${
+                    selectedGroupId === g._id
+                      ? "border-[#D4AF37]/40 bg-[#D4AF37]/10 text-[#D4AF37]"
+                      : "border-white/10 text-gray-500 hover:border-white/20"
+                  }`}
+                  title="წევრის დამატება"
+                >
+                  +
+                </button>
+              </div>
             ))}
           </div>
         ) : (
@@ -149,17 +177,58 @@ function FamilyGroupSection({ user }) {
             <p className="text-xs text-gray-500">დააწექით "ძიება"-ს</p>
           )}
 
-{searchError && (
-  <div className="flex items-start gap-2 bg-red-500/10 border border-red-500/20 rounded-xl p-3 mb-2">
-    <span className="text-red-400 text-xs mt-0.5">⚠</span>
-    <div>
-      <p className="text-xs text-red-400 font-medium">ძიება ვერ მოხერხდა</p>
-      <p className="text-[11px] text-gray-500 mt-0.5 font-mono break-all">{searchError}</p>
-    </div>
-  </div>
-)}
+          {searchError && (
+            <div className="flex items-start gap-2 bg-red-500/10 border border-red-500/20 rounded-xl p-3 mb-2">
+              <span className="text-red-400 text-xs mt-0.5">⚠</span>
+              <div>
+                <p className="text-xs text-red-400 font-medium">ძიება ვერ მოხერხდა</p>
+                <p className="text-[11px] text-gray-500 mt-0.5 font-mono break-all">{searchError}</p>
+              </div>
+            </div>
+          )}
 
           {status && <p className="text-xs text-[#D4AF37] mt-1">{status}</p>}
+        </div>
+      )}
+
+      {membersGroupId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
+          <div className="bg-[#121214] border border-white/10 rounded-2xl w-full max-w-md p-6 relative">
+            <button
+              onClick={() => setMembersGroupId(null)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-white transition"
+            >
+              ✕
+            </button>
+            <h3 className="font-serif text-xl text-[#FFF5D6] mb-4 font-light">ჯგუფის წევრები</h3>
+            {groupMembers === undefined ? (
+              <p className="text-xs text-gray-500">იტვირთება...</p>
+            ) : groupMembers.length === 0 ? (
+              <p className="text-xs text-gray-500">წევრები ვერ მოიძებნა.</p>
+            ) : (
+              <div className="space-y-3">
+                {groupMembers.map((m) => (
+                  <div key={m._id} className="flex items-center gap-3">
+                    {m.avatarUrl ? (
+                      <img src={m.avatarUrl} className="w-9 h-9 rounded-full object-cover border border-white/10" />
+                    ) : (
+                      <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs text-gray-500">
+                        {m.name?.[0] ?? "?"}
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-200">{m.name}</p>
+                    </div>
+                    {m.role === "owner" && (
+                      <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 text-[#D4AF37]">
+                        მფლობელი
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -230,11 +230,14 @@ subscriptions: defineTable({
 
     familyGroupMembers: defineTable({
       groupId: v.id("familyGroups"),
-      userId: v.string(), 
+      userId: v.string(),
+      name: v.string(),
+      avatarUrl: v.optional(v.string()),
       role: v.union(v.literal("owner"), v.literal("editor"), v.literal("viewer")),
     }).index("by_group", ["groupId"])
       .index("by_user", ["userId"]),
 
+      
       familyConnectionRequests: defineTable({
         fromUserId: v.string(),
         fromUserName: v.string(),

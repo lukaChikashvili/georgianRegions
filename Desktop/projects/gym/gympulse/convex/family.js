@@ -17,7 +17,7 @@ export const searchUserByExact = action({
   ? `https://api.clerk.com/v1/users?email_address[]=${encodeURIComponent(normalized.toLowerCase())}`
   : `https://api.clerk.com/v1/users?query=${encodeURIComponent(normalized)}`;
 
-  
+
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}` },
       });
@@ -80,10 +80,16 @@ export const getPendingRequestsForUser = query({
 });
 
 export const createFamilyGroup = mutation({
-  args: { userId: v.string(), name: v.string() },
-  handler: async (ctx, { userId, name }) => {
+  args: { userId: v.string(), name: v.string(), creatorName: v.string(), creatorAvatar: v.optional(v.string()) },
+  handler: async (ctx, { userId, name, creatorName, creatorAvatar }) => {
     const groupId = await ctx.db.insert("familyGroups", { name, createdBy: userId });
-    await ctx.db.insert("familyGroupMembers", { groupId, userId, role: "owner" });
+    await ctx.db.insert("familyGroupMembers", {
+      groupId,
+      userId,
+      name: creatorName,
+      avatarUrl: creatorAvatar,
+      role: "owner",
+    });
     return groupId;
   },
 });
@@ -123,19 +129,36 @@ export const sendConnectionRequest = mutation({
 });
 
 export const respondToRequest = mutation({
-  args: { requestId: v.id("familyConnectionRequests"), accept: v.boolean() },
-  handler: async (ctx, { requestId, accept }) => {
-    const req = await ctx.db.get(requestId);
-    if (!req) throw new Error("მოთხოვნა ვერ მოიძებნა");
+    args: {
+      requestId: v.id("familyConnectionRequests"),
+      accept: v.boolean(),
+      userName: v.optional(v.string()),
+      userAvatar: v.optional(v.string()),
+    },
+    handler: async (ctx, { requestId, accept, userName, userAvatar }) => {
+      const req = await ctx.db.get(requestId);
+      if (!req) throw new Error("მოთხოვნა ვერ მოიძებნა");
+  
+      await ctx.db.patch(requestId, { status: accept ? "accepted" : "declined" });
+  
+      if (accept) {
+        await ctx.db.insert("familyGroupMembers", {
+          groupId: req.groupId,
+          userId: req.toUserId,
+          name: userName ?? "უცნობი",
+          avatarUrl: userAvatar,
+          role: "viewer",
+        });
+      }
+    },
+  });
 
-    await ctx.db.patch(requestId, { status: accept ? "accepted" : "declined" });
-
-    if (accept) {
-      await ctx.db.insert("familyGroupMembers", {
-        groupId: req.groupId,
-        userId: req.toUserId,
-        role: "viewer",
-      });
-    }
-  },
-});
+  export const getGroupMembers = query({
+    args: { groupId: v.id("familyGroups") },
+    handler: async (ctx, { groupId }) => {
+      return ctx.db
+        .query("familyGroupMembers")
+        .withIndex("by_group", (q) => q.eq("groupId", groupId))
+        .collect();
+    },
+  });
