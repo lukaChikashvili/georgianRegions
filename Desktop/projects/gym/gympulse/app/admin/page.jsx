@@ -196,6 +196,9 @@ const AdminDashboard = () => {
   const dismissReportMutation = useMutation(api.reports.dismissReport);
   const actionReportMutation = useMutation(api.reports.actionReport);
 
+  const myGroups = useQuery(api.family.getMyFamilyGroups, user?.id ? { userId: user.id } : "skip");
+const setMemorialGroup = useMutation(api.memorials.setMemorialGroup);
+
   const [reportsFilter, setReportsFilter] = useState("pending"); 
 
   const [editingMemorial, setEditingMemorial] = useState(null);
@@ -577,6 +580,29 @@ const AdminDashboard = () => {
                     <option value="private">პირადი (Private)</option>
                   </select>
                 </div>
+
+                <div className="flex flex-col gap-1.5">
+  <label className="text-[11px] text-gray-400">ოჯახური ჯგუფი</label>
+  <select
+    className="form-input bg-[#0D0D0F]"
+    value={editingMemorial.groupId || ""}
+    onChange={async (e) => {
+      const groupId = e.target.value || undefined;
+      setEditingMemorial({ ...editingMemorial, groupId });
+      try {
+        await setMemorialGroup({ id: editingMemorial._id, groupId });
+      } catch (err) {
+        alert("ჯგუფის მინიჭება ვერ მოხერხდა: " + err.message);
+      }
+    }}
+  >
+    <option value="">— არცერთი —</option>
+    {myGroups?.map((g) => (
+      <option key={g._id} value={g._id}>{g.name}</option>
+    ))}
+  </select>
+  <p className="text-[10px] text-gray-500">ჯგუფის წევრებს შეუძლიათ ფოტოების და ისტორიის დამატება</p>
+</div>
 
                 <div className="pt-4 border-t border-white/5 flex justify-end gap-3">
                   <button type="button" onClick={closeEditModal} className="px-4 py-2 rounded-xl border border-white/5 text-xs uppercase tracking-wider font-medium hover:bg-white/5 transition">გაუქმება</button>

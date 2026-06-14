@@ -176,12 +176,31 @@ export const lightCandle = mutation({
 
 export const getMyMemorials = query({
   args: { creatorId: v.string() },
-  handler: async (ctx, args) => {
-    return await ctx.db
+  handler: async (ctx, { creatorId }) => {
+    const owned = await ctx.db
       .query("memorials")
-      .withIndex("by_creatorId", (q) => q.eq("creatorId", args.creatorId))
-      .order("desc")
+      .withIndex("by_creatorId", (q) => q.eq("creatorId", creatorId))
       .collect();
+
+    const memberships = await ctx.db
+      .query("familyGroupMembers")
+      .withIndex("by_user", (q) => q.eq("userId", creatorId))
+      .collect();
+
+    const sharedMemorials = [];
+    for (const m of memberships) {
+      const groupMemorials = await ctx.db
+        .query("memorials")
+        .withIndex("by_groupId", (q) => q.eq("groupId", m.groupId))
+        .collect();
+      for (const mem of groupMemorials) {
+        if (mem.creatorId !== creatorId) {
+          sharedMemorials.push({ ...mem, sharedByGroup: true });
+        }
+      }
+    }
+
+    return [...owned, ...sharedMemorials];
   },
 });
 
@@ -645,3 +664,38 @@ export const getAllCities = query({
     return ctx.db.query("cities").collect();
   },
 });
+
+
+export const setMemorialGroup = mutation({
+  args: { id: v.id("memorials"), groupId: v.optional(v.id("familyGroups")) },
+  handler: async (ctx, { id, groupId }) => {
+    const memorial = await ctx.db.get(id);
+    if (!memorial) throw new Error("მემორიალი ვერ მოიძებნა");
+
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity || memorial.creatorId !== identity.subject) {
+      throw new Error("არ გაქვთ უფლება");
+    }
+
+    await ctx.db.patch(id, { groupId });
+  },
+});
+
+export const addGalleryPhotos = mutation({
+  args: { memorialId: v.id("memorials"), newStorageIds: v.array(v.id("_storage")) },
+  handler: async (ctx, { memorialId, newStorageIds }) => {
+    const memorial = await ctx.db.get(memorialId);
+    if (!memorial) throw new Error("მემორიალი ვერ მოიძებნა");
+
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("ავტორიზაცია საჭიროა");
+
+    const access = await getMemorialAccess(ctx, identity.subject, memorial);
+    if (!access.canContribute) throw new Error("არ გაქვთ ფოტოების დამატების უფლება");
+
+    const merged = [...(memorial.galleryUrls ?? []), ...newStorageIds];
+    await ctx.db.patch(memorialId, { galleryUrls: merged });
+  },
+});
+
+
