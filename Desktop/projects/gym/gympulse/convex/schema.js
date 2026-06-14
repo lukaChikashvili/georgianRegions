@@ -216,4 +216,17 @@ subscriptions: defineTable({
       createdAt: v.number(),
     }).index("by_memorialId", ["memorialId"]),
 
+
+    familyGroups: defineTable({
+      name: v.string(),           
+      createdBy: v.id("users"),
+    }),
+
+
+    familyGroupMembers: defineTable({
+      groupId: v.id("familyGroups"),
+      userId: v.id("users"),
+      role: v.union(v.literal("owner"), v.literal("editor"), v.literal("viewer")),
+    }).index("by_group", ["groupId"])
+      .index("by_user", ["userId"]),
 });
