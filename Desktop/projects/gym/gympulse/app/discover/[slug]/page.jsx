@@ -9,6 +9,7 @@ import { useUser } from '@clerk/nextjs';
 import AudioPlayer from '../../../components/AudioPlayer';
 import CustomAudioPlayer from '../../../components/CustomAudioPlayer';
 import ReportButton from '../../../components/ReportButton';
+import ContributePhotos from '../../../components/Contributephotos';
 
 const MemorialPage = () => {
   const params = useParams();
@@ -539,6 +540,8 @@ const convertYouTube = (url) => {
     </div>
   </section>
 )}
+
+<ContributePhotos memorial={memorial} />
         </div>
 
         <div className="space-y-8">

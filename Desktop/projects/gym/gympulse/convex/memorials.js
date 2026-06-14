@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { checkIsPremium } from "./pricing";
+import { getMemorialAccess } from "./permissions";
 
 export const createMemorial = mutation({
     
@@ -699,3 +700,16 @@ export const addGalleryPhotos = mutation({
 });
 
 
+export const getMyAccessToMemorial = query({
+  args: { memorialId: v.id("memorials") },
+  handler: async (ctx, { memorialId }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return { canContribute: false, isCreator: false };
+
+    const memorial = await ctx.db.get(memorialId);
+    if (!memorial) return { canContribute: false, isCreator: false };
+
+    const access = await getMemorialAccess(ctx, identity.subject, memorial);
+    return { canContribute: access.canContribute, isCreator: access.isCreator };
+  },
+});
