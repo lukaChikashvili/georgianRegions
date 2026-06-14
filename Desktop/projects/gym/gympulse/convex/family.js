@@ -162,3 +162,49 @@ export const respondToRequest = mutation({
         .collect();
     },
   });
+
+
+  export const deleteFamilyGroup = mutation({
+    args: { groupId: v.id("familyGroups"), userId: v.string() },
+    handler: async (ctx, { groupId, userId }) => {
+      const group = await ctx.db.get(groupId);
+      if (!group) throw new Error("ჯგუფი ვერ მოიძებნა");
+  
+     
+      const membership = await ctx.db
+        .query("familyGroupMembers")
+        .withIndex("by_group", (q) => q.eq("groupId", groupId))
+        .filter((q) => q.eq(q.field("userId"), userId))
+        .first();
+  
+      if (!membership || membership.role !== "owner") {
+        throw new Error("მხოლოდ ჯგუფის მფლობელს შეუძლია მისი წაშლა");
+      }
+  
+     
+      const members = await ctx.db
+        .query("familyGroupMembers")
+        .withIndex("by_group", (q) => q.eq("groupId", groupId))
+        .collect();
+      for (const m of members) {
+        await ctx.db.delete(m._id);
+      }
+  
+     
+      const allRequests = await ctx.db.query("familyConnectionRequests").collect();
+      for (const r of allRequests) {
+        if (r.groupId === groupId) await ctx.db.delete(r._id);
+      }
+  
+      
+      const memorials = await ctx.db
+        .query("memorials")
+        .withIndex("by_groupId", (q) => q.eq("groupId", groupId))
+        .collect();
+      for (const mem of memorials) {
+        await ctx.db.patch(mem._id, { groupId: undefined });
+      }
+  
+      await ctx.db.delete(groupId);
+    },
+  });

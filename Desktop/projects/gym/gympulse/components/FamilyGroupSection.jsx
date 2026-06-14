@@ -23,6 +23,21 @@ function FamilyGroupSection({ user }) {
   const createGroup = useMutation(api.family.createFamilyGroup);
   const sendRequest = useMutation(api.family.sendConnectionRequest);
   const respond = useMutation(api.family.respondToRequest);
+  const deleteGroup = useMutation(api.family.deleteFamilyGroup);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteGroup = async () => {
+    if (!confirm("ნამდვილად გსურთ ამ ჯგუფის წაშლა? ყველა წევრი ამოღებული იქნება და მემორიალებიდან ჯგუფის მინიჭება გაუქმდება.")) return;
+    setDeleting(true);
+    try {
+      await deleteGroup({ groupId: membersGroupId, userId: user.id });
+      setMembersGroupId(null);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) return;
@@ -191,46 +206,53 @@ function FamilyGroupSection({ user }) {
         </div>
       )}
 
-      {membersGroupId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
-          <div className="bg-[#121214] border border-white/10 rounded-2xl w-full max-w-md p-6 relative">
-            <button
-              onClick={() => setMembersGroupId(null)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-white transition"
-            >
-              ✕
-            </button>
-            <h3 className="font-serif text-xl text-[#FFF5D6] mb-4 font-light">ჯგუფის წევრები</h3>
-            {groupMembers === undefined ? (
-              <p className="text-xs text-gray-500">იტვირთება...</p>
-            ) : groupMembers.length === 0 ? (
-              <p className="text-xs text-gray-500">წევრები ვერ მოიძებნა.</p>
-            ) : (
-              <div className="space-y-3">
-                {groupMembers.map((m) => (
-                  <div key={m._id} className="flex items-center gap-3">
-                    {m.avatarUrl ? (
-                      <img src={m.avatarUrl} className="w-9 h-9 rounded-full object-cover border border-white/10" />
-                    ) : (
-                      <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs text-gray-500">
-                        {m.name?.[0] ?? "?"}
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-200">{m.name}</p>
-                    </div>
-                    {m.role === "owner" && (
-                      <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 text-[#D4AF37]">
-                        მფლობელი
-                      </span>
-                    )}
-                  </div>
-                ))}
+{membersGroupId && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
+    <div className="bg-[#121214] border border-white/10 rounded-2xl w-full max-w-md p-6 relative">
+      <button onClick={() => setMembersGroupId(null)} className="absolute top-4 right-4 text-gray-500 hover:text-white transition">✕</button>
+      <h3 className="font-serif text-xl text-[#FFF5D6] mb-4 font-light">ჯგუფის წევრები</h3>
+      {groupMembers === undefined ? (
+        <p className="text-xs text-gray-500">იტვირთება...</p>
+      ) : groupMembers.length === 0 ? (
+        <p className="text-xs text-gray-500">წევრები ვერ მოიძებნა.</p>
+      ) : (
+        <div className="space-y-3">
+          {groupMembers.map((m) => (
+            <div key={m._id} className="flex items-center gap-3">
+              {m.avatarUrl ? (
+                <img src={m.avatarUrl} className="w-9 h-9 rounded-full object-cover border border-white/10" />
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs text-gray-500">
+                  {m.name?.[0] ?? "?"}
+                </div>
+              )}
+              <div className="flex-1">
+                <p className="text-sm text-gray-200">{m.name}</p>
               </div>
-            )}
-          </div>
+              {m.role === "owner" && (
+                <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 text-[#D4AF37]">
+                  მფლობელი
+                </span>
+              )}
+            </div>
+          ))}
         </div>
       )}
+
+      {groupMembers?.find((m) => m.userId === user.id && m.role === "owner") && (
+        <div className="mt-5 pt-4 border-t border-white/5">
+          <button
+            onClick={handleDeleteGroup}
+            disabled={deleting}
+            className="cursor-pointer w-full py-2 rounded-xl border border-red-500/30 text-red-400 text-xs font-semibold hover:bg-red-500/10 transition disabled:opacity-50"
+          >
+            {deleting ? "იშლება..." : "ჯგუფის წაშლა"}
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+)}
     </div>
   );
 }
