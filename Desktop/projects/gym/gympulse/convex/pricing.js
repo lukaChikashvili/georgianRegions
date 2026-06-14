@@ -115,3 +115,15 @@ export const checkIsPremium = async (ctx, userId) => {
 
   return sub?.plan === "lifetime" && sub?.status === "active";
 };
+
+
+export const getPremiumCount = query({
+  args: {},
+  handler: async (ctx) => {
+    const premiumMemorials = await ctx.db
+      .query("memorials")
+      .filter((q) => q.eq(q.field("isPremium"), true))
+      .collect();
+    return premiumMemorials.length;
+  },
+});

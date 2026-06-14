@@ -86,7 +86,7 @@ const Hero = () => {
             className="mt-8 font-sans text-xs text-gray-500/80 tracking-wide animate-fade-in"
             style={{ animationDelay: '1000ms', animationFillMode: 'forwards' }}
           >
-            დაწყება უფასოა &nbsp;&middot;&nbsp; რეგისტრაციის გარეშე &nbsp;&middot;&nbsp; ნაგულისხმევად პირადი
+            დაწყება უფასოა &nbsp;&middot;&nbsp; ერთჯერადი გადახდა 49.99 ₾ · &nbsp;&middot;&nbsp; სამუდამოდ თქვენი
           </p>
         </div>
 
