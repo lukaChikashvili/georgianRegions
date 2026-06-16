@@ -1,5 +1,8 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+
+const DAILY_GIFT_LIMIT = 5;
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 export const sendGift = mutation({
   args: {
@@ -9,11 +12,30 @@ export const sendGift = mutation({
     giftType: v.string(),
     giftEmoji: v.string(),
     giftName: v.string(),
-    giftPrice: v.number(),
     dedication: v.optional(v.string()),
     isAnonymous: v.boolean(),
   },
   handler: async (ctx, args) => {
+    if (!args.senderId) {
+      throw new ConvexError("საჩუქრის გასაგზავნად საჭიროა ავტორიზაცია.");
+    }
+
+    const since = Date.now() - ONE_DAY_MS;
+
+    const recentFromSender = await ctx.db
+      .query("gifts")
+      .withIndex("by_memorial_sender", (q) =>
+        q.eq("memorialId", args.memorialId).eq("senderId", args.senderId)
+      )
+      .filter((q) => q.gte(q.field("createdAt"), since))
+      .collect();
+
+    if (recentFromSender.length >= DAILY_GIFT_LIMIT) {
+      throw new ConvexError(
+        `დღეში მაქსიმუმ ${DAILY_GIFT_LIMIT} საჩუქრის გაგზავნა შეგიძლიათ ერთ მემორიალზე. გთხოვთ სცადოთ ხვალ.`
+      );
+    }
+
     await ctx.db.insert("gifts", {
       ...args,
       createdAt: Date.now(),
