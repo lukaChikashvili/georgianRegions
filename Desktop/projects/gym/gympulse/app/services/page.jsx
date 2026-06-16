@@ -206,7 +206,7 @@ const filteredMemorials = memorials?.filter((m) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8 pt-24 text-white">
+    <div className="max-w-4xl mx-auto p-8 pt-24 text-white min-h-screen">
       {upgradeModal && (
         <UpgradeModal
           title={MODAL_CONTENT[upgradeModal].title}

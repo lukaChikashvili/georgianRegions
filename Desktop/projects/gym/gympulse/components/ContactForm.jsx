@@ -52,16 +52,10 @@ export default function ContactForm() {
             <div className="space-y-4 pt-4 font-sans text-xs tracking-wide text-gray-400 font-light">
               <div className="flex items-center gap-3 group">
                 <Mail size={14} className="text-[#D4AF37]/80 group-hover:text-[#D4AF37] transition-colors" />
-                <span className="hover:text-gray-300 transition-colors">support@goldenmemory.ge</span>
+                <span className="hover:text-gray-300 transition-colors">support@goldenmemorial.ge</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone size={14} className="text-[#D4AF37]/80" />
-                <span>+995 (32) 2XX XX XX</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Clock size={14} className="text-[#D4AF37]/80" />
-                <span>ორშაბათი — კვირა, 24/7 მხარდაჭერა</span>
-              </div>
+              
+              
             </div>
           </div>
 

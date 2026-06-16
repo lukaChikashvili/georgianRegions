@@ -47,7 +47,7 @@ const Experience = ({ graveRecords = [],  isPreview = false , visitorWineId = nu
     <>
       <fog attach="fog" args={["#0b0d12", 60, 250]} />
 
-      <group position={isPreview ? [0, -7, -15] : [50, -11, -20]}>
+      <group position={isPreview ? [0, -7, -15] : [0, -11, -20]}>
         {graveRecords.map((record, index) => {
           const row = Math.floor(index / gravesPerRow);
           const indexInRow = index % gravesPerRow;

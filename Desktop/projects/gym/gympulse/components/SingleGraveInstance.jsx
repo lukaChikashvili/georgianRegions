@@ -267,9 +267,7 @@ const showBottle = record.winePoured || visitorWine;
       ))}
 
      
-      {fenceStyle === "wood" && woodSides.map((s, i) => (
-        <primitive key={i} object={woodFenceScene.clone()} scale={FENCE_SCALE} position={s.pos} rotation={s.rot} />
-      ))}
+     
     </group>
   );
 };

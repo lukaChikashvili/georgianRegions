@@ -30,8 +30,8 @@ export const Footer = () => {
         <div className="flex flex-wrap justify-center gap-8 text-xs font-light text-gray-500">
           <Link href="/discover" className="hover:text-[#D4AF37] transition-colors">არქივი</Link>
           <Link href="/grave" className="hover:text-[#D4AF37] transition-colors">3D მემორიალი</Link>
-          <Link href="#how-it-works" className="hover:text-[#D4AF37] transition-colors">ინსტრუქცია</Link>
-          <span className="cursor-pointer hover:text-[#D4AF37] transition-colors">კონფიდენციალურობა</span>
+          <Link href="/policy" className="hover:text-[#D4AF37] transition-colors">წესები & პირობები</Link>
+          <span className="cursor-pointer hover:text-[#D4AF37] transition-colors">კონფიდენციალურობის პოლიტიკა</span>
         </div>
 
         

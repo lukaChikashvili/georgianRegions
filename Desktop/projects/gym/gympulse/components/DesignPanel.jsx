@@ -77,11 +77,11 @@ const DesignPanel = ({ activeCategory, setActiveCategory, designSettings, update
         {activeCategory === "fence" && (
           <div className="space-y-3 animate-fadeIn">
             <p className="text-[11px] text-gray-400 uppercase tracking-wider font-light">პერიმეტრის მოწყობა</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
               {[
                 { id: "none", name: "ღობის გარეშე", desc: "მწვანე ველი" },
                 { id: "iron", name: "ჭედური რკინა", desc: "ტრადიციული" },
-                { id: "wood", name: "ხის ღობე", desc: "ძველებური" },
+              
               ].map((f) => (
                 <button
                   key={f.id}
