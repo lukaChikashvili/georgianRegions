@@ -216,7 +216,7 @@ subscriptions: defineTable({
       giftType: v.string(),    
       giftEmoji: v.string(),
       giftName: v.string(),
-      giftPrice: v.number(),
+      giftPrice: v.optional(v.number()),
       dedication: v.optional(v.string()),
       isAnonymous: v.boolean(),
       createdAt: v.number(),

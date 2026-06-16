@@ -89,14 +89,16 @@ const convertYouTube = (url) => {
      );
  
      const GIFT_ITEMS = [
-      { id: "rose",    name: "ვარდი",    emoji: "🌹", price: 5  },
-      { id: "lily",    name: "შროშანი",  emoji: "🌸", price: 6  },
-      { id: "candle",  name: "სანთელი",  emoji: "🕯️", price: 3  },
-      { id: "wreath",  name: "გვირგვინი",emoji: "💐", price: 25 },
-      { id: "bouquet", name: "თაიგული", emoji: "🌺", price: 15 },
-      { id: "dove",    name: "მტრედი",   emoji: "🕊️", price: 10 },
+      { id: "rose",    name: "ვარდი",     emoji: "🌹" },
+      { id: "lily",    name: "შროშანი",   emoji: "🌸" },
+      { id: "candle",  name: "სანთელი",   emoji: "🕯️" },
+      { id: "wreath",  name: "გვირგვინი", emoji: "💐" },
+      { id: "bouquet", name: "თაიგული",   emoji: "🌺" },
+      { id: "dove",    name: "მტრედი",    emoji: "🕊️" },
     ];
- 
+
+    const [giftError, setGiftError] = useState("");
+    
     const [selectedGift, setSelectedGift] = useState(GIFT_ITEMS[0]);
     const [giftDedication, setGiftDedication] = useState("");
     const [isGiftAnonymous, setIsGiftAnonymous] = useState(false);
@@ -107,8 +109,8 @@ const convertYouTube = (url) => {
     const handleSendGift = async () => {
       if (!memorial || !user) return;
       setIsSendingGift(true);
+      setGiftError("");
       try {
-       
         await sendGiftMutation({
           memorialId: memorial._id,
           senderName: isGiftAnonymous ? "ანონიმური" : (user.fullName || user.firstName || "სტუმარი"),
@@ -116,7 +118,6 @@ const convertYouTube = (url) => {
           giftType: selectedGift.id,
           giftEmoji: selectedGift.emoji,
           giftName: selectedGift.name,
-          giftPrice: selectedGift.price,
           dedication: giftDedication.trim() || undefined,
           isAnonymous: isGiftAnonymous,
         });
@@ -125,6 +126,8 @@ const convertYouTube = (url) => {
         setTimeout(() => setGiftSent(false), 4000);
       } catch (err) {
         console.error(err);
+        setGiftError(err.data || "საჩუქრის გაგზავნა ვერ მოხერხდა.");
+        setTimeout(() => setGiftError(""), 5000);
       } finally {
         setIsSendingGift(false);
       }
@@ -829,21 +832,20 @@ const convertYouTube = (url) => {
 
   
     <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-      {GIFT_ITEMS.map((gift) => (
-        <button
-          key={gift.id}
-          onClick={() => setSelectedGift(gift)}
-          className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 ${
-            selectedGift.id === gift.id
-              ? 'border-[#D4AF37]/60 bg-[#1A150F]/60'
-              : 'border-white/5 bg-[#0D0D0F]/40 hover:border-white/10'
-          }`}
-        >
-          <span className="text-2xl">{gift.emoji}</span>
-          <span className="text-[11px] text-gray-400">{gift.name}</span>
-          <span className="text-[11px] font-medium text-[#D4AF37]">{gift.price} ₾</span>
-        </button>
-      ))}
+    {GIFT_ITEMS.map((gift) => (
+  <button
+    key={gift.id}
+    onClick={() => setSelectedGift(gift)}
+    className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 ${
+      selectedGift.id === gift.id
+        ? 'border-[#D4AF37]/60 bg-[#1A150F]/60'
+        : 'border-white/5 bg-[#0D0D0F]/40 hover:border-white/10'
+    }`}
+  >
+    <span className="text-2xl">{gift.emoji}</span>
+    <span className="text-[11px] text-gray-400">{gift.name}</span>
+  </button>
+))}
     </div>
 
    
@@ -873,6 +875,8 @@ const convertYouTube = (url) => {
           {giftSent ? '✓ გაგზავნილია!' : isSendingGift ? 'იგზავნება...' : `${selectedGift.emoji} გაგზავნე — ${selectedGift.price} ₾`}
         </button>
       </div>
+      {giftError && <p className="text-xs text-red-400 text-right">{giftError}</p>}
+      
       {!user && (
         <p className="text-xs text-gray-600 text-right">საჩუქრის გასაგზავნად საჭიროა ავტორიზაცია.</p>
       )}
