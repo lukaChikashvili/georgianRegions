@@ -69,3 +69,7 @@ export const update = mutation({
       await ctx.db.delete(id);
     },
   });
+
+
+
+  

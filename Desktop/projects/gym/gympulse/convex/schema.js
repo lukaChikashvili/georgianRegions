@@ -247,5 +247,55 @@ subscriptions: defineTable({
         groupName: v.string(),
         status: v.union(v.literal("pending"), v.literal("accepted"), v.literal("declined")),
         createdAt: v.number(),
-      }).index("by_to_user", ["toUserId"])
+      }).index("by_to_user", ["toUserId"]),
+
+
+
+      funeralHomes: defineTable({
+       
+        clerkUserId: v.string(),
+        
+        
+        name: v.string(),
+        description: v.string(),
+        city: v.string(),
+        address: v.string(),
+        phone: v.string(),
+        email: v.string(),
+        website: v.optional(v.string()),
+        
+        
+        logoId: v.optional(v.id("_storage")),
+        coverImageId: v.optional(v.id("_storage")),
+        galleryIds: v.optional(v.array(v.id("_storage"))),
+        
+       
+        services: v.array(v.object({
+          name: v.string(),
+          description: v.string(),
+          price: v.optional(v.number()),
+        })),
+        
+       
+        status: v.union(
+          v.literal("pending"),    
+          v.literal("active"),  
+          v.literal("suspended")   
+        ),
+        
+        
+        subscriptionStatus: v.union(
+          v.literal("trial"),
+          v.literal("active"),
+          v.literal("expired")
+        ),
+        subscriptionExpiresAt: v.optional(v.number()),
+        
+       
+        totalBookings: v.optional(v.number()),
+        rating: v.optional(v.number()),
+      })
+      .index("by_clerk_user", ["clerkUserId"])
+      .index("by_city", ["city"])
+      .index("by_status", ["status"])
 });
