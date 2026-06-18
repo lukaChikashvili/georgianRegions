@@ -11,6 +11,7 @@
 import type * as comments from "../comments.js";
 import type * as family from "../family.js";
 import type * as familyTree from "../familyTree.js";
+import type * as funeralHomes from "../funeralHomes.js";
 import type * as gifts from "../gifts.js";
 import type * as memorials from "../memorials.js";
 import type * as permissions from "../permissions.js";
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   comments: typeof comments;
   family: typeof family;
   familyTree: typeof familyTree;
+  funeralHomes: typeof funeralHomes;
   gifts: typeof gifts;
   memorials: typeof memorials;
   permissions: typeof permissions;
