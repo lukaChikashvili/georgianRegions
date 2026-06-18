@@ -38,7 +38,8 @@ const Header = () => {
     { id: 2, link: "/discover", title: "აღმოაჩინე" },
     { id: 3, link: "/grave", title: "3D სასაფლაო" }, 
     { id: 4, link: "/services", title: "სამგლოვიარო  სერვისები" },
-    { id: 5, link: "/blog", title: "ისტორიები" },
+    { id: 5, link: "/funeral-homes", title: "დამკრძალავი ბიუროები" },
+    { id: 6, link: "/blog", title: "ისტორიები" },
   ];
 
   return (
