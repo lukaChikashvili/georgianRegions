@@ -37,7 +37,7 @@ export default function FuneralHomesDirectory() {
   );
 
   return (
-    <div className="min-h-screen py-16 px-6" style={{ background: 'radial-gradient(ellipse 80% 60% at 30% 0%, #1A150F 0%, #111114 55%, #0D0D0F 100%)' }}>
+    <div className="min-h-screen py-16 px-6 mt-16" style={{ background: 'radial-gradient(ellipse 80% 60% at 30% 0%, #1A150F 0%, #111114 55%, #0D0D0F 100%)' }}>
       <div className="max-w-6xl mx-auto">
 
         
@@ -207,24 +207,24 @@ export default function FuneralHomesDirectory() {
 
                   <div className="flex items-center justify-between pt-3 border-t border-white/5">
                     <div className="flex items-center gap-3">
-                      <a
+                      <span
                         href={`tel:${fh.phone}`}
                         onClick={e => e.stopPropagation()}
                         className="text-gray-600 hover:text-[#D4AF37] transition-colors"
                         title={fh.phone}
                       >
                         <Phone className="w-3.5 h-3.5" />
-                      </a>
-                      <a
+                      </span>
+                      <span
                         href={`mailto:${fh.email}`}
                         onClick={e => e.stopPropagation()}
                         className="text-gray-600 hover:text-[#D4AF37] transition-colors"
                         title={fh.email}
                       >
                         <Mail className="w-3.5 h-3.5" />
-                      </a>
+                      </span>
                       {fh.website && (
-                        <a
+                        <span
                           href={fh.website}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -232,7 +232,7 @@ export default function FuneralHomesDirectory() {
                           className="text-gray-600 hover:text-[#D4AF37] transition-colors"
                         >
                           <Globe className="w-3.5 h-3.5" />
-                        </a>
+                        </span>
                       )}
                     </div>
                     <span className="text-[#D4AF37]/40 group-hover:text-[#D4AF37] transition-colors">

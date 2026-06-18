@@ -1,3 +1,4 @@
+import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 
@@ -43,7 +44,7 @@ export const createFuneralHome = mutation({
         coverImageId: args.coverImageId,
         galleryIds: args.galleryIds,
         services: args.services,
-        status: "pending",
+        status: "active",
         subscriptionStatus: "trial",
         subscriptionExpiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000, 
         totalBookings: 0,

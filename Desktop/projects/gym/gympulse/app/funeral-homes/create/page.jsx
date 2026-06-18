@@ -9,7 +9,7 @@ import { SignInButton } from "@clerk/nextjs";
 import { 
   Building2, Phone, Mail, Globe, MapPin, 
   Plus, Trash2, Upload, ChevronRight, ChevronLeft,
-  CheckCircle, Image, Briefcase
+  CheckCircle, Image, Briefcase, ImageIcon
 } from "lucide-react";
 
 const GEORGIAN_CITIES = [
@@ -96,7 +96,7 @@ export default function FuneralHomeRegister() {
         coverImageId: coverImageId,
         galleryIds: galleryIds.length ? galleryIds  : undefined,
       });
-      router.push(`/funeral-homes/dashboard?registered=true`);
+      router.push(`/funeral-homes/${id}?new=true`);
     } catch (e) {
       setError(e.message ?? "დაფიქსირდა შეცდომა");
       setSubmitting(false);
@@ -127,7 +127,7 @@ export default function FuneralHomeRegister() {
   );
 
   return (
-    <div className="min-h-screen py-16 px-6" style={{ background: 'radial-gradient(ellipse 80% 60% at 30% 0%, #1A150F 0%, #111114 55%, #0D0D0F 100%)' }}>
+    <div className="min-h-screen py-16 px-6 mt-12" style={{ background: 'radial-gradient(ellipse 80% 60% at 30% 0%, #1A150F 0%, #111114 55%, #0D0D0F 100%)' }}>
       <div className="max-w-2xl mx-auto">
 
       
@@ -274,7 +274,7 @@ export default function FuneralHomeRegister() {
             </div>
           )}
 
-          {/* ── Step 1: Services ── */}
+    
           {step === 1 && (
             <div className="space-y-5">
               <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-6 flex items-center gap-2">
@@ -336,7 +336,6 @@ export default function FuneralHomeRegister() {
             </div>
           )}
 
-          {/* ── Step 2: Media ── */}
           {step === 2 && (
             <div className="space-y-6">
               <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-6 flex items-center gap-2">
@@ -344,7 +343,7 @@ export default function FuneralHomeRegister() {
               </h2>
               <p className="text-gray-500 text-xs -mt-2 mb-4">ფოტოების ატვირთვა შეგიძლიათ დაარეგისტრირების შემდეგ, დაფიდან</p>
 
-              {/* Logo placeholder */}
+    
               <div className="p-6 rounded-xl border border-dashed border-white/10 bg-white/[0.01] flex flex-col items-center gap-3 text-center">
                 <div className="w-12 h-12 rounded-full bg-[#D4AF37]/10 flex items-center justify-center">
                   <Upload className="w-5 h-5 text-[#D4AF37]/50" />
@@ -355,7 +354,6 @@ export default function FuneralHomeRegister() {
                 </div>
               </div>
 
-              {/* Cover placeholder */}
               <div className="p-6 rounded-xl border border-dashed border-white/10 bg-white/[0.01] flex flex-col items-center gap-3 text-center">
                 <div className="w-12 h-12 rounded-full bg-[#D4AF37]/10 flex items-center justify-center">
                   <ImageIcon className="w-5 h-5 text-[#D4AF37]/50" />
@@ -368,7 +366,7 @@ export default function FuneralHomeRegister() {
             </div>
           )}
 
-          {/* ── Step 3: Review ── */}
+       
           {step === 3 && (
             <div className="space-y-5">
               <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-6 flex items-center gap-2">
@@ -401,7 +399,7 @@ export default function FuneralHomeRegister() {
             </div>
           )}
 
-          {/* Navigation */}
+         
           <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
             <button
               onClick={() => { setError(null); setStep(s => s - 1); }}
@@ -433,7 +431,7 @@ export default function FuneralHomeRegister() {
           </div>
         </div>
 
-        {/* Footer note */}
+       
         <p className="text-center text-xs text-gray-600 mt-6">
           კითხვების შემთხვევაში დაგვიკავშირდით:{" "}
           <a href="mailto:info@goldenmemorial.ge" className="text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors">
