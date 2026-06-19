@@ -4,7 +4,7 @@ import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import { useConvexAuth, useMutation, useQuery } from 'convex/react';
 import Image from 'next/image';
 import logo from '../public/logo.png';
-import { Bell, Crown, Menu, User, X, ChevronDown } from 'lucide-react';
+import { Bell, Crown, Menu, User, X, ChevronDown, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
 import { api } from '@/convex/_generated/api';
 import { useState } from 'react';
@@ -132,7 +132,7 @@ const Header = () => {
               title="ადმინ პანელი"
               className="p-2 rounded-xl bg-white/[0.03] border border-white/5 text-gray-500 hover:text-[#D4AF37] hover:border-[#D4AF37]/20 transition-all"
             >
-              <Crown className="w-4 h-4" />
+              <LayoutDashboard className="w-4 h-4" />
             </Link>
 
         
