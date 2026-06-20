@@ -71,7 +71,7 @@ const Hero = () => {
             className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-fade-in"
             style={{ animationDelay: '800ms', animationFillMode: 'forwards' }}
           >
-            <Link href="/memorial" className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-sm tracking-wider uppercase transition-all duration-300 hover:brightness-110 shadow-lg hover:shadow-[#D4AF37]/10 active:scale-[0.99] cursor-pointer text-center">
+            <Link href="/memorial" className="button px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-sm tracking-wider uppercase transition-all duration-300 hover:brightness-110 shadow-lg hover:shadow-[#D4AF37]/10 active:scale-[0.99] cursor-pointer text-center">
               შექმენი მემორიალი
             </Link>
             <a 

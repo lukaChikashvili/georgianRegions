@@ -72,7 +72,7 @@ const Header = () => {
    
       <div className="relative z-10 group">
         <Link href="/">
-          <Image width={130} src={logo} alt="logo" className="opacity-90 transition-opacity group-hover:opacity-100" />
+          <Image width={75} src={logo} alt="logo" className="opacity-0 md:opacity-90 transition-opacity group-hover:opacity-100" />
         </Link>
       </div>
 
@@ -91,7 +91,7 @@ const Header = () => {
           <button
             onClick={() => setIsMoreOpen(!isMoreOpen)}
             onBlur={() => setTimeout(() => setIsMoreOpen(false), 150)}
-            className="flex items-center gap-1 font-sans text-sm tracking-wide text-gray-400 font-light hover:text-[#FFF5D6] transition-colors duration-300"
+            className=" cursor-pointer  flex items-center gap-1 font-sans text-sm tracking-wide text-gray-400 font-light hover:text-[#FFF5D6] transition-colors duration-300"
           >
             მეტი <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isMoreOpen ? 'rotate-180' : ''}`} />
           </button>
@@ -117,9 +117,10 @@ const Header = () => {
       <div className='flex items-center gap-6 relative z-10'>
         {!isAuthenticated && (
           <SignInButton mode="modal">
-            <button className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-black bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] hover:brightness-110 shadow-lg transition-all text-xs uppercase cursor-pointer">
-              <User className="w-3.5 h-3.5" /> შესვლა
-            </button>
+     <button className="button flex gap-4 items-center" >
+          <User size = {17}/>
+          შესვლა
+        </button>
           </SignInButton>
         )}
 
