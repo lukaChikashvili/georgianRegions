@@ -7,19 +7,19 @@ import Image from "next/image";
 const slides = [
   {
     image: "/banner2.png",
-    eyebrow: "სამუდამო ხსოვნის სივრცე",
-    title: "მიაგეთ პატივი",
-    titleGold: "სამუდამოდ",
-    subtitle: "შექმენით ციფრული მემორიალი წუთებში — სამუდამოდ თქვენი.",
+    eyebrow: "მოგონება, რომელიც არასოდეს ქრება",
+    title: "გაიხსენეთ საყვარელი  ",
+    titleGold: " ადამიანის ისტორია",
+    subtitle: "GoldenMemorial.ge — მშვიდი სივრცე, სადაც ოჯახები ქმნიან სამუდამო ციფრულ მემორიალებს საყვარელი ადამიანების ხსოვნის შესანახად.",
     ctaText: "შექმენი მემორიალი",
     ctaLink: "/memorial",
   },
   {
     image: "/banner3.png",
     eyebrow: "ოჯახური მემკვიდრეობა",
-    title: "გაიხსენეთ",
-    titleGold: "ერთად",
-    subtitle: "მოიწვიეთ ახლობლები მოგონებების გასაზიარებლად.",
+    title: "დატოვეთ მოგონება მათზე, ვინც უკვე",
+    titleGold: "აღარ არის",
+    subtitle: "მოიწვიეთ ახლობლები მოგონებების გასაზიარებლად, აანთეთ სანთელი, დატოვეთ სამძიმრის წერილი, იხილეთ დაკრძალვის დეტალები, მათი საყვარელი სიმღერა და ბიოგრაფია",
     ctaText: "აღმოაჩინე მემორიალები",
     ctaLink: "/discover",
   },
@@ -50,7 +50,7 @@ const Hero = () => {
 
   return (
     <section
-      className="relative w-full h-[100svh] min-h-[400px] overflow-hidden bg-[#0D0D0F]"
+      className="relative w-full h-[90svh] mt-16 min-h-[400px] overflow-hidden bg-[#0D0D0F]"
       aria-label="Hero slideshow"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -91,51 +91,51 @@ const Hero = () => {
       />
 
 
-      <div className="relative z-10 h-full flex items-center px-6 md:px-12">
-        <div className="max-w-2xl">
-          {slides.map((slide, i) => (
-            <div
-              key={i}
-              className="transition-opacity duration-700 ease-in-out"
-              style={{
-                opacity: i === current ? 1 : 0,
-                position: i === current ? "relative" : "absolute",
-                pointerEvents: i === current ? "auto" : "none",
-              }}
-              aria-hidden={i !== current}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-px bg-gradient-to-r from-[#D4AF37] to-transparent opacity-80" />
-                <span className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium">
-                  {slide.eyebrow}
-                </span>
-              </div>
-
-              <h1
-                className="font-serif text-[#FFF5D6] font-light leading-[1.1] tracking-wide mb-5"
-                style={{ fontSize: "clamp(2.25rem, 6vw + 1rem, 4.5rem)" }}
-              >
-                {slide.title}
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFF5D6] via-[#D4AF37] to-[#AA7C11] italic">
-                  {slide.titleGold}
-                </span>
-              </h1>
-
-              <p className="text-sm md:text-base text-gray-300 font-light leading-relaxed max-w-md mb-8">
-                {slide.subtitle}
-              </p>
-
-              <Link href={slide.ctaLink}>
-                <button className="button2">{slide.ctaText}</button>
-              </Link>
-            </div>
-          ))}
+<div className="relative z-10 h-full flex items-center px-6 md:px-12 -mt-64">
+  <div className="max-w-2xl ml-24 relative w-full">
+    {slides.map((slide, i) => (
+      <div
+        key={i}
+        className="absolute inset-0 transition-all duration-700 ease-out"
+        style={{
+          opacity: i === current ? 1 : 0,
+          transform: i === current ? "translateY(0)" : "translateY(12px)",
+          pointerEvents: i === current ? "auto" : "none",
+          transitionDelay: i === current ? "500ms" : "0ms",
+        }}
+        aria-hidden={i !== current}
+      >
+        <div className="inline-flex items-center gap-2 mb-7 px-3 py-1.5 rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/[0.04]">
+          <span className="w-1 h-1 rounded-full bg-[#D4AF37]" />
+          <span className="text-[11px] tracking-[0.2em] uppercase text-[#D4AF37]/80 font-medium">
+            {slide.eyebrow}
+          </span>
         </div>
+
+        <h1
+          className="font-serif text-[#F5EFE0] font-light leading-[1.15] tracking-tight mb-6"
+          style={{ fontSize: "clamp(2.25rem, 6vw + 1rem, 4.5rem)" }}
+        >
+          {slide.title}{" "}
+          <span className="italic text-[#C9A24B] font-normal">
+            {slide.titleGold}
+          </span>
+        </h1>
+
+        <p className="text-sm md:text-base text-gray-400 font-light leading-relaxed max-w-md mb-9 pl-5 border-l border-[#D4AF37]/30">
+          {slide.subtitle}
+        </p>
+
+        <Link href={slide.ctaLink}>
+          <button className="button2">{slide.ctaText}</button>
+        </Link>
       </div>
+    ))}
+  </div>
+</div>
 
       
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2 mb-8">
         {slides.map((_, i) => (
           <button
             key={i}
