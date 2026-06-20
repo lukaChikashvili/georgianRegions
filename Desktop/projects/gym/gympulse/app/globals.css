@@ -4,7 +4,8 @@
 
 body {
   font-family: "BPG Algeti Compact", sans-serif;
-    background: radial-gradient(circle, #1C160E 0%, #0D0D0D 60%, #050505 100%);
+  background-color: #0D0D0D;
+  
 }
 
 
@@ -72,3 +73,64 @@ body {
   
   
   
+  .button2 {
+    cursor: pointer;
+    position: relative;
+    padding: 15px 26px;
+    width: 240px;
+    font-size: 14px;
+    color: #212121;
+    border: 2px solid rgb(193, 163, 98);
+    border-radius: 25px;
+    background-color: rgb(193, 163, 98);
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  }
+  
+  .button2:hover {
+    color: rgb(193, 163, 98);
+    background-color: transparent;
+    scale: 1.1;
+    box-shadow: 0 0px 20px rgba(193, 163, 98, 0.4);
+  }
+  
+  .button2:active {
+    scale: 1;
+  }
+  
+  .button2-outline {
+    cursor: pointer;
+    position: relative;
+    padding: 15px 26px;
+    font-size: 14px;
+    color: rgb(193, 163, 98);
+    border: 2px solid rgb(193, 163, 98);
+    border-radius: 25px;
+    background-color: transparent;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+  }
+  
+  .button2-outline:hover {
+    color: rgb(193, 163, 98);
+    background-color: rgba(193, 163, 98, 0.08);
+    scale: 1.1;
+    box-shadow: 0 0px 20px rgba(193, 163, 98, 0.4);
+  }
+  
+  .button2-outline:active {
+    scale: 1;
+  }
+
+  @keyframes glow-sweep {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(300%);
+    }
+  }
+  
+  .animate-glow-sweep {
+    animation: glow-sweep 4s ease-in-out infinite;
+  }
