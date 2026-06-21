@@ -79,10 +79,10 @@ export default function MultiBookingModal({ funeralHomeId, services, onClose, on
           <div className="py-8 text-center">
             <CheckCircle2 className="w-12 h-12 text-[#D4AF37] mx-auto mb-4" />
             <p className="text-[#FFF5D6]/90 text-sm mb-2">თქვენი ჯავშანი გაიგზავნა</p>
-            <p className="text-gray-500 text-xs">სამგლოვიარო სახლი დაგიკავშირდებათ მალე</p>
+            <p className="text-gray-500 text-xs">დამკრძალავი ბიურო დაგიკავშირდებათ მალე</p>
             <button
               onClick={onClose}
-              className="mt-6 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium"
+              className="button mt-6 px-6 py-2.5 rounded-xl  text-black text-sm font-medium"
             >
               დახურვა
             </button>
@@ -91,14 +91,14 @@ export default function MultiBookingModal({ funeralHomeId, services, onClose, on
           <div className="py-6 text-center">
             <p className="text-gray-400 text-sm mb-5">ჯავშნისთვის გთხოვთ შეხვიდეთ სისტემაში</p>
             <SignInButton mode="modal">
-              <button className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium">
+              <button className="button px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium">
                 შესვლა
               </button>
             </SignInButton>
           </div>
         ) : (
           <div className="space-y-4">
-            {/* Selected services summary */}
+         
             <div className="rounded-xl border border-white/5 bg-white/[0.02] divide-y divide-white/5">
               {services.map((s, i) => (
                 <div key={i} className="px-4 py-3 flex items-center justify-between">
@@ -155,7 +155,7 @@ export default function MultiBookingModal({ funeralHomeId, services, onClose, on
             <div>
               <label className="block text-xs text-gray-400 mb-2">სასურველი თარიღი *</label>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                <Calendar className="absolute left-3 text-white top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
                 <input
                   type="date"
                   value={form.requestedDate}
@@ -179,7 +179,7 @@ export default function MultiBookingModal({ funeralHomeId, services, onClose, on
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium hover:brightness-110 transition-all disabled:opacity-50"
+              className="button3 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl  text-black text-sm font-medium hover:brightness-110 transition-all disabled:opacity-50"
             >
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
               ჯავშნის გაგზავნა

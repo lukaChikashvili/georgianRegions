@@ -43,10 +43,10 @@ export default function FuneralHomesDirectory() {
         
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
           <div>
-            <p className="text-[#D4AF37] text-xs uppercase tracking-widest mb-3">სამგლოვიარო სერვისები</p>
-            <h1 className="text-3xl font-serif italic text-[#FFF5D6]">სამგლოვიარო სახლები</h1>
+            <p className="text-[#D4AF37] text-xs uppercase tracking-widest mb-3">სარიტუალო მომსახურება</p>
+            <h1 className="text-3xl font-serif italic text-[#FFF5D6]">დამკრძალავი ბიუროები</h1>
             <p className="text-gray-500 text-sm mt-2">
-              {funeralHomes === undefined ? "იტვირთება..." : `${funeralHomes.length} სამგლოვიარო სახლი`}
+              {funeralHomes === undefined ? "იტვირთება..." : `${funeralHomes.length} დამკრძალავი ბიურო`}
             </p>
           </div>
 
@@ -61,7 +61,7 @@ export default function FuneralHomesDirectory() {
           ) : (
             <Link
               href="/funeral-homes/dashboard"
-              className="flex items-center gap-2 px-5 py-2.5 border border-[#D4AF37]/30 text-[#D4AF37] text-sm rounded-xl hover:bg-[#D4AF37]/10 transition-all shrink-0"
+              className=" button flex items-center gap-2 px-5 py-2.5 border border-[#D4AF37]/30 text-[#D4AF37] text-sm rounded-xl hover:bg-[#D4AF37]/10 transition-all shrink-0"
             >
               <Building2 className="w-4 h-4" /> ჩემი გვერდი
             </Link>
@@ -87,7 +87,7 @@ export default function FuneralHomesDirectory() {
               <button
                 key={city}
                 onClick={() => setSelectedCity(city === "ყველა" ? "" : city)}
-                className={`px-3 py-2 rounded-lg text-xs whitespace-nowrap transition-all border ${
+                className={`px-3 py-2 rounded-lg text-xs whitespace-nowrap transition-all border text-white font-medium ${
                   (city === "ყველა" && !selectedCity) || selectedCity === city
                     ? "bg-[#D4AF37]/15 border-[#D4AF37]/30 text-[#D4AF37]"
                     : "border-white/5 text-gray-500 hover:text-gray-300 hover:border-white/10"
@@ -125,7 +125,7 @@ export default function FuneralHomesDirectory() {
             <p className="text-gray-600 text-sm mb-6">სცადეთ სხვა ფილტრი ან დაამატეთ თქვენი</p>
             <Link
               href="/funeral-homes/create"
-              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all"
+              className="button flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all"
             >
               <Plus className="w-4 h-4" /> სამგლოვიარო სახლის დამატება
             </Link>

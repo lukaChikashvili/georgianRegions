@@ -112,7 +112,7 @@ export default function FuneralHomeProfilePage() {
     }
   };
 
-  if (!myFuneralHome || !form) return null; // layout already handles loading/auth states
+  if (!myFuneralHome || !form) return null; 
 
   return (
     <>
@@ -122,7 +122,7 @@ export default function FuneralHomeProfilePage() {
         </div>
       )}
 
-      {/* Photos */}
+  
       <div className="mb-8 p-6 rounded-2xl border border-white/5" style={{ background: 'rgba(255,255,255,0.02)' }}>
         <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-5 flex items-center gap-2">
           <ImageIcon className="w-3.5 h-3.5" /> ფოტოები
@@ -173,7 +173,7 @@ export default function FuneralHomeProfilePage() {
         </div>
       </div>
 
-      {/* Info form */}
+    
       <div className="mb-8 p-6 rounded-2xl border border-white/5 space-y-5" style={{ background: 'rgba(255,255,255,0.02)' }}>
         <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-1 flex items-center gap-2">
           <Building2 className="w-3.5 h-3.5" /> ძირითადი ინფორმაცია
@@ -235,7 +235,7 @@ export default function FuneralHomeProfilePage() {
         </div>
       </div>
 
-      {/* Services */}
+     
       <div className="mb-8 p-6 rounded-2xl border border-white/5" style={{ background: 'rgba(255,255,255,0.02)' }}>
         <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-5">სერვისები</h2>
         <div className="space-y-4">
@@ -262,10 +262,10 @@ export default function FuneralHomeProfilePage() {
         </button>
       </div>
 
-      {/* Save */}
+      
       <div className="sticky bottom-6 flex justify-end">
         <button onClick={handleSave} disabled={saving}
-          className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all disabled:opacity-50 shadow-2xl">
+          className="button2 flex items-center gap-2 px-8 py-3  text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all disabled:opacity-50 shadow-2xl">
           {saving ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> ინახება...</>
           ) : saved ? (

@@ -46,9 +46,9 @@ export default function FuneralHomeDetail() {
     return (
       <div className="min-h-screen pt-32 flex flex-col items-center justify-center text-center px-6" style={{ background: '#0A0A0A' }}>
         <Building2 className="w-12 h-12 text-white/10 mb-4" />
-        <h1 className="text-[#FFF5D6]/60 font-serif italic text-xl mb-2">სამგლოვიარო სახლი ვერ მოიძებნა</h1>
+        <h1 className="text-[#FFF5D6]/60 font-serif italic text-xl mb-2">სარიტუალო სახლი ვერ მოიძებნა</h1>
         <Link href="/funeral-homes" className="text-[#D4AF37]/60 hover:text-[#D4AF37] text-sm mt-4 flex items-center gap-1.5">
-          <ArrowLeft className="w-3.5 h-3.5" /> სამგლოვიარო სახლებზე დაბრუნება
+          <ArrowLeft className="w-3.5 h-3.5" /> დამკრძალავ ბიუროებზე დაბრუნება
         </Link>
       </div>
     );
@@ -71,7 +71,7 @@ export default function FuneralHomeDetail() {
           href="/funeral-homes"
           className="absolute top-6 left-6 flex items-center gap-1.5 px-3 py-2 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 text-gray-300 hover:text-[#D4AF37] text-xs transition-colors"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> სამგლოვიარო სახლები
+          <ArrowLeft className="w-3.5 h-3.5 " /> სარიტუალო სახლები
         </Link>
       </div>
 
@@ -114,7 +114,7 @@ export default function FuneralHomeDetail() {
           <div className="flex gap-2 pb-1">
   <a
     href={`tel:${fh.phone}`}
-    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium hover:brightness-110 transition-all"
+    className="button flex items-center gap-2 px-4 py-2.5 rounded-xl text-black text-sm font-medium hover:brightness-110 transition-all"
   >
     <Phone className="w-3.5 h-3.5" />
     დარეკვა
@@ -258,7 +258,7 @@ export default function FuneralHomeDetail() {
 
               <a
   href={`tel:${fh.phone}`}
-  className="w-full mt-6 flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium hover:brightness-110 transition-all"
+  className="button2 w-full mt-6 flex items-center justify-center gap-2 px-5 py-3 rounded-xl  text-black text-sm font-medium hover:brightness-110 transition-all"
 >
   <Phone className="w-4 h-4" />
   ახლავე დარეკვა
@@ -284,7 +284,7 @@ export default function FuneralHomeDetail() {
             </div>
             <button
               onClick={() => setShowBooking(true)}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium hover:brightness-110 transition-all whitespace-nowrap"
+              className="button px-6 py-2.5 rounded-xl  text-black text-sm font-medium hover:brightness-110 transition-all whitespace-nowrap"
             >
               გაგრძელება
             </button>

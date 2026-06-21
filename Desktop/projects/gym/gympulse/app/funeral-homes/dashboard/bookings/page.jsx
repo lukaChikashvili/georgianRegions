@@ -87,14 +87,14 @@ function BookingCard({ booking, onConfirm, onDecline, onComplete, actingId }) {
           <button
             onClick={() => onConfirm(booking._id)}
             disabled={isActing}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-xs font-medium hover:brightness-110 transition-all disabled:opacity-50"
+            className="button flex items-center gap-1.5 px-4 py-2 rounded-lg   text-black text-xs font-medium hover:brightness-110 transition-all disabled:opacity-50"
           >
             {isActing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />} დადასტურება
           </button>
           <button
             onClick={() => onDecline(booking._id)}
             disabled={isActing}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-white/10 text-gray-400 text-xs hover:text-red-400 hover:border-red-400/30 transition-all disabled:opacity-50"
+            className="button4 flex items-center gap-1.5 px-4 py-2 rounded-lg border border-white/10 text-gray-400 text-xs hover:text-red-400 hover:border-red-400/30 transition-all disabled:opacity-50"
           >
             <XCircle className="w-3.5 h-3.5" /> უარყოფა
           </button>
@@ -232,10 +232,10 @@ export default function BookingsRevenuePage() {
   return (
     <div>
     
-      <div className="flex items-center gap-2 mb-6 p-1 rounded-xl border border-white/5 bg-white/[0.02] w-fit">
+      <div className="flex items-center gap-4 mb-6 p-1 rounded-xl border border-white/5 bg-white/[0.02] w-fit">
         <button
           onClick={() => setTab("bookings")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
+          className={`button flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
             tab === "bookings" ? "bg-[#D4AF37]/15 text-[#D4AF37]" : "text-gray-500 hover:text-gray-300"
           }`}
         >
@@ -244,7 +244,7 @@ export default function BookingsRevenuePage() {
         </button>
         <button
           onClick={() => setTab("revenue")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
+          className={`button flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
             tab === "revenue" ? "bg-[#D4AF37]/15 text-[#D4AF37]" : "text-gray-500 hover:text-gray-300"
           }`}
         >
