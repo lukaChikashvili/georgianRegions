@@ -297,5 +297,48 @@ subscriptions: defineTable({
       })
       .index("by_clerk_user", ["clerkUserId"])
       .index("by_city", ["city"])
-      .index("by_status", ["status"])
+      .index("by_status", ["status"]),
+
+
+      bookings: defineTable({
+        funeralHomeId: v.id("funeralHomes"),
+        serviceName: v.string(),
+        serviceDescription: v.optional(v.string()),
+        servicePrice: v.optional(v.number()),
+
+        customerUserId: v.optional(v.string()),
+        customerName: v.string(),
+        customerPhone: v.string(),
+        customerEmail: v.string(),
+
+        memorialId: v.optional(v.id("memorials")),
+
+        requestedDate: v.string(), 
+        note: v.optional(v.string()), 
+
+        status: v.union(
+          v.literal("pending"),
+          v.literal("confirmed"),
+          v.literal("completed"),
+          v.literal("cancelled")
+        ),
+        declineReason: v.optional(v.string()),
+
+        paymentMethod: v.union(v.literal("online"), v.literal("manual")),
+        paymentStatus: v.union(
+                       v.literal("unpaid"),
+                       v.literal("paid"),
+                       v.literal("refunded")
+                  ),
+         bogOrderId: v.optional(v.string()),
+
+         confirmedAt: v.optional(v.number()),
+         completedAt: v.optional(v.number()),
+         cancelledAt: v.optional(v.number()),
+
+
+      }).index("by_funeralHome", ["funeralHomeId"])
+      .index("by_funeralHome_status", ["funeralHomeId", "status"])
+      .index("by_customer", ["customerUserId"])
+      .index("by_memorial", ["memorialId"]),
 });
