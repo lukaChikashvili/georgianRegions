@@ -66,11 +66,7 @@ export const Pricing = ({ spotsLeft = 100 }) => {
                   : "bg-[#121214]/40 border border-white/5"
               }`}
             >
-              {plan.featured && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full">
-                  ყველაზე პოპულარული
-                </span>
-              )}
+             
 
               <h3 className="text-xl font-light text-[#FFF5D6] font-serif mb-2">
                 {plan.name}

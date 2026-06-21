@@ -55,7 +55,7 @@ const Hero = () => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-     
+
       {slides.map((slide, i) => (
         <div
           key={i}
@@ -70,7 +70,7 @@ const Hero = () => {
             priority={i === 0}
             className="object-cover"
           />
-         
+
           <div
             className="absolute inset-0"
             style={{
@@ -81,7 +81,7 @@ const Hero = () => {
         </div>
       ))}
 
-      
+
       <div
         className="absolute inset-0 z-[1] pointer-events-none opacity-30"
         style={{
@@ -90,51 +90,50 @@ const Hero = () => {
         }}
       />
 
+      <div className="relative z-10 h-full flex items-center justify-center md:justify-start px-6 md:px-12 -mt-56 md:-mt-64">
+        <div className="max-w-2xl w-full text-center md:text-left mx-auto md:mx-0 md:ml-24 relative">
+          {slides.map((slide, i) => (
+            <div
+              key={i}
+              className="absolute inset-0 transition-all duration-700 ease-out flex flex-col items-center md:items-start"
+              style={{
+                opacity: i === current ? 1 : 0,
+                transform: i === current ? "translateY(0)" : "translateY(12px)",
+                pointerEvents: i === current ? "auto" : "none",
+                transitionDelay: i === current ? "500ms" : "0ms",
+              }}
+              aria-hidden={i !== current}
+            >
+              <div className="inline-flex items-center gap-2 mb-7 px-3 py-1.5 rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/[0.04]">
+                <span className="w-1 h-1 rounded-full bg-[#D4AF37]" />
+                <span className="text-[11px] tracking-[0.2em] uppercase text-[#D4AF37]/80 font-medium">
+                  {slide.eyebrow}
+                </span>
+              </div>
 
-<div className="relative z-10 h-full flex items-center px-6 md:px-12 -mt-64">
-  <div className="max-w-2xl ml-24 relative w-full">
-    {slides.map((slide, i) => (
-      <div
-        key={i}
-        className="absolute inset-0 transition-all duration-700 ease-out"
-        style={{
-          opacity: i === current ? 1 : 0,
-          transform: i === current ? "translateY(0)" : "translateY(12px)",
-          pointerEvents: i === current ? "auto" : "none",
-          transitionDelay: i === current ? "500ms" : "0ms",
-        }}
-        aria-hidden={i !== current}
-      >
-        <div className="inline-flex items-center gap-2 mb-7 px-3 py-1.5 rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/[0.04]">
-          <span className="w-1 h-1 rounded-full bg-[#D4AF37]" />
-          <span className="text-[11px] tracking-[0.2em] uppercase text-[#D4AF37]/80 font-medium">
-            {slide.eyebrow}
-          </span>
+              <h1
+                className="font-serif text-[#F5EFE0] font-light leading-[1.15] tracking-tight mb-6"
+                style={{ fontSize: "clamp(2.25rem, 6vw + 1rem, 4.5rem)" }}
+              >
+                {slide.title}{" "}
+                <span className="italic text-[#C9A24B] font-normal">
+                  {slide.titleGold}
+                </span>
+              </h1>
+
+              <p className="text-sm md:text-base text-gray-400 font-light leading-relaxed max-w-md mb-9 px-5 md:pl-5 md:px-0 border-l-0 md:border-l border-[#D4AF37]/30">
+                {slide.subtitle}
+              </p>
+
+              <Link href={slide.ctaLink}>
+                <button className="button2">{slide.ctaText}</button>
+              </Link>
+            </div>
+          ))}
         </div>
-
-        <h1
-          className="font-serif text-[#F5EFE0] font-light leading-[1.15] tracking-tight mb-6"
-          style={{ fontSize: "clamp(2.25rem, 6vw + 1rem, 4.5rem)" }}
-        >
-          {slide.title}{" "}
-          <span className="italic text-[#C9A24B] font-normal">
-            {slide.titleGold}
-          </span>
-        </h1>
-
-        <p className="text-sm md:text-base text-gray-400 font-light leading-relaxed max-w-md mb-9 pl-5 border-l border-[#D4AF37]/30">
-          {slide.subtitle}
-        </p>
-
-        <Link href={slide.ctaLink}>
-          <button className="button2">{slide.ctaText}</button>
-        </Link>
       </div>
-    ))}
-  </div>
-</div>
 
-      
+
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex gap-2 mb-8">
         {slides.map((_, i) => (
           <button
