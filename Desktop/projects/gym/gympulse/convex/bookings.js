@@ -68,3 +68,70 @@ async function requireFuneralHomeOwner(ctx, funeralHomeId) {
       return bookingId;
     },
   });
+
+
+  export const confirmBooking = mutation({
+    args: { bookingId: v.id("bookings") },
+    handler: async (ctx, { bookingId }) => {
+      const booking = await ctx.db.get(bookingId);
+      if (!booking) throw new ConvexError("ჯავშანი ვერ მოიძებნა");
+      await requireFuneralHomeOwner(ctx, booking.funeralHomeId);
+  
+      if (booking.status !== "pending") {
+        throw new ConvexError("მხოლოდ მოლოდინში მყოფი ჯავშნის დადასტურებაა შესაძლებელი");
+      }
+  
+      await ctx.db.patch(bookingId, {
+        status: "confirmed",
+        confirmedAt: Date.now(),
+      });
+  
+      await ctx.scheduler.runAfter(0, "bookings:sendStatusEmailToCustomer", {
+        bookingId,
+        newStatus: "confirmed",
+      });
+    },
+  });
+  
+  export const declineBooking = mutation({
+    args: { bookingId: v.id("bookings"), reason: v.optional(v.string()) },
+    handler: async (ctx, { bookingId, reason }) => {
+      const booking = await ctx.db.get(bookingId);
+      if (!booking) throw new ConvexError("ჯავშანი ვერ მოიძებნა");
+      await requireFuneralHomeOwner(ctx, booking.funeralHomeId);
+  
+      if (booking.status !== "pending") {
+        throw new ConvexError("მხოლოდ მოლოდინში მყოფი ჯავშნის უარყოფაა შესაძლებელი");
+      }
+  
+      await ctx.db.patch(bookingId, {
+        status: "cancelled",
+        declineReason: reason,
+        cancelledAt: Date.now(),
+      });
+  
+      await ctx.scheduler.runAfter(0, "bookings:sendStatusEmailToCustomer", {
+        bookingId,
+        newStatus: "cancelled",
+      });
+    },
+  });
+
+  export const completeBooking = mutation({
+    args: { bookingId: v.id("bookings") },
+    handler: async (ctx, { bookingId }) => {
+      const booking = await ctx.db.get(bookingId);
+      if (!booking) throw new ConvexError("ჯავშანი ვერ მოიძებნა");
+      await requireFuneralHomeOwner(ctx, booking.funeralHomeId);
+  
+      if (booking.status !== "confirmed") {
+        throw new ConvexError("მხოლოდ დადასტურებული ჯავშნის დასრულებაა შესაძლებელი");
+      }
+  
+      await ctx.db.patch(bookingId, {
+        status: "completed",
+        completedAt: Date.now(),
+      });
+    },
+  });
+  
