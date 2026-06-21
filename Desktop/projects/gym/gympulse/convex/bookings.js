@@ -1,6 +1,5 @@
-import { ConvexError } from "convex/values";
-import { mutation, query } from "./_generated/server";
-
+import { ConvexError, v } from "convex/values";
+import { internalMutation, mutation, query } from "./_generated/server";
 
 async function requireFuneralHomeOwner(ctx, funeralHomeId) {
     const identity = await ctx.auth.getUserIdentity();
@@ -9,9 +8,9 @@ async function requireFuneralHomeOwner(ctx, funeralHomeId) {
     }
     const fh = await ctx.db.get(funeralHomeId);
     if (!fh) {
-      throw new ConvexError("დამკრძალავი ბიურო ვერ მოიძებნა");
+      throw new ConvexError("სამგლოვიარო სახლი ვერ მოიძებნა");
     }
-    if (fh.ownerId !== identity.subject) {
+    if (fh.clerkUserId !== identity.subject) {
       throw new ConvexError("არ გაქვთ წვდომა ამ რესურსზე");
     }
     return fh;
@@ -191,11 +190,16 @@ async function requireFuneralHomeOwner(ctx, funeralHomeId) {
         : 0;
   
       
-      const byService = {};
-      for (const b of realized) {
-        byService[b.serviceName] = (byService[b.serviceName] || 0) + (b.servicePrice || 0);
-      }
-  
+        const byServiceMap = new Map();
+        for (const b of realized) {
+          const current = byServiceMap.get(b.serviceName) || 0;
+          byServiceMap.set(b.serviceName, current + (b.servicePrice || 0));
+        }
+        
+        const byService = Array.from(byServiceMap, ([name, total]) => ({
+          name,
+          total,
+        }));
     
       const byMonth = {};
       for (const b of realized) {
@@ -213,5 +217,107 @@ async function requireFuneralHomeOwner(ctx, funeralHomeId) {
         byService,
         byMonth,
       };
+    },
+  });
+
+
+  export const getMyBookings = query({
+    args: {},
+    handler: async (ctx) => {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) return [];
+  
+      return await ctx.db
+        .query("bookings")
+        .withIndex("by_customer", (q) => q.eq("customerUserId", identity.subject))
+        .order("desc")
+        .collect();
+    },
+  });
+
+  export const createBookingGroup = mutation({
+    args: {
+      funeralHomeId: v.id("funeralHomes"),
+      services: v.array(
+        v.object({
+          name: v.string(),
+          description: v.optional(v.string()),
+          price: v.optional(v.number()),
+        })
+      ),
+      customerName: v.string(),
+      customerPhone: v.string(),
+      customerEmail: v.string(),
+      memorialId: v.optional(v.id("memorials")),
+      requestedDate: v.string(),
+      note: v.optional(v.string()),
+      paymentMethod: v.union(v.literal("online"), v.literal("manual")),
+    },
+    handler: async (ctx, args) => {
+      const fh = await ctx.db.get(args.funeralHomeId);
+      if (!fh) {
+        throw new ConvexError("სამგლოვიარო სახლი ვერ მოიძებნა");
+      }
+      if (fh.status !== "active") {
+        throw new ConvexError("ეს სამგლოვიარო სახლი ამჟამად არააქტიურია");
+      }
+      if (args.services.length === 0) {
+        throw new ConvexError("გთხოვთ აირჩიოთ მინიმუმ ერთი სერვისი");
+      }
+  
+      const identity = await ctx.auth.getUserIdentity();
+      const bookingGroupId = crypto.randomUUID();
+      const bookingIds = [];
+  
+      for (const service of args.services) {
+        const id = await ctx.db.insert("bookings", {
+          funeralHomeId: args.funeralHomeId,
+          serviceName: service.name,
+          serviceDescription: service.description,
+          servicePrice: service.price,
+          customerUserId: identity?.subject,
+          customerName: args.customerName,
+          customerPhone: args.customerPhone,
+          customerEmail: args.customerEmail,
+          memorialId: args.memorialId,
+          requestedDate: args.requestedDate,
+          note: args.note,
+          status: "pending",
+          paymentMethod: args.paymentMethod,
+          paymentStatus: "unpaid",
+          bookingGroupId,
+        });
+        bookingIds.push(id);
+      }
+  
+      await ctx.scheduler.runAfter(0, "bookings:sendBookingGroupNotification", {
+        bookingGroupId,
+      });
+  
+      return bookingGroupId;
+    },
+  });
+
+
+  export const sendBookingGroupNotification = internalMutation({
+    args: { bookingGroupId: v.string() },
+    handler: async (ctx, args) => {
+     
+      console.log(`Sending notification for group: ${args.bookingGroupId}`);
+    },
+  });
+
+  export const sendStatusEmailToCustomer = internalMutation({
+    args: { 
+      bookingId: v.id("bookings"),
+      newStatus: v.string() 
+    },
+    handler: async (ctx, args) => {
+      
+      const booking = await ctx.db.get(args.bookingId);
+      if (!booking) return;
+  
+      
+      console.log(`Sending email for booking ${args.bookingId} with status ${args.newStatus}`);
     },
   });

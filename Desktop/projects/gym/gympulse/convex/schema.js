@@ -311,6 +311,8 @@ subscriptions: defineTable({
         customerPhone: v.string(),
         customerEmail: v.string(),
 
+        bookingGroupId: v.optional(v.string()),
+
         memorialId: v.optional(v.id("memorials")),
 
         requestedDate: v.string(), 
@@ -340,5 +342,6 @@ subscriptions: defineTable({
       }).index("by_funeralHome", ["funeralHomeId"])
       .index("by_funeralHome_status", ["funeralHomeId", "status"])
       .index("by_customer", ["customerUserId"])
-      .index("by_memorial", ["memorialId"]),
+      .index("by_memorial", ["memorialId"])
+      .index("by_bookingGroupId", ["bookingGroupId"]),
 });

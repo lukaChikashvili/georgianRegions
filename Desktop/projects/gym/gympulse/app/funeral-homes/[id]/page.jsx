@@ -1,19 +1,38 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 import { api } from "@/convex/_generated/api";
 import Link from "next/link";
 import {
   Building2, MapPin, Phone, Mail, Globe, Star,
-  ArrowLeft, Briefcase, Image as ImageIcon, ShieldCheck
+  ArrowLeft, Briefcase, Image as ImageIcon, ShieldCheck, Check, ShoppingBag
 } from "lucide-react";
+import MultiBookingModal from "@/components/MultiBookingModal";
 
 export default function FuneralHomeDetail() {
   const params = useParams();
   const id = params.id;
 
   const fh = useQuery(api.funeralHomes.getFuneralHomeById, { id });
+  const [selectedServices, setSelectedServices] = useState([]); 
+  const [showBooking, setShowBooking] = useState(false);
+
+  const toggleService = (service) => {
+    setSelectedServices((prev) => {
+      const exists = prev.some((s) => s.name === service.name);
+      if (exists) return prev.filter((s) => s.name !== service.name);
+      return [...prev, service];
+    });
+  };
+
+  const isSelected = (service) => selectedServices.some((s) => s.name === service.name);
+
+  const totalPrice = useMemo(
+    () => selectedServices.reduce((sum, s) => sum + (s.price || 0), 0),
+    [selectedServices]
+  );
 
   if (fh === undefined) {
     return (
@@ -36,9 +55,8 @@ export default function FuneralHomeDetail() {
   }
 
   return (
-    <div className="min-h-screen mt-16" style={{ background: '#0A0A0A' }}>
+    <div className="min-h-screen mt-16 pb-24" style={{ background: '#0A0A0A' }}>
 
-     
       <div className="relative h-64 sm:h-80 overflow-hidden">
         {fh.coverUrl ? (
           <img src={fh.coverUrl} alt={fh.name} className="w-full h-full object-cover" />
@@ -49,7 +67,6 @@ export default function FuneralHomeDetail() {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent" />
 
-        
         <Link
           href="/funeral-homes"
           className="absolute top-6 left-6 flex items-center gap-1.5 px-3 py-2 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 text-gray-300 hover:text-[#D4AF37] text-xs transition-colors"
@@ -60,9 +77,7 @@ export default function FuneralHomeDetail() {
 
       <div className="max-w-5xl mx-auto px-6">
 
-    
         <div className="relative -mt-16 mb-10 flex flex-col sm:flex-row sm:items-end gap-5">
-        
           <div className="w-28 h-28 rounded-2xl border-4 border-[#0A0A0A] overflow-hidden bg-[#111114] shrink-0 shadow-2xl">
             {fh.logoUrl ? (
               <img src={fh.logoUrl} alt="logo" className="w-full h-full object-cover" />
@@ -77,7 +92,7 @@ export default function FuneralHomeDetail() {
             <div className="flex items-center gap-2 mb-1.5">
               <h1 className="text-3xl font-serif italic text-[#FFF5D6]">{fh.name}</h1>
               {fh.status === "active" && (
-               <ShieldCheck className="w-5 h-5 text-[#D4AF37]" title="ვერიფიცირებული" />
+                <ShieldCheck className="w-5 h-5 text-[#D4AF37]" title="ვერიფიცირებული" />
               )}
             </div>
             <div className="flex items-center gap-2 text-gray-500 text-sm">
@@ -96,72 +111,98 @@ export default function FuneralHomeDetail() {
             </div>
           </div>
 
-          
           <div className="flex gap-2 pb-1">
-            <a
-              href={`tel:${fh.phone}`}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium hover:brightness-110 transition-all"
-            >
-              <Phone className="w-3.5 h-3.5" /> დარეკვა
-            </a>
-            <a
-              href={`mailto:${fh.email}`}
-              className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 transition-all"
-              title={fh.email}
-            >
-              <Mail className="w-4 h-4" />
-            </a>
-            {fh.website && (
-              <a
-                href={fh.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 transition-all"
-              >
-                <Globe className="w-4 h-4" />
-              </a>
-            )}
-          </div>
+  <a
+    href={`tel:${fh.phone}`}
+    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium hover:brightness-110 transition-all"
+  >
+    <Phone className="w-3.5 h-3.5" />
+    დარეკვა
+  </a>
+
+  <a
+    href={`mailto:${fh.email}`}
+    className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 transition-all"
+    title={fh.email}
+  >
+    <Mail className="w-4 h-4" />
+  </a>
+
+  {fh.website && (
+    <a
+      href={fh.website}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/30 transition-all"
+    >
+      <Globe className="w-4 h-4" />
+    </a>
+  )}
+</div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 pb-20">
 
           <div className="lg:col-span-2 space-y-10">
 
-            
             <div>
               <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-4">ჩვენ შესახებ</h2>
               <p className="text-gray-400 text-sm leading-relaxed whitespace-pre-line">{fh.description}</p>
             </div>
 
-           
             <div>
-              <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
-                <Briefcase className="w-3.5 h-3.5" /> სერვისები
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest flex items-center gap-2">
+                  <Briefcase className="w-3.5 h-3.5" /> სერვისები
+                </h2>
+                {selectedServices.length > 0 && (
+                  <span className="text-xs text-gray-500">აირჩიეთ ერთი ან მეტი სერვისი</span>
+                )}
+              </div>
 
               {fh.services?.length > 0 ? (
                 <div className="space-y-3">
-                  {fh.services.map((s, i) => (
-                    <div key={i} className="p-5 rounded-xl border border-white/5 bg-white/[0.02] flex items-start justify-between gap-4">
-                      <div>
-                        <h3 className="text-[#FFF5D6]/90 text-sm font-medium mb-1.5">{s.name}</h3>
-                        <p className="text-gray-500 text-xs leading-relaxed">{s.description}</p>
-                      </div>
-                      {s.price !== undefined && (
-                        <span className="shrink-0 px-3 py-1.5 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/20 text-[#D4AF37] text-sm font-medium whitespace-nowrap">
-                          {s.price} ₾
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                  {fh.services.map((s, i) => {
+                    const selected = isSelected(s);
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => toggleService(s)}
+                        className={`w-full text-left p-5 rounded-xl border flex items-start justify-between gap-4 transition-all ${
+                          selected
+                            ? "border-[#D4AF37]/50 bg-[#D4AF37]/[0.06]"
+                            : "border-white/5 bg-white/[0.02] hover:border-white/10"
+                        }`}
+                      >
+                        <div className="flex items-start gap-3 flex-1">
+                          <div
+                            className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition-all ${
+                              selected
+                                ? "bg-[#D4AF37] border-[#D4AF37]"
+                                : "border-white/20"
+                            }`}
+                          >
+                            {selected && <Check className="w-3.5 h-3.5 text-black" />}
+                          </div>
+                          <div>
+                            <h3 className="text-[#FFF5D6]/90 text-sm font-medium mb-1.5">{s.name}</h3>
+                            <p className="text-gray-500 text-xs leading-relaxed">{s.description}</p>
+                          </div>
+                        </div>
+                        {s.price !== undefined && (
+                          <span className="shrink-0 px-3 py-1.5 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/20 text-[#D4AF37] text-sm font-medium whitespace-nowrap">
+                            {s.price} ₾
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-gray-600 text-sm">სერვისები არ არის დამატებული</p>
               )}
             </div>
 
-          
             {fh.galleryUrls?.length > 0 && (
               <div>
                 <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-4 flex items-center gap-2">
@@ -178,7 +219,6 @@ export default function FuneralHomeDetail() {
             )}
           </div>
 
-     
           <div>
             <div className="sticky top-24 p-6 rounded-2xl border border-[#D4AF37]/10" style={{ background: 'rgba(255,255,255,0.02)' }}>
               <h3 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-5">საკონტაქტო ინფორმაცია</h3>
@@ -217,15 +257,51 @@ export default function FuneralHomeDetail() {
               </div>
 
               <a
-                href={`tel:${fh.phone}`}
-                className="w-full mt-6 flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium hover:brightness-110 transition-all"
-              >
-                <Phone className="w-4 h-4" /> ახლავე დარეკვა
-              </a>
+  href={`tel:${fh.phone}`}
+  className="w-full mt-6 flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium hover:brightness-110 transition-all"
+>
+  <Phone className="w-4 h-4" />
+  ახლავე დარეკვა
+</a>
             </div>
           </div>
         </div>
       </div>
+
+      {selectedServices.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#D4AF37]/15 backdrop-blur-md" style={{ background: 'rgba(10,10,10,0.95)' }}>
+          <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center shrink-0">
+                <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
+              </div>
+              <div>
+                <p className="text-[#FFF5D6]/90 text-sm font-medium">
+                  {selectedServices.length} სერვისი არჩეულია
+                </p>
+                <p className="text-gray-500 text-xs">{totalPrice} ₾ სავარაუდო ჯამი</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowBooking(true)}
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium hover:brightness-110 transition-all whitespace-nowrap"
+            >
+              გაგრძელება
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showBooking && (
+        <MultiBookingModal
+          funeralHomeId={fh._id}
+          services={selectedServices}
+          onClose={() => setShowBooking(false)}
+          onSuccess={() => {
+            setSelectedServices([]);
+          }}
+        />
+      )}
     </div>
   );
 }
