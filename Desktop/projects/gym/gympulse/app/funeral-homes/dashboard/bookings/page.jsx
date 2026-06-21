@@ -45,12 +45,21 @@ function BookingCard({ booking, onConfirm, onDecline, onComplete, actingId }) {
   return (
     <div className="p-5 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.03] transition-colors">
       <div className="flex items-start justify-between gap-4 mb-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-[#FFF5D6]/90 text-sm font-medium">{booking.customerName}</h3>
-            <StatusBadge status={booking.status} />
+        <div className="flex items-start gap-3">
+          {booking.selectedImageUrl && (
+            <img
+              src={booking.selectedImageUrl}
+              alt=""
+              className="w-12 h-12 rounded-lg object-cover border border-white/10 shrink-0"
+            />
+          )}
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-[#FFF5D6]/90 text-sm font-medium">{booking.customerName}</h3>
+              <StatusBadge status={booking.status} />
+            </div>
+            <p className="text-gray-500 text-xs">{booking.serviceName}</p>
           </div>
-          <p className="text-gray-500 text-xs">{booking.serviceName}</p>
         </div>
         <div className="text-right shrink-0">
           {booking.servicePrice !== undefined && (
@@ -61,10 +70,10 @@ function BookingCard({ booking, onConfirm, onDecline, onComplete, actingId }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-4 text-xs text-gray-500">
-        <a href={`tel:${booking.customerPhone}`} className="flex items-center gap-1.5 hover:text-[#D4AF37] transition-colors">
+        <a href={`tel:${booking.customerPhone}`} className="flex items-center gap-1.5 hover:text-[#c1a362] transition-colors">
           <Phone className="w-3.5 h-3.5" /> {booking.customerPhone}
         </a>
-        <a href={`mailto:${booking.customerEmail}`} className="flex items-center gap-1.5 hover:text-[#D4AF37] transition-colors">
+        <a href={`mailto:${booking.customerEmail}`} className="flex items-center gap-1.5 hover:text-[#c1a362] transition-colors">
           <Mail className="w-3.5 h-3.5" /> {booking.customerEmail}
         </a>
         <span className="flex items-center gap-1.5">
@@ -105,7 +114,7 @@ function BookingCard({ booking, onConfirm, onDecline, onComplete, actingId }) {
         <button
           onClick={() => onComplete(booking._id)}
           disabled={isActing}
-          className="text-xs text-gray-500 hover:text-[#D4AF37] transition-colors"
+          className="text-xs text-gray-500 hover:text-[#c1a362] transition-colors"
         >
           მონიშნე როგორც დასრულებული
         </button>
@@ -119,7 +128,7 @@ function StatCard({ icon: Icon, label, value, sub, trend }) {
     <div className="p-5 rounded-xl border border-white/5 bg-white/[0.02]">
       <div className="flex items-center justify-between mb-3">
         <div className="w-9 h-9 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center">
-          <Icon className="w-4 h-4 text-[#D4AF37]" />
+          <Icon className="w-4 h-4 text-[#c1a362]" />
         </div>
         {trend !== undefined && (
           <span className={`flex items-center gap-0.5 text-[11px] ${trend >= 0 ? "text-green-400" : "text-red-400"}`}>
@@ -151,7 +160,7 @@ function RevenueChart({ byMonth }) {
 
   return (
     <div className="p-6 rounded-2xl border border-white/5 bg-white/[0.02]">
-      <h3 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-6">შემოსავალი თვეების მიხედვით</h3>
+      <h3 className="text-[#c1a362] text-xs uppercase tracking-widest mb-6">შემოსავალი თვეების მიხედვით</h3>
       <div className="flex items-end justify-between gap-3 h-40">
         {months.map((m) => (
           <div key={m.key} className="flex-1 flex flex-col items-center gap-2">
@@ -236,16 +245,16 @@ export default function BookingsRevenuePage() {
         <button
           onClick={() => setTab("bookings")}
           className={`button flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
-            tab === "bookings" ? "bg-[#D4AF37]/15 text-[#D4AF37]" : "text-gray-500 hover:text-gray-300"
+            tab === "bookings" ? "bg-[#D4AF37]/15 text-[#c1a362]" : "text-gray-500 hover:text-gray-300"
           }`}
         >
           <Inbox className="w-3.5 h-3.5" /> ჯავშნები
-          {pendingCount > 0 && <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />}
+          {pendingCount > 0 && <span className="w-1.5 h-1.5 rounded-full bg-[#c1a362]" />}
         </button>
         <button
           onClick={() => setTab("revenue")}
           className={`button flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${
-            tab === "revenue" ? "bg-[#D4AF37]/15 text-[#D4AF37]" : "text-gray-500 hover:text-gray-300"
+            tab === "revenue" ? "bg-[#D4AF37]/15 text-[#c1a362]" : "text-gray-500 hover:text-gray-300"
           }`}
         >
           <TrendingUp className="w-3.5 h-3.5" /> შემოსავალი
@@ -261,7 +270,7 @@ export default function BookingsRevenuePage() {
                 onClick={() => setFilter(f.key)}
                 className={`px-3.5 py-1.5 rounded-lg text-xs transition-all border ${
                   filter === f.key
-                    ? "bg-[#D4AF37]/15 border-[#D4AF37]/30 text-[#D4AF37]"
+                    ? "bg-[#D4AF37]/15 border-[#D4AF37]/30 text-[#c1a362]"
                     : "border-white/10 text-gray-500 hover:text-gray-300"
                 }`}
               >
@@ -272,7 +281,7 @@ export default function BookingsRevenuePage() {
 
           {bookings === undefined ? (
             <div className="py-20 flex justify-center">
-              <Loader2 className="w-6 h-6 text-[#D4AF37]/50 animate-spin" />
+              <Loader2 className="w-6 h-6 text-[#c1a362]/50 animate-spin" />
             </div>
           ) : bookings.length > 0 ? (
             <div className="space-y-3">
@@ -299,7 +308,7 @@ export default function BookingsRevenuePage() {
       {tab === "revenue" && (
         stats === undefined ? (
           <div className="py-20 flex justify-center">
-            <Loader2 className="w-6 h-6 text-[#D4AF37]/50 animate-spin" />
+            <Loader2 className="w-6 h-6 text-[#c1a362]/50 animate-spin" />
           </div>
         ) : (
           <div className="space-y-6">
@@ -313,13 +322,13 @@ export default function BookingsRevenuePage() {
             <RevenueChart byMonth={stats.byMonth} />
 
             <div className="p-6 rounded-2xl border border-white/5 bg-white/[0.02]">
-              <h3 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-5">სერვისების მიხედვით</h3>
+              <h3 className="text-[#c1a362] text-xs uppercase tracking-widest mb-5">სერვისების მიხედვით</h3>
               <div className="space-y-3">
                 {Object.entries(stats.byService).length > 0 ? (
                   Object.entries(stats.byService).map(([name, amount]) => (
                     <div key={name} className="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0">
                       <span className="text-sm text-gray-400">{name}</span>
-                      <span className="text-sm text-[#D4AF37]">{amount} ₾</span>
+                      <span className="text-sm text-[#c1a362]">{amount} ₾</span>
                     </div>
                   ))
                 ) : (

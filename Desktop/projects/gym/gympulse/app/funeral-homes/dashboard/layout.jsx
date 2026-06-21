@@ -23,7 +23,7 @@ export default function DashboardLayout({ children }) {
   if (isLoading || (isAuthenticated && myFuneralHome === undefined)) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#0A0A0A' }}>
-        <Loader2 className="w-8 h-8 text-[#D4AF37]/50 animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#c1a362] animate-spin" />
       </div>
     );
   }
@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }) {
       <div className="min-h-screen flex items-center justify-center px-6" style={{ background: '#0A0A0A' }}>
         <div className="text-center max-w-md">
           <div className="w-16 h-16 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center mx-auto mb-6">
-            <Building2 className="w-8 h-8 text-[#D4AF37]" />
+            <Building2 className="w-8 h-8 text-[#c1a362]" />
           </div>
           <h1 className="text-2xl font-serif italic text-[#FFF5D6] mb-3">საჭიროა ავტორიზაცია</h1>
           <SignInButton mode="modal">
@@ -51,7 +51,7 @@ export default function DashboardLayout({ children }) {
       <div className="min-h-screen flex items-center justify-center px-6" style={{ background: '#0A0A0A' }}>
         <div className="text-center max-w-md">
           <div className="w-16 h-16 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center mx-auto mb-6">
-            <Building2 className="w-8 h-8 text-[#D4AF37]" />
+            <Building2 className="w-8 h-8 text-[#c1a362]" />
           </div>
           <h1 className="text-2xl font-serif italic text-[#FFF5D6] mb-3">თქვენ არ გაქვთ რეგისტრირებული სამგლოვიარო სახლი</h1>
           <p className="text-gray-500 text-sm mb-8">დაარეგისტრირეთ თქვენი სამგლოვიარო სახლი და დაიწყეთ მუშაობა</p>
@@ -76,7 +76,7 @@ export default function DashboardLayout({ children }) {
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <p className="text-[#D4AF37] text-xs uppercase tracking-widest mb-2">მართვის პანელი</p>
+            <p className="text-[#c1a362] text-xs uppercase tracking-widest mb-2">მართვის პანელი</p>
             <h1 className="text-2xl font-serif italic text-[#FFF5D6]">{myFuneralHome.name}</h1>
           </div>
           <Link
@@ -88,7 +88,7 @@ export default function DashboardLayout({ children }) {
           </Link>
         </div>
 
-        {/* Tab nav */}
+       
         <div className="flex items-center gap-2 mb-8 p-1 rounded-xl border border-white/5 bg-white/[0.02] w-fit">
           {TABS.map(tab => {
             const active = tab.exact ? pathname === tab.href : pathname.startsWith(tab.href);
@@ -107,7 +107,7 @@ export default function DashboardLayout({ children }) {
           })}
         </div>
 
-        {/* Subscription banner */}
+      
         <div className={`mb-8 p-4 rounded-xl border flex items-center gap-3 ${
           myFuneralHome.subscriptionStatus === "trial"
             ? "bg-[#D4AF37]/5 border-[#D4AF37]/15"
@@ -129,7 +129,7 @@ export default function DashboardLayout({ children }) {
             )}
           </div>
           {myFuneralHome.subscriptionStatus !== "active" && (
-            <button className="px-4 py-2 rounded-lg bg-[#D4AF37]/15 text-[#D4AF37] text-xs font-medium hover:bg-[#D4AF37]/25 transition-colors shrink-0">
+            <button className="px-4 py-2 rounded-lg bg-[#D4AF37]/15 text-[#c1a362] text-xs font-medium hover:bg-[#D4AF37]/25 transition-colors shrink-0">
               გამოწერის შეძენა
             </button>
           )}

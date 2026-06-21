@@ -126,7 +126,7 @@ const Hero = () => {
               </p>
 
               <Link href={slide.ctaLink}>
-                <button className="button2">{slide.ctaText}</button>
+                <button className="button">{slide.ctaText}</button>
               </Link>
             </div>
           ))}

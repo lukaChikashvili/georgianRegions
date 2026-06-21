@@ -99,7 +99,7 @@ const Header = () => {
                   key={link.id}
                   href={link.link}
                   onClick={() => setIsMoreOpen(false)}
-                  className="block px-3 py-2 rounded-lg text-sm text-gray-400 hover:text-[#C1A362] hover:bg-white/[0.04] transition-colors"
+                  className="block px-3 py-2 rounded-lg text-sm text-gray-400 hover:text-[#c1a362] hover:bg-white/[0.04] transition-colors"
                 >
                   {link.title}
                 </Link>

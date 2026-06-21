@@ -1,4 +1,3 @@
-// app/funeral-homes/dashboard/page.js
 "use client";
 
 import { useState, useRef } from "react";
@@ -8,6 +7,7 @@ import {
   Building2, Phone, Mail, Globe, MapPin, Plus, Trash2,
   Upload, Save, CheckCircle, Image as ImageIcon, Loader2, AlertCircle
 } from "lucide-react";
+import ServiceImageUploader from "@/components/ServiceImageUploader";
 
 const GEORGIAN_CITIES = [
   "თბილისი", "ბათუმი", "ქუთაისი", "რუსთავი", "გორი",
@@ -34,6 +34,7 @@ export default function FuneralHomeProfilePage() {
   const coverInputRef = useRef(null);
 
   const [form, setForm] = useState(null);
+  // each service: { name, description, price, images: [{ storageId, url }] }
   const [services, setServices] = useState(null);
 
   if (myFuneralHome && form === null) {
@@ -46,7 +47,18 @@ export default function FuneralHomeProfilePage() {
       email: myFuneralHome.email,
       website: myFuneralHome.website || "",
     });
-    setServices(myFuneralHome.services || []);
+    setServices(
+      (myFuneralHome.services || []).map((s) => ({
+        name: s.name,
+        description: s.description,
+        price: s.price,
+        // map existing storage IDs + resolved URLs into the uploader's expected shape
+        images: (s.images || []).map((storageId, idx) => ({
+          storageId,
+          url: s.imageUrls?.[idx],
+        })),
+      }))
+    );
   }
 
   const updateForm = (key, value) => {
@@ -55,7 +67,7 @@ export default function FuneralHomeProfilePage() {
   };
 
   const addService = () => {
-    setServices(prev => [...prev, { name: "", description: "", price: undefined }]);
+    setServices(prev => [...prev, { name: "", description: "", price: undefined, images: [] }]);
     setSaved(false);
   };
 
@@ -69,6 +81,11 @@ export default function FuneralHomeProfilePage() {
     setSaved(false);
   };
 
+  const updateServiceImages = (i, images) => {
+    setServices(prev => prev.map((s, idx) => idx === i ? { ...s, images } : s));
+    setSaved(false);
+  };
+
   const handleSave = async () => {
     setSaving(true);
     setError(null);
@@ -77,7 +94,14 @@ export default function FuneralHomeProfilePage() {
         id: myFuneralHome._id,
         ...form,
         website: form.website || undefined,
-        services: services.filter(s => s.name && s.description),
+        services: services
+          .filter(s => s.name && s.description)
+          .map(s => ({
+            name: s.name,
+            description: s.description,
+            price: s.price,
+            images: s.images?.length ? s.images.map(img => img.storageId) : undefined,
+          })),
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
@@ -112,7 +136,7 @@ export default function FuneralHomeProfilePage() {
     }
   };
 
-  if (!myFuneralHome || !form) return null; 
+  if (!myFuneralHome || !form) return null;
 
   return (
     <>
@@ -122,7 +146,6 @@ export default function FuneralHomeProfilePage() {
         </div>
       )}
 
-  
       <div className="mb-8 p-6 rounded-2xl border border-white/5" style={{ background: 'rgba(255,255,255,0.02)' }}>
         <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-5 flex items-center gap-2">
           <ImageIcon className="w-3.5 h-3.5" /> ფოტოები
@@ -150,7 +173,7 @@ export default function FuneralHomeProfilePage() {
               onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0], "logo")} />
           </div>
           <div>
-            <label className="block text-xs text-gray-400 mb-2">სარეკლამო ფოტო</label>
+            <label className="block text-xs text-gray-400 mb-2">სარეკლამო ბანერი</label>
             <button
               onClick={() => coverInputRef.current?.click()}
               disabled={uploadingCover}
@@ -173,7 +196,6 @@ export default function FuneralHomeProfilePage() {
         </div>
       </div>
 
-    
       <div className="mb-8 p-6 rounded-2xl border border-white/5 space-y-5" style={{ background: 'rgba(255,255,255,0.02)' }}>
         <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-1 flex items-center gap-2">
           <Building2 className="w-3.5 h-3.5" /> ძირითადი ინფორმაცია
@@ -235,7 +257,6 @@ export default function FuneralHomeProfilePage() {
         </div>
       </div>
 
-     
       <div className="mb-8 p-6 rounded-2xl border border-white/5" style={{ background: 'rgba(255,255,255,0.02)' }}>
         <h2 className="text-[#D4AF37] text-xs uppercase tracking-widest mb-5">სერვისები</h2>
         <div className="space-y-4">
@@ -253,6 +274,16 @@ export default function FuneralHomeProfilePage() {
                 className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-[#D4AF37]/40 transition-colors resize-none" />
               <input type="number" value={service.price ?? ""} onChange={e => updateService(i, "price", e.target.value ? Number(e.target.value) : undefined)} placeholder="ფასი (₾)"
                 className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-[#D4AF37]/40 transition-colors" />
+
+              <div>
+                <label className="block text-xs text-gray-400 mb-2">
+                  ფოტოები <span className="text-gray-600">(მაგ: კუბოს ვარიანტები)</span>
+                </label>
+                <ServiceImageUploader
+                  images={service.images || []}
+                  onChange={(images) => updateServiceImages(i, images)}
+                />
+              </div>
             </div>
           ))}
         </div>
@@ -262,10 +293,9 @@ export default function FuneralHomeProfilePage() {
         </button>
       </div>
 
-      
-      <div className="sticky bottom-6 flex justify-end">
+      <div className="sticky bottom-6 flex justify-end ">
         <button onClick={handleSave} disabled={saving}
-          className="button2 flex items-center gap-2 px-8 py-3  text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all disabled:opacity-50 shadow-2xl">
+          className="button3 flex items-center  gap-2 px-8 py-3  text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all disabled:opacity-50 shadow-2xl">
           {saving ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> ინახება...</>
           ) : saved ? (

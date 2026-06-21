@@ -274,6 +274,7 @@ subscriptions: defineTable({
           name: v.string(),
           description: v.string(),
           price: v.optional(v.number()),
+          images: v.optional(v.array(v.id("_storage"))),
         })),
         
        
@@ -310,7 +311,8 @@ subscriptions: defineTable({
         customerName: v.string(),
         customerPhone: v.string(),
         customerEmail: v.string(),
-
+        selectedImageUrl: v.optional(v.string()),
+    
         bookingGroupId: v.optional(v.string()),
 
         memorialId: v.optional(v.id("memorials")),

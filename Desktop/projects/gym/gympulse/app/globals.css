@@ -1,9 +1,9 @@
-@import url("//cdn.web-fonts.ge/fonts/bpg-algeti-compact/css/bpg-algeti-compact.min.css");
+
 @import "tailwindcss";
 
 
 body {
-  font-family: "BPG Algeti Compact", sans-serif;
+ 
   background-color: #0D0D0D;
   
 }
@@ -58,7 +58,7 @@ body {
   }
   
   .button:hover::before {
-    scale: 3;
+    scale: 5;
   }
   
   .button:hover {

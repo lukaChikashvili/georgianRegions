@@ -41,6 +41,7 @@ export default function MultiBookingModal({ funeralHomeId, services, onClose, on
           name: s.name,
           description: s.description,
           price: s.price,
+          selectedImageUrl: s.selectedImageUrl, 
         })),
         customerName: form.customerName,
         customerPhone: form.customerPhone,
@@ -91,7 +92,7 @@ export default function MultiBookingModal({ funeralHomeId, services, onClose, on
           <div className="py-6 text-center">
             <p className="text-gray-400 text-sm mb-5">ჯავშნისთვის გთხოვთ შეხვიდეთ სისტემაში</p>
             <SignInButton mode="modal">
-              <button className="button px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium">
+              <button className="button px-6 py-2.5 rounded-xl  text-black text-sm font-medium">
                 შესვლა
               </button>
             </SignInButton>
@@ -99,22 +100,29 @@ export default function MultiBookingModal({ funeralHomeId, services, onClose, on
         ) : (
           <div className="space-y-4">
          
-            <div className="rounded-xl border border-white/5 bg-white/[0.02] divide-y divide-white/5">
-              {services.map((s, i) => (
-                <div key={i} className="px-4 py-3 flex items-center justify-between">
-                  <span className="text-gray-300 text-sm">{s.name}</span>
-                  {s.price !== undefined && (
-                    <span className="text-[#D4AF37] text-sm">{s.price} ₾</span>
-                  )}
-                </div>
-              ))}
-              {totalPrice > 0 && (
-                <div className="px-4 py-3 flex items-center justify-between bg-[#D4AF37]/5">
-                  <span className="text-[#FFF5D6]/90 text-sm font-medium">ჯამი</span>
-                  <span className="text-[#D4AF37] text-sm font-medium">{totalPrice} ₾</span>
-                </div>
-              )}
-            </div>
+         <div className="rounded-xl border border-white/5 bg-white/[0.02] divide-y divide-white/5">
+  {services.map((s, i) => (
+    <div key={i} className="px-4 py-3 flex items-center gap-3">
+      {s.selectedImageUrl && (
+        <img
+          src={s.selectedImageUrl}
+          alt=""
+          className="w-10 h-10 rounded-lg object-cover border border-white/10 shrink-0"
+        />
+      )}
+      <span className="text-gray-300 text-sm flex-1">{s.name}</span>
+      {s.price !== undefined && (
+        <span className="text-[#D4AF37] text-sm">{s.price} ₾</span>
+      )}
+    </div>
+  ))}
+  {totalPrice > 0 && (
+    <div className="px-4 py-3 flex items-center justify-between bg-[#D4AF37]/5">
+      <span className="text-[#FFF5D6]/90 text-sm font-medium">ჯამი</span>
+      <span className="text-[#D4AF37] text-sm font-medium">{totalPrice} ₾</span>
+    </div>
+  )}
+</div>
 
             {error && (
               <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">

@@ -43,7 +43,7 @@ export default function FuneralHomesDirectory() {
         
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
           <div>
-            <p className="text-[#D4AF37] text-xs uppercase tracking-widest mb-3">სარიტუალო მომსახურება</p>
+            <p className="text-[#c1a362] text-xs uppercase tracking-widest mb-3">სარიტუალო მომსახურება</p>
             <h1 className="text-3xl font-serif italic text-[#FFF5D6]">დამკრძალავი ბიუროები</h1>
             <p className="text-gray-500 text-sm mt-2">
               {funeralHomes === undefined ? "იტვირთება..." : `${funeralHomes.length} დამკრძალავი ბიურო`}
@@ -54,9 +54,9 @@ export default function FuneralHomesDirectory() {
           {!myFuneralHome ? (
             <Link
               href="/funeral-homes/create"
-              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all shrink-0"
+              className="button3 flex items-center gap-2 px-5 py-2.5  text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all shrink-0"
             >
-              <Plus className="w-4 h-4" /> სამგლოვიარო სახლის დამატება
+              <Plus className="w-4 h-4" /> დამკრძალავი ბიუროს დამატება
             </Link>
           ) : (
             <Link
@@ -89,7 +89,7 @@ export default function FuneralHomesDirectory() {
                 onClick={() => setSelectedCity(city === "ყველა" ? "" : city)}
                 className={`px-3 py-2 rounded-lg text-xs whitespace-nowrap transition-all border text-white font-medium ${
                   (city === "ყველა" && !selectedCity) || selectedCity === city
-                    ? "bg-[#D4AF37]/15 border-[#D4AF37]/30 text-[#D4AF37]"
+                    ? "bg-[#c1a362]/15 border-[#c1a362]/20 text-[#c1a362]"
                     : "border-white/5 text-gray-500 hover:text-gray-300 hover:border-white/10"
                 }`}
               >
@@ -119,15 +119,15 @@ export default function FuneralHomesDirectory() {
         {filtered?.length === 0 && (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <div className="w-16 h-16 rounded-2xl bg-[#D4AF37]/5 border border-[#D4AF37]/10 flex items-center justify-center mb-5">
-              <Building2 className="w-7 h-7 text-[#D4AF37]/30" />
+              <Building2 className="w-7 h-7 text-[#c1a362]/30" />
             </div>
-            <h3 className="text-[#FFF5D6]/60 font-serif italic text-lg mb-2">სამგლოვიარო სახლი ვერ მოიძებნა</h3>
+            <h3 className="text-[#FFF5D6]/60 font-serif italic text-lg mb-2">დამკრძალავი ბიურო ვერ მოიძებნა</h3>
             <p className="text-gray-600 text-sm mb-6">სცადეთ სხვა ფილტრი ან დაამატეთ თქვენი</p>
             <Link
               href="/funeral-homes/create"
-              className="button flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all"
+              className="button3 flex items-center gap-2 px-5 py-2.5   text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all"
             >
-              <Plus className="w-4 h-4" /> სამგლოვიარო სახლის დამატება
+              <Plus className="w-4 h-4" /> დამკრძალავი ბიუროს დამატება
             </Link>
           </div>
         )}
@@ -166,7 +166,7 @@ export default function FuneralHomesDirectory() {
                   
                   {fh.rating && (
                     <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-sm">
-                      <Star className="w-3 h-3 text-[#D4AF37] fill-[#D4AF37]" />
+                      <Star className="w-3 h-3 text-[#c1a362] fill-[#c1a362]" />
                       <span className="text-xs text-white">{fh.rating.toFixed(1)}</span>
                     </div>
                   )}
@@ -218,7 +218,7 @@ export default function FuneralHomesDirectory() {
                       <span
                         href={`mailto:${fh.email}`}
                         onClick={e => e.stopPropagation()}
-                        className="text-gray-600 hover:text-[#D4AF37] transition-colors"
+                        className="text-gray-600 hover:text-[#c1a362] transition-colors"
                         title={fh.email}
                       >
                         <Mail className="w-3.5 h-3.5" />
@@ -229,13 +229,13 @@ export default function FuneralHomesDirectory() {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={e => e.stopPropagation()}
-                          className="text-gray-600 hover:text-[#D4AF37] transition-colors"
+                          className="text-gray-600 hover:text-[#c1a362] transition-colors"
                         >
                           <Globe className="w-3.5 h-3.5" />
                         </span>
                       )}
                     </div>
-                    <span className="text-[#D4AF37]/40 group-hover:text-[#D4AF37] transition-colors">
+                    <span className="text-[#D4AF37]/40 group-hover:text-[#c1a362] transition-colors">
                       <ChevronRight className="w-4 h-4" />
                     </span>
                   </div>
@@ -248,12 +248,12 @@ export default function FuneralHomesDirectory() {
      
         {filtered && filtered.length > 0 && !myFuneralHome && (
           <div className="mt-12 p-8 rounded-2xl border border-[#D4AF37]/10 text-center" style={{ background: 'rgba(212,175,55,0.03)' }}>
-            <Briefcase className="w-8 h-8 text-[#D4AF37]/40 mx-auto mb-3" />
-            <h3 className="text-[#FFF5D6] font-serif italic text-lg mb-2">გაქვთ სამგლოვიარო სახლი?</h3>
+            <Briefcase className="w-8 h-8 text-[#c1a362] mx-auto mb-3" />
+            <h3 className="text-[#FFF5D6] font-serif italic text-lg mb-2">გაქვთ დამკრძალავი ბიურო?</h3>
             <p className="text-gray-500 text-sm mb-5">დაარეგისტრირეთ და მიიღეთ ახალი კლიენტები GoldenMemorial-ის მეშვეობით</p>
             <Link
               href="/funeral-homes/create"
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all"
+              className=" button3 inline-flex items-center gap-2 px-6 py-2.5  text-black text-sm font-medium rounded-xl hover:brightness-110 transition-all"
             >
               <Plus className="w-4 h-4" /> დარეგისტრირდი — 30 დღე უფასოდ
             </Link>
