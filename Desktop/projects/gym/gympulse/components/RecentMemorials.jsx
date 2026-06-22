@@ -87,7 +87,7 @@ export const RecentMemorials = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-24 bg-[#0D0D0F] relative border-t border-white/5 selection:bg-[#D4AF37] selection:text-black"
+      className="py-24 bg-[#0D0D0F] relative border-t border-white/5 selection:bg-[#c1a362] selection:text-black"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
 
@@ -96,7 +96,7 @@ export const RecentMemorials = () => {
           <div>
             <span
               ref={taglineRef}
-              className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium font-sans"
+              className="text-xs tracking-widest uppercase text-[#c1a362]/90 font-medium font-sans"
             >
               მემორიალები
             </span>
@@ -110,7 +110,7 @@ export const RecentMemorials = () => {
           <Link
             ref={linkRef}
             href="/discover"
-            className="mt-4 sm:mt-0 text-xs tracking-widest uppercase text-[#D4AF37] border-b border-[#D4AF37]/30 pb-1 hover:border-[#D4AF37] transition-all flex items-center gap-1 group w-fit"
+            className="mt-4 sm:mt-0 text-xs tracking-widest uppercase text-[#c1a362] border-b border-[#D4AF37]/30 pb-1 hover:border-[#D4AF37] transition-all flex items-center gap-1 group w-fit"
           >
             ყველას ნახვა <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
           </Link>
@@ -137,7 +137,7 @@ export const RecentMemorials = () => {
                   href={`/discover/${memorial.urlSlug}`}
                   key={memorial._id}
                   ref={(el) => (cardsRef.current[index] = el)}
-                  className="group block relative overflow-hidden rounded-2xl bg-[#121214]/30 border border-white/5 transition-all duration-500 hover:border-[#D4AF37]/20 hover:-translate-y-1"
+                  className="group block relative overflow-hidden rounded-2xl bg-[#121214]/30 border border-white/5 transition-all duration-500 hover:border-[#c1a362]/20 hover:-translate-y-1"
                 >
                   <div className="aspect-[4/5] w-full overflow-hidden relative bg-[#0D0D0F]">
                     <MemorialPortrait
@@ -149,7 +149,7 @@ export const RecentMemorials = () => {
                   </div>
 
                   <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                    <div className="flex items-center gap-1.5 text-xs text-[#D4AF37]/80 font-sans tracking-wider mb-2">
+                    <div className="flex items-center gap-1.5 text-xs text-[#c1a362]/80 font-sans tracking-wider mb-2">
                       <Calendar size={12} className="opacity-70" />
                       <span>{birthYear} — {deathYear}</span>
                     </div>

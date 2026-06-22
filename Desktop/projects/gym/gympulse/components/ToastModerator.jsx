@@ -36,8 +36,8 @@ export default function ToastModerator({ memorialId }) {
     <div className="space-y-8">
       
       <div>
-        <h3 className="text-[#D4AF37] font-serif text-xl mb-4">
-          მოსამტკიცებელი სადღეგრძელოები ({pendingToasts.length})
+        <h3 className="text-[#c1a362] font-serif text-xl mb-4">
+          შემოსული სადღეგრძელოები ({pendingToasts.length})
         </h3>
         
         {pendingToasts.length === 0 ? (

@@ -66,7 +66,7 @@ export default function InvitationDisplay({ memorialId }) {
                       alert("გამოქვეყნება ვერ მოხერხდა.");
                     }
                   }}
-                  className="flex-1 py-2 text-xs bg-[#D4AF37] text-black font-bold rounded"
+                  className="flex-1 py-2 text-xs bg-[#c1a362] text-black font-bold rounded"
                 >
                   გამოქვეყნება
                 </button>

@@ -42,7 +42,7 @@ export const Pricing = ({ spotsLeft = 100 }) => {
     <section className="py-24 bg-[#0D0D0F] relative border-t border-white/5">
       <div className="max-w-5xl mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-20">
-          <span className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium font-sans">
+          <span className="text-xs tracking-widest uppercase text-[#c1a362]/90 font-medium font-sans">
             ტარიფები
           </span>
 
@@ -62,7 +62,7 @@ export const Pricing = ({ spotsLeft = 100 }) => {
               key={index}
               className={`relative rounded-2xl p-8 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 ${
                 plan.featured
-                  ? "bg-[#16130F] border border-[#D4AF37]/40 shadow-xl shadow-[#D4AF37]/10"
+                  ? "bg-[#16130F] border border-[#c1a362]/40 shadow-xl shadow-[#D4AF37]/10"
                   : "bg-[#121214]/40 border border-white/5"
               }`}
             >
@@ -89,7 +89,7 @@ export const Pricing = ({ spotsLeft = 100 }) => {
                 {plan.featured && (
                   <>
                     <div className="mt-2">
-                      <span className="text-xs tracking-widest uppercase text-[#D4AF37]/80">
+                      <span className="text-xs tracking-widest uppercase text-[#c1a362]/80">
                         ერთჯერადი გადახდა
                       </span>
                     </div>
@@ -99,7 +99,7 @@ export const Pricing = ({ spotsLeft = 100 }) => {
                     </p>
 
                     {discountActive && (
-                      <p className="text-xs text-[#D4AF37] mt-3 font-medium">
+                      <p className="text-xs text-[#c1a362] mt-3 font-medium">
                         პირველი {spotsLeft} მომხმარებლისთვის — შემდეგ 99 ₾
                       </p>
                     )}
@@ -113,7 +113,7 @@ export const Pricing = ({ spotsLeft = 100 }) => {
                     key={i}
                     className="flex items-start gap-3 text-sm text-gray-400 font-sans font-light"
                   >
-                    <Check className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                    <Check className="w-4 h-4 text-[#c1a362] shrink-0 mt-0.5" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -122,7 +122,7 @@ export const Pricing = ({ spotsLeft = 100 }) => {
               <button
                 className={`w-full py-3 rounded-xl font-semibold text-xs tracking-wider uppercase transition-all duration-300 ${
                   plan.featured
-                    ? "bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black hover:brightness-110"
+                    ? " bg-gradient-to-r from-[#c1a362] via-[#c1a362] to-[#c1a362] text-black hover:brightness-110"
                     : "bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white"
                 }`}
               >

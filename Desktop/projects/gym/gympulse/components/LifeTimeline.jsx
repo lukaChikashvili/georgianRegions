@@ -59,7 +59,7 @@ export default function LifeTimeline({ memorial, currentUserId, isPremium = fals
   };
 
   if (entries === undefined) {
-    return <p className="text-[#D4AF37]/50 text-sm">იტვირთება...</p>;
+    return <p className="text-[#c1a362]/50 text-sm">იტვირთება...</p>;
   }
 
   return (
@@ -68,7 +68,7 @@ export default function LifeTimeline({ memorial, currentUserId, isPremium = fals
         <p className="text-[#FFF5D6]/60 text-sm font-light tracking-wide">
           {entries.length === 0 ? "ჯერ არ არის მომენტები" : `${entries.length} მომენტი`}
           {!isPremium && (
-            <span className="ml-2 text-[#D4AF37]/40 text-xs">({entries.length}/2 უფასო)</span>
+            <span className="ml-2 text-[#c1a362]/40 text-xs">({entries.length}/2 უფასო)</span>
           )}
         </p>
 
@@ -77,18 +77,18 @@ export default function LifeTimeline({ memorial, currentUserId, isPremium = fals
           
             <button
               onClick={onUpgradeClick}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[#D4AF37]/20 bg-[#1A150F]/40 text-[#D4AF37]/50 hover:text-[#D4AF37] hover:border-[#D4AF37]/40 hover:bg-[#1A150F]/60 transition"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[#c1a362]/20 bg-[#1A150F]/40 text-[#c1a362]/50 hover:text-[#c1a362] hover:border-[#c1a362]/40 hover:bg-[#1A150F]/60 transition"
             >
               <Lock size={13} />
               მომენტის დამატება
-              <span className="ml-1 flex items-center gap-0.5 text-[10px] border border-[#D4AF37]/30 rounded-full px-1.5 py-0.5">
+              <span className="ml-1 flex items-center gap-0.5 text-[10px] border border-[#c1a362]/30 rounded-full px-1.5 py-0.5">
                 <Crown size={8} /> პრემიუმი
               </span>
             </button>
           ) : (
             <button
               onClick={() => setAdding(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-[#1a1208] rounded-lg text-sm font-medium hover:opacity-85 transition"
+              className="button flex items-center gap-2 px-4 py-2 bg-[#c1a362] text-[#1a1208] rounded-lg text-sm font-medium hover:opacity-85 transition"
             >
               + მომენტის დამატება
             </button>
@@ -97,7 +97,7 @@ export default function LifeTimeline({ memorial, currentUserId, isPremium = fals
       </div>
 
       {adding && isOwner && !limitReached && (
-        <div className="bg-black/30 border border-[#D4AF37]/30 rounded-xl p-5 space-y-3">
+        <div className="bg-black/30 border border-[#c1a362]/30 rounded-xl p-5 space-y-3">
           <div className="flex gap-3">
             <input
               type="text"
@@ -105,14 +105,14 @@ export default function LifeTimeline({ memorial, currentUserId, isPremium = fals
               placeholder="წელი"
               value={draft.year}
               onChange={(e) => setDraft((d) => ({ ...d, year: e.target.value }))}
-              className="w-20 bg-black/40 border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-[#D4AF37] placeholder-white/20 text-sm outline-none focus:border-[#D4AF37]/50"
+              className="w-20 bg-black/40 border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-[#c1a362] placeholder-white/20 text-sm outline-none focus:border-[#c1a362]/50"
             />
             <input
               type="text"
               placeholder="სათაური *"
               value={draft.title}
               onChange={(e) => setDraft((d) => ({ ...d, title: e.target.value }))}
-              className="flex-1 bg-black/40 border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-white placeholder-white/20 text-sm outline-none focus:border-[#D4AF37]/50"
+              className="flex-1 bg-black/40 border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-white placeholder-white/20 text-sm outline-none focus:border-[#c1a362]/50"
             />
           </div>
           <textarea
@@ -120,7 +120,7 @@ export default function LifeTimeline({ memorial, currentUserId, isPremium = fals
             value={draft.description}
             onChange={(e) => setDraft((d) => ({ ...d, description: e.target.value }))}
             rows={2}
-            className="w-full bg-black/40 border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-white/80 placeholder-white/20 text-sm outline-none resize-none focus:border-[#D4AF37]/50"
+            className="w-full bg-black/40 border border-[#D4AF37]/20 rounded-lg px-3 py-2 text-white/80 placeholder-white/20 text-sm outline-none resize-none focus:border-[#c1a362]/50"
           />
           <div className="flex flex-wrap gap-2">
             {CATEGORIES.map((c) => (
@@ -139,10 +139,10 @@ export default function LifeTimeline({ memorial, currentUserId, isPremium = fals
             ))}
           </div>
           <div className="flex gap-2 pt-1">
-            <button onClick={handleAdd} className="px-4 py-2 bg-[#D4AF37] text-black rounded-lg text-sm font-medium hover:opacity-85">
+            <button onClick={handleAdd} className="button -4 py-2 bg-[#c1a362] text-black rounded-lg text-sm font-medium hover:opacity-85">
               შენახვა
             </button>
-            <button onClick={() => setAdding(false)} className="px-4 py-2 text-white/40 text-sm hover:text-white/70">
+            <button onClick={() => setAdding(false)} className="button4 px-4 py-2 text-white/40 text-sm hover:text-white/70">
               გაუქმება
             </button>
           </div>
@@ -152,7 +152,7 @@ export default function LifeTimeline({ memorial, currentUserId, isPremium = fals
       {entries.length === 0 && !adding ? (
         <div className="text-center py-16 text-white/20 text-sm font-light">
           <div className="text-3xl mb-3 opacity-30">⧖</div>
-          <p className="font-serif text-base text-white/30 italic mb-1">ყოველი ცხოვრება ათასი მომენტს შეიცავს</p>
+          <p className="font-serif text-base text-white/30 italic mb-1">ყოველი ცხოვრება ათას მომენტს შეიცავს</p>
           <p>დაიწყეთ პირველი მოგონების დამატებით</p>
         </div>
       ) : (
@@ -181,10 +181,10 @@ export default function LifeTimeline({ memorial, currentUserId, isPremium = fals
                             value={getVal(entry, "year")}
                             onChange={(e) => handleFieldChange(entry._id, "year", e.target.value)}
                             onBlur={() => handleBlurSave(entry._id, "year")}
-                            className="w-16 bg-transparent text-[#D4AF37] font-serif text-lg border-b border-transparent focus:border-[#D4AF37]/40 outline-none"
+                            className="w-16 bg-transparent text-[#c1a362] font-serif text-lg border-b border-transparent focus:border-[#c1a362]/40 outline-none"
                           />
                         ) : (
-                          <span className="text-[#D4AF37] font-serif text-lg">{entry.year}</span>
+                          <span className="text-[#c1a362] font-serif text-lg">{entry.year}</span>
                         )}
                         <div className="text-[10px] uppercase tracking-widest mt-0.5" style={{ color: dotColor + "99" }}>
                           {cat}

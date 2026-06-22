@@ -88,12 +88,12 @@ export const AboutUs = () => {
            
             <div
               ref={dividerRef}
-              className="w-10 h-[1px] bg-gradient-to-r from-[#D4AF37] to-transparent mb-5"
+              className="w-10 h-[1px] bg-gradient-to-r from-[#c1a362] to-transparent mb-5"
             />
 
             <span
               ref={taglineRef}
-              className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium font-sans"
+              className="text-xs tracking-widest uppercase text-[#c1a362]/90 font-medium font-sans"
             >
               ჩვენი ფილოსოფია
             </span>
@@ -103,7 +103,7 @@ export const AboutUs = () => {
               className="text-3xl md:text-5xl font-light text-[#FFF5D6] font-serif leading-[1.3] mt-4"
             >
               მოგონებები, რომლებიც <br />
-              <span className="italic text-[#D4AF37]">არასოდეს</span> ქრებიან.
+              <span className="italic text-[#c1a362]">არასოდეს</span> ქრებიან.
             </h2>
           </div>
 

@@ -23,7 +23,7 @@ export const VirtualCemetery = () => {
             <div className="absolute inset-0 opacity-[0.02] bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]" />
             
             <div className="text-center space-y-4 z-10 p-6">
-              <div className="w-16 h-16 mx-auto rounded-full bg-[#1A150F] border border-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] animate-pulse">
+              <div className="w-16 h-16 mx-auto rounded-full bg-[#1A150F] border border-[#c1a362]/20 flex items-center justify-center text-[#c1a362] animate-pulse">
                 <Box size={24} />
               </div>
               <p className="font-serif text-lg text-[#FFF5D6] font-light">3D ინტერაქტიული გარემო</p>
@@ -35,7 +35,7 @@ export const VirtualCemetery = () => {
 
           
           <div className="lg:col-span-6 space-y-6">
-            <span className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium font-sans">ინოვაცია</span>
+            <span className="text-xs tracking-widest uppercase text-[#c1a362]/90 font-medium font-sans">ინოვაცია</span>
             <h2 className="text-3xl md:text-4xl font-light text-[#FFF5D6] font-serif leading-[1.3]">
               ვირტუალური 3D სასაფლაო და ინდივიდუალური დიზაინი
             </h2>
@@ -46,14 +46,14 @@ export const VirtualCemetery = () => {
             <ul className="space-y-3.5 pt-2">
               {features.map((item, idx) => (
                 <li key={idx} className="flex items-center gap-3 text-sm text-gray-400 font-sans font-light">
-                  <div className="text-[#D4AF37]/80">{item.icon}</div>
+                  <div className="text-[#c1a362]/80">{item.icon}</div>
                   <span>{item.text}</span>
                 </li>
               ))}
             </ul>
 
             <div className="pt-6">
-              <Link href="/grave" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:brightness-110 shadow-lg hover:shadow-[#D4AF37]/5 active:scale-[0.99]">
+              <Link href="/grave" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#c1a362] via-[#c1a362] to-[#c1a362] text-black font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:brightness-110 shadow-lg hover:shadow-[#c1a362]/5 active:scale-[0.99]">
                 დიზაინის დაწყება
               </Link>
             </div>

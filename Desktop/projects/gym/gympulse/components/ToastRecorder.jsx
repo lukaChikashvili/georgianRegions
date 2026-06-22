@@ -120,7 +120,7 @@ export default function ToastRecorder({ memorialId }) {
   if (isSubmitted) {
     return (
       <div className="text-center">
-        <p className="text-[#D4AF37] font-serif text-lg">
+        <p className="text-[#c1a362] font-serif text-lg">
           ✓ მადლობა! თქვენი სადღეგრძელო გაიგზავნა ოჯახთან დასამტკიცებლად.
         </p>
       </div>
@@ -147,7 +147,7 @@ export default function ToastRecorder({ memorialId }) {
       return (
         <div 
           key={i}
-          className="w-2 bg-[#D4AF37] transition-all duration-100"
+          className="w-2 bg-[#c1a362] transition-all duration-100"
           style={{ height: `${Math.max(height, 5)}%` }}
         />
       );
@@ -161,7 +161,7 @@ export default function ToastRecorder({ memorialId }) {
         {!recording ? (
           <button 
             onClick={startRecording} 
-            className="bg-[#D4AF37] text-black px-6 py-2 rounded-lg font-bold hover:bg-[#b8962d] transition"
+            className="button text-black px-6 py-2 rounded-lg font-bold hover:bg-[#b8962d] transition"
           >
             🎤 მიკროფონის ჩართვა
           </button>
@@ -180,7 +180,7 @@ export default function ToastRecorder({ memorialId }) {
         {blob && !uploading && (
           <button 
             onClick={upload} 
-            className="border border-[#D4AF37] text-[#D4AF37] px-6 py-2 rounded-lg hover:bg-[#D4AF37]/10 transition"
+            className="border border-[#c1a362] text-[#c1a362] px-6 py-2 rounded-lg hover:bg-[#D4AF37]/10 transition"
           >
             📤 გაგზავნა
           </button>
@@ -189,7 +189,7 @@ export default function ToastRecorder({ memorialId }) {
         {uploading && (
           <button 
             disabled
-            className="border border-[#D4AF37]/50 text-[#D4AF37]/50 px-6 py-2 rounded-lg cursor-not-allowed"
+            className="border border-[#c1a362]/50 text-[#c1a362]/50 px-6 py-2 rounded-lg cursor-not-allowed"
           >
             იტვირთება...
           </button>

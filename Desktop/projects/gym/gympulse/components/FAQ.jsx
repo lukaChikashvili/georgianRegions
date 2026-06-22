@@ -16,7 +16,7 @@ export const FAQ = () => {
     <section className="py-24 bg-[#0D0D0F] relative border-t border-white/5">
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-16">
-          <span className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium font-sans">კითხვები</span>
+          <span className="text-xs tracking-widest uppercase text-[#c1a362]/90 font-medium font-sans">კითხვები</span>
           <h2 className="text-3xl font-light text-[#FFF5D6] font-serif mt-3">ხშირად დასმული კითხვები</h2>
         </div>
 

@@ -80,7 +80,7 @@ const Blog = ({ posts }) => {
                       : 'Recently'}
                   </time>
                 </div>
-                <h2 className="text-xl font-serif italic text-white leading-tight group-hover:text-[#D4AF37] transition-colors line-clamp-2">
+                <h2 className="text-xl font-serif italic text-white leading-tight group-hover:text-[#c1a362] transition-colors line-clamp-2">
                   {value.title}
                 </h2>
                 <p className="text-gray-400 leading-relaxed text-sm line-clamp-3 font-light">
@@ -104,7 +104,7 @@ const Blog = ({ posts }) => {
                   )}
                   <Link
                     href={`/blog/${value._id}`}
-                    className="text-[10px] uppercase tracking-widest text-[#D4AF37] flex items-center gap-2 hover:gap-4 transition-all"
+                    className="text-[10px] uppercase tracking-widest text-[#c1a362] flex items-center gap-2 hover:gap-4 transition-all"
                   >
                     წაკითხვა
                     <ArrowRight size={12} />
@@ -121,7 +121,7 @@ const Blog = ({ posts }) => {
           <button
             onClick={() => setPage(prev => Math.max(prev - 1, 1))}
             disabled={page === 1}
-            className="p-3 border border-white/10 text-white/50 hover:border-[#D4AF37] hover:text-[#D4AF37] disabled:opacity-20 transition-all rounded-full"
+            className="p-3 border border-white/10 text-white/50 hover:border-[#c1a362] hover:text-[#D4AF37] disabled:opacity-20 transition-all rounded-full"
           >
             <ArrowLeft size={16} />
           </button>
@@ -136,7 +136,7 @@ const Blog = ({ posts }) => {
                   onClick={() => changePage(pageNum)}
                   className={`w-9 h-9 text-[11px] transition-all duration-300 rounded-full ${
                     isActive
-                      ? 'bg-[#D4AF37] text-black font-bold'
+                      ? 'bg-[#c1a362] text-black font-bold'
                       : 'border border-white/10 text-white/50 hover:border-white/30'
                   }`}
                 >
@@ -149,7 +149,7 @@ const Blog = ({ posts }) => {
           <button
             onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
             disabled={page === totalPages}
-            className="p-3 border border-white/10 text-white/50 hover:border-[#D4AF37] hover:text-[#D4AF37] disabled:opacity-20 transition-all rounded-full"
+            className="p-3 border border-white/10 text-white/50 hover:border-[#c1a362] hover:text-[#c1a362] disabled:opacity-20 transition-all rounded-full"
           >
             <ArrowRight size={16} />
           </button>

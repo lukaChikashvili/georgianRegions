@@ -388,8 +388,8 @@ const convertYouTube = (url) => {
 
       <header className="relative z-10 pt-28 pb-16 text-center max-w-3xl mx-auto px-6 flex flex-col items-center">
         <div className="relative group mb-8">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#AA7C11] via-[#D4AF37] to-transparent opacity-30 blur-md" />
-          <div className="relative w-44 h-44 md:w-52 md:h-52 rounded-full p-[1.5px] bg-gradient-to-b from-[#FFF5D6] via-[#D4AF37] to-[#1A1A1A]">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#AA7C11] via-[#c1a362] to-transparent opacity-30 blur-md" />
+          <div className="relative w-44 h-44 md:w-52 md:h-52 rounded-full p-[1.5px] bg-gradient-to-b from-[#FFF5D6] via-[#c1a362] to-[#1A1A1A]">
             <div className="w-full h-full rounded-full overflow-hidden bg-[#121214]">
             {portraitUrl ? (
                <img src={portraitUrl} alt={memorial.firstName} className="w-full h-full object-cover grayscale contrast-110 opacity-90" />
@@ -402,20 +402,20 @@ const convertYouTube = (url) => {
           </div>
         </div>
 
-        <h1 className="font-serif text-4xl md:text-6xl font-light text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D6] via-[#D4AF37] to-[#AA7C11] tracking-wide mb-3">
+        <h1 className="font-serif text-4xl md:text-6xl font-light text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5D6] via-[#c1a362] to-[#cea754] tracking-wide mb-3">
           {memorial.firstName} {memorial.lastName}
         </h1>
 
    
         
         <div className="flex items-center gap-2 text-sm text-gray-500 font-light tracking-widest uppercase">
-          <Calendar size={14} className="text-[#D4AF37]/70" />
+          <Calendar size={14} className="text-[#c1a362]/70" />
           <span>{memorial.birthDate.replace(/-/g, '.')}</span>
-          <span className="text-[#D4AF37] mx-1">•</span>
+          <span className="text-[#c1a362] mx-1">•</span>
           <span>{memorial.deathDate.replace(/-/g, '.')}</span>
         </div>
 
-        <p className="mt-8 font-serif text-lg md:text-xl text-gray-400 italic max-w-xl border-l border-r border-[#D4AF37]/20 px-6">
+        <p className="mt-8 font-serif text-lg md:text-xl text-gray-400 italic max-w-xl border-l border-r border-[#c1a362]/20 px-6">
           "{memorial.epitaph}"
         </p>
 
@@ -434,7 +434,7 @@ const convertYouTube = (url) => {
         <div className="lg:col-span-2 space-y-8">
           <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl">
             <h2 className="font-serif text-xl text-[#FFF5D6] mb-6 flex items-center gap-3">
-              <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+              <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#c1a362] to-[#AA7C11]" />
               ცხოვრების ისტორია
             </h2>
             <p className="leading-relaxed text-gray-400 font-light text-base whitespace-pre-line">
@@ -445,7 +445,7 @@ const convertYouTube = (url) => {
           {timelineEntries && timelineEntries.length > 0 && (
   <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl">
     <h2 className="font-serif text-xl text-[#FFF5D6] mb-8 flex items-center gap-3">
-      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#c1a362] to-[#AA7C11]" />
       ცხოვრების ქრონიკა
     </h2>
 
@@ -518,7 +518,7 @@ const convertYouTube = (url) => {
 {galleryUrls && galleryUrls.length > 0 && (
   <section className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
     <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
-      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#c1a362] to-[#AA7C11]" />
       ფოტოგალერეა
     </h2>
     
@@ -530,7 +530,7 @@ const convertYouTube = (url) => {
           className="cursor-pointer aspect-square rounded-xl overflow-hidden border border-white/5 bg-[#0D0D0F] group relative"
         >
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
-            <span className="text-[11px] text-[#D4AF37] font-light tracking-wider uppercase border border-[#D4AF37]/30 px-3 py-1.5 rounded-lg bg-black/50 backdrop-blur-xs">
+            <span className="text-[11px] text-[#c1a362] font-light tracking-wider uppercase border border-[#c1a362]/30 px-3 py-1.5 rounded-lg bg-black/50 backdrop-blur-xs">
               გადიდება
             </span>
           </div>
@@ -552,16 +552,16 @@ const convertYouTube = (url) => {
 
         <div className="space-y-8">
           {memorial.enableCandle && (
-            <section className="bg-gradient-to-b from-[#161619]/60 to-[#0F0F12]/80 border border-[#D4AF37]/15 rounded-2xl p-6 text-center">
+            <section className="bg-gradient-to-b from-[#161619]/60 to-[#0F0F12]/80 border border-[#c1a362]/15 rounded-2xl p-6 text-center">
               <h3 className="font-serif text-base text-[#FFF5D6] mb-4 tracking-wide">ვირტუალური პანაშვიდი</h3>
               <div className="flex flex-col items-center justify-center my-6 space-y-2">
-                <div className={`p-4 rounded-full border transition-all duration-500 ${hasLitCandle ? 'bg-[#1A150F] border-[#D4AF37]/40 text-[#D4AF37] shadow-[0_0_25px_rgba(212,175,55,0.2)] animate-pulse' : 'bg-[#121214] border-white/5 text-gray-600'}`}>
+                <div className={`p-4 rounded-full border transition-all duration-500 ${hasLitCandle ? 'bg-[#1A150F] border-[#c1a362]/40 text-[#c1a362] shadow-[0_0_25px_rgba(212,175,55,0.2)] animate-pulse' : 'bg-[#121214] border-white/5 text-gray-600'}`}>
                   <Flame size={32} />
                 </div>
                 <span className="font-sans text-2xl font-light text-gray-200">{memorial.candleCount}</span>
                 <span className="text-[10px] uppercase tracking-widest text-gray-500 font-light">ანთებული სანთელი</span>
               </div>
-              <button onClick={handleLightCandle} disabled={hasLitCandle || isLighting} className={`w-full py-3 px-4 rounded-xl font-medium text-xs uppercase tracking-wider transition-all duration-300 ${hasLitCandle ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5' : 'bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold hover:brightness-110 cursor-pointer active:scale-[0.98]'}`}>
+              <button onClick={handleLightCandle} disabled={hasLitCandle || isLighting} className={`w-full py-3 px-4 rounded-xl font-medium text-xs uppercase tracking-wider transition-all duration-300 ${hasLitCandle ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5' : 'bg-gradient-to-r from-[#c1a362] via-[#b48e3c] to-[#AA7C11] text-black font-semibold hover:brightness-110 cursor-pointer active:scale-[0.98]'}`}>
                 {isLighting ? 'ინთება...' : hasLitCandle ? 'სანთელი ანთებულია' : 'აანთე სანთელი'}
               </button>
             </section>
@@ -573,7 +573,7 @@ const convertYouTube = (url) => {
 
     {memorial.location && (
       <div className="flex items-start gap-4">
-        <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><MapPin size={16} /></div>
+        <div className="p-2 rounded-xl bg-[#161619] text-[#c1a362]/80 shrink-0"><MapPin size={16} /></div>
         <div>
           <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">ცხოვრების ადგილი</h4>
           <p className="text-sm text-gray-300 font-light mt-0.5">{memorial.location}</p>
@@ -583,7 +583,7 @@ const convertYouTube = (url) => {
 
     {memorial.funeralLocation && (
       <div className="flex items-start gap-4">
-        <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><MapPin size={16} /></div>
+        <div className="p-2 rounded-xl bg-[#161619] text-[#c1a362]/80 shrink-0"><MapPin size={16} /></div>
         <div>
           <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">სამძიმრის ადგილი</h4>
           <p className="text-sm text-gray-300 font-light mt-0.5">{memorial.funeralLocation}</p>
@@ -593,7 +593,7 @@ const convertYouTube = (url) => {
 
     {memorial.funeralTime && (
       <div className="flex items-start gap-4">
-        <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><Calendar size={16} /></div>
+        <div className="p-2 rounded-xl bg-[#161619] text-[#c1a362]/80 shrink-0"><Calendar size={16} /></div>
         <div>
           <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">გამოსვენების დრო</h4>
           <p className="text-sm text-gray-300 font-light mt-0.5">{formatGeorgianDate(memorial.funeralTime)}</p>
@@ -603,7 +603,7 @@ const convertYouTube = (url) => {
 
     {memorial.cemeteryLocation && (
       <div className="flex items-start gap-4">
-        <div className="p-2 rounded-xl bg-[#161619] text-[#D4AF37]/80 shrink-0"><MapPin size={16} /></div>
+        <div className="p-2 rounded-xl bg-[#161619] text-[#c1a362]/80 shrink-0"><MapPin size={16} /></div>
         <div>
           <h4 className="text-[10px] uppercase tracking-widest text-gray-500 font-light">საფლავის / ქელეხის ლოკაცია</h4>
           <p className="text-sm text-gray-300 font-light mt-0.5">{memorial.cemeteryLocation}</p>
@@ -619,11 +619,11 @@ const convertYouTube = (url) => {
 </section>
 
           {memorial.enableDonations && memorial.bankAccountIban && (
-            <section className="bg-gradient-to-b from-[#1A150F]/50 to-[#121214]/60 border border-[#D4AF37]/20 rounded-2xl p-6 relative overflow-hidden space-y-4 animate-fade-in">
+            <section className="bg-gradient-to-b from-[#1A150F]/50 to-[#121214]/60 border border-[#c1a362]/20 rounded-2xl p-6 relative overflow-hidden space-y-4 animate-fade-in">
               <div className="absolute top-0 right-0 w-24 h-24 bg-[#D4AF37]/5 blur-xl rounded-full pointer-events-none" />
               <div>
                 <h3 className="font-serif text-base text-[#FFF5D6] tracking-wide flex items-center gap-2">
-                  <CreditCard size={18} className="text-[#D4AF37]" /> ფინანსური დახმარება (ფულის დაწერა)
+                  <CreditCard size={18} className="text-[#c1a362]" /> ფინანსური დახმარება (ფულის დაწერა)
                 </h3>
                 <p className="text-[11px] text-gray-400 font-light mt-1 leading-relaxed">
                   თუ გსურთ თანადგომა გამოუცხადოთ ოჯახს სარიტუალო ხარჯების დასაფარად, შეგიძლიათ თანხა პირდაპირ მითითებულ ანგარიშზე გადარიცხოთ.
@@ -645,7 +645,7 @@ const convertYouTube = (url) => {
                 </div>
               </div>
 
-              <button onClick={handleCopyIban} className="cursor-pointer w-full py-2.5 px-4 rounded-xl text-xs font-medium border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all active:scale-[0.99]">
+              <button onClick={handleCopyIban} className="cursor-pointer w-full py-2.5 px-4 rounded-xl text-xs font-medium border border-[#c1a362]/30 text-[#c1a362] hover:bg-[#c1a362]/5 transition-all active:scale-[0.99]">
                 {copied ? <span className="text-green-400 font-semibold animate-pulse">✓ ანგარიში დაკოპირდა</span> : 'ანგარიშის ნომრის კოპირება'}
               </button>
             </section>
@@ -663,9 +663,9 @@ const convertYouTube = (url) => {
       onClick={() => setIsListModalOpen(true)}
       className="group cursor-pointer bg-[#0D0D0F]/60 hover:bg-[#121215] border border-white/5 hover:border-[#D4AF37]/30 rounded-xl px-4 py-2 flex items-center gap-3 transition-all duration-200"
     >
-      <Users size={14} className="text-gray-500 group-hover:text-[#D4AF37] transition-colors" />
+      <Users size={14} className="text-gray-500 group-hover:text-[#c1a362] transition-colors" />
       <span className="text-sm font-light text-gray-400">დასწრებას ადასტურებს:</span>
-      <span className="text-base font-medium text-[#D4AF37] underline decoration-dotted underline-offset-4">
+      <span className="text-base font-medium text-[#c1a362] underline decoration-dotted underline-offset-4">
         {memorial.attendeesCount || 0} ადამიანი
       </span>
     </button>
@@ -674,7 +674,7 @@ const convertYouTube = (url) => {
       onClick={handleAttendButtonClick}
       disabled={hasRSVPed || isRSVPing}
       className={`w-full py-3 px-4 rounded-xl text-xs uppercase tracking-wider font-semibold transition-all duration-300 transform active:scale-[0.98] flex items-center justify-center gap-2 ${
-        hasRSVPed ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5' : 'cursor-pointer bg-gradient-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black hover:brightness-110 shadow-md'
+        hasRSVPed ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5' : 'cursor-pointer bg-gradient-to-r from-[#c1a362] via-[#c1a362] to-[#dea833] text-black hover:brightness-110 shadow-md'
       }`}
     >
       {isRSVPing ? 'ფიქსირდება...' : hasRSVPed ? <><CheckCircle size={14} className="text-gray-500" /> დასწრება დადასტურებულია</> : 'დავესწრები პანაშვიდს'}
@@ -696,7 +696,7 @@ const convertYouTube = (url) => {
       {memorial.favoriteSongUrl && (
   <section className="max-w-4xl  mx-auto  mt-20 px-6 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl flex flex-col items-center gap-4">
     <h2 className="font-serif text-xl text-[#FFF5D6] self-start flex items-center gap-3">
-      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#c1a362] to-[#c1a362]" />
       მუსიკალური მოგონება
     </h2>
 
@@ -705,20 +705,20 @@ const convertYouTube = (url) => {
       className="cursor-pointer relative group mt-2"
     >
       
-      <div className="absolute inset-0 rounded-full bg-[#D4AF37]/20 blur-xl opacity-40 group-hover:opacity-70 transition duration-500" />
+      <div className="absolute inset-0 rounded-full bg-[#c1a362]/20 blur-xl opacity-40 group-hover:opacity-70 transition duration-500" />
       
       
       <div className="relative w-44 h-44 rounded-full bg-zinc-900 border-4 border-zinc-800 shadow-2xl flex items-center justify-center animate-[spin_8s_linear_infinite] group-hover:[animation-play-state:paused] transition-all duration-300">
         <div className="w-[92%] h-[92%] rounded-full border border-zinc-700/40" />
         <div className="absolute w-[70%] h-[70%] rounded-full border border-zinc-700/30" />
         
-        <div className="absolute w-16 h-16 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
+        <div className="absolute w-16 h-16 bg-[#c1a362] rounded-full flex items-center justify-center shadow-lg">
           <div className="w-3 h-3 bg-black rounded-full" />
         </div>
       </div>
 
      
-      <p className="text-[11px] uppercase tracking-widest text-[#D4AF37]/70 text-center mt-4">
+      <p className="text-[11px] uppercase tracking-widest text-[#c1a362]/70 text-center mt-4">
         დააჭირეთ მოსასმენად
       </p>
     </button>
@@ -750,7 +750,7 @@ const convertYouTube = (url) => {
         <div className="relative w-24 h-24 rounded-full bg-zinc-900 border-4 border-zinc-800 shadow-xl flex items-center justify-center animate-[spin_8s_linear_infinite]">
           <div className="w-[92%] h-[92%] rounded-full border border-zinc-700/40" />
           <div className="absolute w-[70%] h-[70%] rounded-full border border-zinc-700/30" />
-          <div className="absolute w-10 h-10 bg-[#D4AF37] rounded-full flex items-center justify-center">
+          <div className="absolute w-10 h-10 bg-[#c1a362] rounded-full flex items-center justify-center">
             <div className="w-2 h-2 bg-black rounded-full" />
           </div>
         </div>
@@ -767,7 +767,7 @@ const convertYouTube = (url) => {
         />
       </div>
 
-      <p className="text-[11px] uppercase tracking-widest text-[#D4AF37]/70 text-center">
+      <p className="text-[11px] uppercase tracking-widest text-[#c1a362]/70 text-center">
         მუსიკა, რომელიც დარჩა
       </p>
     </div>
@@ -781,7 +781,7 @@ const convertYouTube = (url) => {
       <section className="max-w-4xl mx-auto mt-20 px-6">
 
       <h2 className="font-serif text-xl text-[#FFF5D6] mb-6 flex items-center gap-3">
-              <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+              <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#c1a362] to-[#c1a362]" />
               სადღეგრძელოები
             </h2>
 
@@ -790,15 +790,15 @@ const convertYouTube = (url) => {
     approvedToasts.map((toast) => (
       <div 
         key={toast._id} 
-        className="group relative bg-[#0D0D0F]/40 border border-white/5 hover:border-[#D4AF37]/30 transition-all duration-500 rounded-2xl p-6 backdrop-blur-md overflow-hidden"
+        className="group relative bg-[#0D0D0F]/40 border border-white/5 hover:border-[#c1a362]/30 transition-all duration-500 rounded-2xl p-6 backdrop-blur-md overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
         
         <div className="relative flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#1A150F] border border-[#D4AF37]/20 flex items-center justify-center shadow-inner">
-                <span className="text-[11px] text-[#D4AF37] font-bold">
+              <div className="w-9 h-9 rounded-full bg-[#1A150F] border border-[#c1a362]/20 flex items-center justify-center shadow-inner">
+                <span className="text-[11px] text-[#c1a362] font-bold">
                   {toast.authorName.charAt(0).toUpperCase()}
                 </span>
               </div>
@@ -826,7 +826,7 @@ const convertYouTube = (url) => {
 <section className="max-w-4xl mx-auto mt-20 px-6">
   <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
     <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
-      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#c1a362] to-[#c1a362]" />
       ყვავილი და საჩუქარი
     </h2>
 
@@ -838,7 +838,7 @@ const convertYouTube = (url) => {
     onClick={() => setSelectedGift(gift)}
     className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 ${
       selectedGift.id === gift.id
-        ? 'border-[#D4AF37]/60 bg-[#1A150F]/60'
+        ? 'border-[#c1a362]/60 bg-[#1A150F]/60'
         : 'border-white/5 bg-[#0D0D0F]/40 hover:border-white/10'
     }`}
   >
@@ -855,7 +855,7 @@ const convertYouTube = (url) => {
         placeholder="მიძღვნა (არასავალდებულო)..."
         value={giftDedication}
         onChange={(e) => setGiftDedication(e.target.value)}
-        className="w-full bg-[#0D0D0F] border border-white/5 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none resize-none"
+        className="w-full bg-[#0D0D0F] border border-white/5 rounded-xl p-3 text-sm text-gray-200 focus:border-[#c1a362] outline-none resize-none"
       />
       <div className="flex items-center justify-between">
         <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer select-none">
@@ -863,16 +863,16 @@ const convertYouTube = (url) => {
             type="checkbox"
             checked={isGiftAnonymous}
             onChange={(e) => setIsGiftAnonymous(e.target.checked)}
-            className="accent-[#D4AF37] w-3.5 h-3.5"
+            className="accent-[#c1a362] w-3.5 h-3.5"
           />
           ანონიმურად გაგზავნა
         </label>
         <button
           onClick={handleSendGift}
           disabled={isSendingGift || !user}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black text-sm font-semibold hover:brightness-110 transition-all disabled:opacity-40"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] to-[#c1a362] text-black text-sm font-semibold hover:brightness-110 transition-all disabled:opacity-40"
         >
-          {giftSent ? '✓ გაგზავნილია!' : isSendingGift ? 'იგზავნება...' : `${selectedGift.emoji} გაგზავნე — ${selectedGift.price} ₾`}
+          {giftSent ? '✓ გაგზავნილია!' : isSendingGift ? 'იგზავნება...' : `${selectedGift.emoji} გაგზავნე `}
         </button>
       </div>
       {giftError && <p className="text-xs text-red-400 text-right">{giftError}</p>}
@@ -895,7 +895,7 @@ const convertYouTube = (url) => {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-sm font-medium text-gray-200">{g.isAnonymous ? 'ანონიმური' : g.senderName}</span>
-                  <span className="text-[10px] text-[#D4AF37]/70 bg-[#D4AF37]/10 border border-[#D4AF37]/15 rounded-full px-2 py-0.5">{g.giftName}</span>
+                  <span className="text-[10px] text-[#c1a362]/70 bg-[#D4AF37]/10 border border-[#c1a362]/15 rounded-full px-2 py-0.5">{g.giftName}</span>
                 </div>
                 {g.dedication && (
                   <p className="text-xs text-gray-500 font-light mt-1 leading-relaxed italic">"{g.dedication}"</p>
@@ -916,7 +916,7 @@ const convertYouTube = (url) => {
 <section className="max-w-4xl mx-auto mt-12 px-6">
   <div className="bg-[#121214]/40 border border-white/5 rounded-2xl p-6 backdrop-blur-xl">
     <h2 className="font-serif text-xl text-[#FFF5D6] mb-6 flex items-center gap-3">
-      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#D4AF37] to-[#AA7C11]" />
+      <span className="w-[1.5px] h-5 bg-gradient-to-b from-[#c1a362] to-[#AA7C11]" />
       მემორიალის გაზიარება
     </h2>
 
@@ -962,12 +962,12 @@ const convertYouTube = (url) => {
 
 <section className="max-w-4xl mx-auto mt-12 bg-[#121214]/40 border border-white/5 rounded-2xl p-8 backdrop-blur-xl space-y-6">
         <h2 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-3">
-          <MessageSquare size={20} className="text-[#D4AF37]" /> სამძიმრის კედელი
+          <MessageSquare size={20} className="text-[#c1a362]" /> სამძიმრის კედელი
         </h2>
 
         <form onSubmit={handlePostCondolence} className="space-y-4 bg-[#0D0D0F]/40 p-5 border border-white/5 rounded-xl">
           {submissionNotice && (
-            <div className="p-3 text-xs text-center rounded-lg bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/20 animate-fade-in">
+            <div className="p-3 text-xs text-center rounded-lg bg-[#D4AF37]/10 text-[#c1a362] border border-[#D4AF37]/20 animate-fade-in">
               {submissionNotice}
             </div>
           )}
@@ -996,7 +996,7 @@ const convertYouTube = (url) => {
               <button 
                 type="submit" 
                 disabled={isSubmittingCondolence}
-                className="absolute right-2 p-2 rounded-lg text-[#D4AF37] hover:bg-white/5 transition disabled:opacity-40 cursor-pointer"
+                className="absolute right-2 p-2 rounded-lg text-[#c1a362] hover:bg-white/5 transition disabled:opacity-40 cursor-pointer"
               >
                 <Send size={16} />
               </button>
@@ -1048,7 +1048,7 @@ const convertYouTube = (url) => {
                                   setExpandedThreads(prev => ({ ...prev, [condolence._id]: true }));
                                 }
                               }}
-                              className="cursor-pointer text-xs text-gray-500 hover:text-[#D4AF37] transition font-light"
+                              className="cursor-pointer text-xs text-gray-500 hover:text-[#c1a362] transition font-light"
                             >
                               პასუხი
                             </button>
@@ -1084,7 +1084,7 @@ const convertYouTube = (url) => {
                           value={editText}
                           onChange={(e) => setEditText(e.target.value)}
                           rows={2}
-                          className="w-full bg-[#0D0D0F] border border-[#D4AF37]/30 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none resize-none"
+                          className="w-full bg-[#0D0D0F] border border-[#c1a362]/30 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none resize-none"
                         />
                         <div className="flex justify-end gap-2">
                           <button type="button" onClick={() => setEditingCondolenceId(null)} className="px-3 py-1.5 rounded-lg border border-white/5 text-xs text-gray-500 hover:text-white transition">გაუქმება</button>
@@ -1199,9 +1199,9 @@ const convertYouTube = (url) => {
                 placeholder="მაგ: გიორგი კალანდაძე"
                 value={attendeeName}
                 onChange={(e) => setAttendeeName(e.target.value)}
-                className="w-full bg-[#0D0D0F] border border-white/10 rounded-xl p-3 text-sm text-gray-200 focus:border-[#D4AF37] outline-none"
+                className="w-full bg-[#0D0D0F] border border-white/10 rounded-xl p-3 text-sm text-gray-200 focus:border-[#c1a362] outline-none"
               />
-              <button type="submit" className="cursor-pointer w-full py-3 bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black text-xs font-semibold uppercase tracking-wider rounded-xl hover:brightness-110 transition-all">დადასტურება</button>
+              <button type="submit" className="cursor-pointer w-full py-3 button3  text-black text-xs font-semibold uppercase tracking-wider rounded-xl hover:brightness-110 transition-all">დადასტურება</button>
             </form>
           </div>
         </div>
@@ -1217,7 +1217,7 @@ const convertYouTube = (url) => {
             <button onClick={() => setIsListModalOpen(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white cursor-pointer"><X size={18} /></button>
             <div className="mb-4">
               <h3 className="font-serif text-xl text-[#FFF5D6] flex items-center gap-2">
-                <Users size={20} className="text-[#D4AF37]" /> ვინ ესწრება
+                <Users size={20} className="text-[#c1a362]" /> ვინ ესწრება
               </h3>
               <p className="text-xs text-gray-500 font-light mt-0.5">სულ დადასტურებულია: {memorial.attendeesCount || 0} ადამიანის მოსვლა</p>
             </div>

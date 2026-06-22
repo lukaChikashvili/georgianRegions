@@ -168,7 +168,7 @@ function AddMemberModal({ onClose, onAdd, isAdding }) {
                 placeholder="1945"
                 value={form.birthYear}
                 onChange={(e) => setForm((f) => ({ ...f, birthYear: e.target.value }))}
-                className="bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm outline-none focus:border-[#D4AF37]/40"
+                className="bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm outline-none focus:border-[#c1a362]/40"
               />
             </div>
             <div className="flex flex-col gap-1.5">
@@ -179,7 +179,7 @@ function AddMemberModal({ onClose, onAdd, isAdding }) {
                 placeholder="2010"
                 value={form.deathYear}
                 onChange={(e) => setForm((f) => ({ ...f, deathYear: e.target.value }))}
-                className="bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm outline-none focus:border-[#D4AF37]/40"
+                className="bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-white text-sm outline-none focus:border-[#c1a362]/40"
               />
             </div>
           </div>
@@ -188,7 +188,7 @@ function AddMemberModal({ onClose, onAdd, isAdding }) {
         <button
           onClick={() => onAdd(form)}
           disabled={!form.name.trim() || isAdding}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black font-bold text-sm disabled:opacity-50 hover:brightness-110 transition"
+          className="button3 w-full py-3 rounded-xl  text-black font-bold text-sm disabled:opacity-50 hover:brightness-110 transition"
         >
           {isAdding ? "ემატება..." : "დამატება"}
         </button>
@@ -269,7 +269,7 @@ function ConnectModal({ members, onClose, onConnect }) {
                 onClick={() => setType(t)}
                 className="px-3 py-1 rounded-full text-xs border transition"
                 style={type === t
-                  ? { background: "#D4AF3722", borderColor: "#D4AF37", color: "#D4AF37" }
+                  ? { background: "#c1a362", borderColor: "#D4AF37", color: "#c1a362" }
                   : { background: "transparent", borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.4)" }
                 }
               >
@@ -469,14 +469,14 @@ export default function FamilyTree({ memorial, currentUserId, isPremium = false 
             {limitReached ? (
               <button
                 onClick={() => setShowUpgradeModal(true)}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#D4AF37]/20 bg-[#1A150F]/40 text-[#D4AF37]/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/40 text-xs transition"
+                className="button flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#D4AF37]/20 bg-[#1A150F]/40 text-[#D4AF37]/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/40 text-xs transition"
               >
                 <Lock size={12} /> წევრის დამატება <Crown size={9} className="ml-0.5 opacity-60" />
               </button>
             ) : (
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-1.5 px-4 py-2 bg-[#D4AF37] text-[#0F0F11] rounded-lg text-xs font-bold hover:opacity-85 transition"
+                className="button flex items-center gap-1.5 px-4 py-2 bg-[#c1a362] text-[#0F0F11] rounded-lg text-xs font-bold hover:opacity-85 transition"
               >
                 <UserPlus size={12} /> წევრის დამატება
               </button>
@@ -487,7 +487,7 @@ export default function FamilyTree({ memorial, currentUserId, isPremium = false 
 
    
       <div
-        className="rounded-2xl overflow-hidden border border-[#D4AF37]/10"
+        className="rounded-2xl overflow-hidden border border-[#c1a362]/10"
         style={{ height: 520 }}
       >
         {tree.members.length === 0 ? (
@@ -497,7 +497,7 @@ export default function FamilyTree({ memorial, currentUserId, isPremium = false 
             {isOwner && (
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-2 px-4 py-2 mt-2 bg-[#D4AF37] text-black rounded-lg text-sm font-medium hover:opacity-85"
+                className="button3 flex items-center gap-2 px-4 py-2 mt-2 bg-[#D4AF37] text-black rounded-lg text-sm font-medium hover:opacity-85"
               >
                 <Plus size={14} /> პირველი წევრის დამატება
               </button>

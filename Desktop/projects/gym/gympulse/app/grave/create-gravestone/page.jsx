@@ -225,7 +225,7 @@ const DesignGrave = () => {
         <button
           onClick={handlePublish}
           disabled={isPublishing}
-          className="px-5 py-2 text-xs font-medium text-[#0b0d12] bg-[#ffd700] hover:bg-[#ffe240] rounded-xl shadow-lg transition-all disabled:opacity-50"
+          className="button px-5 py-2 text-xs font-medium text-[#0b0d12] bg-[#ffd700] hover:bg-[#ffe240] rounded-xl shadow-lg transition-all disabled:opacity-50"
         >
           {isPublishing ? "ინახება..." : "დიზაინის შენახვა"}
         </button>
@@ -234,7 +234,7 @@ const DesignGrave = () => {
       {!isPanelOpen && (
         <button
           onClick={() => setIsPanelOpen(true)}
-          className="absolute bottom-6 right-6 z-50 p-4 bg-[#D4AF37] text-black rounded-full shadow-lg hover:scale-105 transition-all"
+          className="absolute bottom-6 right-6 z-50 p-4 bg-[#c1a362] text-black rounded-full shadow-lg hover:scale-105 transition-all"
         >
           🎨
         </button>

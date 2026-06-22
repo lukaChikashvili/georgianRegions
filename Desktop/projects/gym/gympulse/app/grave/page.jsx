@@ -18,9 +18,9 @@ function UpgradeModal({ onClose, onUpgrade, isUpgrading }) {
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-      <div className="relative w-full max-w-md bg-[#0F0F11] border border-[#D4AF37]/20 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden">
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D4AF37]/60 to-transparent" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#D4AF37]/5 blur-3xl pointer-events-none" />
+      <div className="relative w-full max-w-md bg-[#0F0F11] border border-[#c1a362]/20 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden">
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-[#c1a362]/60 to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#c1a362]/5 blur-3xl pointer-events-none" />
 
         <div className="p-7 flex flex-col gap-5 relative z-10">
           <button
@@ -35,12 +35,12 @@ function UpgradeModal({ onClose, onUpgrade, isUpgrading }) {
               <div className="w-12 h-12 rounded-xl bg-[#1A150F] border border-[#D4AF37]/20 flex items-center justify-center text-2xl">
                 🪦
               </div>
-              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-gradient-to-br from-[#AA7C11] to-[#D4AF37] flex items-center justify-center">
+              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-gradient-to-br from-[#AA7C11] to-[#c1a362] flex items-center justify-center">
                 <Crown size={9} className="text-black" />
               </div>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-[#D4AF37]/70 font-medium">პრემიუმ ფუნქცია</p>
+              <p className="text-[10px] uppercase tracking-widest text-[#c1a362]/70 font-medium">პრემიუმ ფუნქცია</p>
               <h3 className="text-base font-semibold text-[#FFF5D6] leading-snug mt-0.5">3D ვირტუალური სასაფლაო</h3>
             </div>
           </div>
@@ -50,7 +50,7 @@ function UpgradeModal({ onClose, onUpgrade, isUpgrading }) {
           </p>
 
           <div className="bg-[#1A150F]/40 border border-[#D4AF37]/10 rounded-xl p-4 space-y-2.5">
-            <p className="text-[11px] uppercase tracking-widest text-[#D4AF37]/60 mb-3">მარადიული პაკეტი მოიცავს</p>
+            <p className="text-[11px] uppercase tracking-widest text-[#c1a362]/60 mb-3">მარადიული პაკეტი მოიცავს</p>
             {[
               'ულიმიტო HD ფოტოგალერეა',
               'სრული ბიოგრაფია (შეუზღუდავი)',
@@ -61,7 +61,7 @@ function UpgradeModal({ onClose, onUpgrade, isUpgrading }) {
             ].map((f) => (
               <div key={f} className="flex items-center gap-2.5 text-xs text-gray-300">
                 <div className="w-4 h-4 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center shrink-0">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#c1a362]" />
                 </div>
                 {f}
               </div>
@@ -69,7 +69,7 @@ function UpgradeModal({ onClose, onUpgrade, isUpgrading }) {
           </div>
 
           <div className="flex items-baseline gap-1.5">
-            <span className="text-3xl font-bold text-[#D4AF37]">49.99</span>
+            <span className="text-3xl font-bold text-[#c1a362]">49.99</span>
             <span className="text-sm text-gray-500">₾</span>
             <span className="text-xs text-gray-600 ml-1">ერთჯერადი გადასახადი · სამუდამოდ</span>
           </div>
@@ -270,14 +270,14 @@ const Page = () => {
             {userIsPremium ? (
               <button
                 onClick={() => router.push("/grave/create-gravestone")}
-                className="flex items-center gap-2 py-2 px-4 text-xs font-medium text-[#0b0d12] bg-[#ffd700] hover:bg-[#ffe240] transition-all rounded-lg hover:scale-[1.02]"
+                className="button flex items-center gap-2 py-2 px-4 text-xs font-medium text-[#0b0d12] bg-[#ffd700] hover:bg-[#ffe240] transition-all rounded-lg hover:scale-[1.02]"
               >
                 {hasDesigned ? "დიზაინის შეცვლა" : "მემორიალის შექმნა"}
               </button>
             ) : (
               <button
                 onClick={() => setShowUpgradeModal(true)}
-                className="flex items-center gap-2 py-2 px-4 text-xs font-medium text-[#D4AF37] bg-[#1A150F] border border-[#D4AF37]/30 hover:border-[#D4AF37]/60 transition-all rounded-lg"
+                className="flex items-center gap-2 py-2 px-4 text-xs font-medium text-[#c1a362] bg-[#1A150F] border border-[#c1a362]/30 hover:border-[#c1a362]/60 transition-all rounded-lg"
               >
                 <Crown size={12} /> პრემიუმი საჭიროა
               </button>

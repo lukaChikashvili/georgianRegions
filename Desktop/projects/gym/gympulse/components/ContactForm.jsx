@@ -33,13 +33,13 @@ export default function ContactForm() {
   };
 
   return (
-    <section className="py-24 bg-[#0D0D0F] relative border-t border-white/5 selection:bg-[#D4AF37] selection:text-black">
+    <section className="py-24 bg-[#0D0D0F] relative border-t border-white/5 selection:bg-[#c1a362] selection:text-black">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           
       
           <div className="lg:col-span-5 space-y-6">
-            <span className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium font-sans">
+            <span className="text-xs tracking-widest uppercase text-[#c1a362]/90 font-medium font-sans">
               კონტაქტი
             </span>
             <h2 className="text-3xl font-light text-[#FFF5D6] font-serif tracking-wide">
@@ -51,7 +51,7 @@ export default function ContactForm() {
 
             <div className="space-y-4 pt-4 font-sans text-xs tracking-wide text-gray-400 font-light">
               <div className="flex items-center gap-3 group">
-                <Mail size={14} className="text-[#D4AF37]/80 group-hover:text-[#D4AF37] transition-colors" />
+                <Mail size={14} className="text-[#c1a362]/80 group-hover:text-[#c1a362] transition-colors" />
                 <span className="hover:text-gray-300 transition-colors">support@goldenmemorial.ge</span>
               </div>
               

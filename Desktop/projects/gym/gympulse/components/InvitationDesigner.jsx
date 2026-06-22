@@ -91,7 +91,7 @@ const InvitationDesigner = ({ memorial }) => {
   if (view === 'selector') {
     return (
       <div style={{ padding: '2rem' }}>
-        <h2 style={{ textAlign: 'center', color: '#D4AF37', marginBottom: '2rem' }}>აირჩიეთ დიზაინი</h2>
+        <h2 style={{ textAlign: 'center', color: '#c1a362', marginBottom: '2rem' }}>აირჩიეთ დიზაინი</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
           {TEMPLATES.map((t) => (
             <div 
@@ -102,7 +102,7 @@ const InvitationDesigner = ({ memorial }) => {
               style={{ 
                 height: '240px', cursor: 'pointer', borderRadius: '12px', 
                 backgroundImage: `url(${t.bg.src})`, backgroundSize: 'cover', backgroundPosition: 'center',
-                border: '2px solid #D4AF37', transition: 'all 0.3s ease', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                border: '2px solid #c1a362', transition: 'all 0.3s ease', display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}
             >
               <div style={{ background: 'rgba(0,0,0,0.7)', padding: '12px 24px', borderRadius: '8px', border: '1px solid #D4AF37', color: '#D4AF37', fontWeight: 'bold' }}>
@@ -122,7 +122,7 @@ const InvitationDesigner = ({ memorial }) => {
       <div style={{ flex: '1', minWidth: '350px' }}>
         <button 
           onClick={() => setView('selector')} 
-          style={{ marginBottom: '20px', cursor: 'pointer', background: '#D4AF37', color: '#000', border: 'none', padding: '10px 20px', borderRadius: '4px', fontWeight: 'bold' }}
+          style={{ marginBottom: '20px', cursor: 'pointer', background: '#c1a362', color: '#000', border: 'none', padding: '10px 20px', borderRadius: '4px', fontWeight: 'bold' }}
         >
           ← უკან
         </button>
@@ -180,7 +180,7 @@ const InvitationDesigner = ({ memorial }) => {
               onClick={() => portraitInputRef.current?.click()}
               style={{ 
                 width: '100%', padding: '16px', cursor: 'pointer', background: 'transparent', 
-                border: '1px dashed #D4AF37', borderRadius: '6px', color: '#D4AF37', 
+                border: '1px dashed #c1a362', borderRadius: '6px', color: '#c1a362', 
                 fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
               }}
             >
@@ -207,11 +207,11 @@ const InvitationDesigner = ({ memorial }) => {
             boxShadow: '0 0 40px rgba(212, 175, 55, 0.2)',
             backgroundImage: `url(${selectedTemplate.bg.src})`,
             backgroundSize: 'cover', backgroundPosition: 'center',
-            borderRadius: '12px', backgroundColor: '#000', border: '1px solid #D4AF37'
+            borderRadius: '12px', backgroundColor: '#000', border: '1px solid #c1a362'
           }}
         >
           <h4 style={{ margin: '0 0 4px 0', textTransform: 'uppercase', letterSpacing: '2px', color: '#D4AF37', fontSize: '11px' }}>
-            In Loving Memory
+           სიყვარულით
           </h4>
 
        

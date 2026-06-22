@@ -50,7 +50,7 @@ function UpgradeModal({ title, description, onClose, onUpgrade, isUpgrading }) {
           <p className="text-sm text-gray-400 font-light leading-relaxed">{description}</p>
 
           <div className="bg-[#1A150F]/40 border border-[#D4AF37]/10 rounded-xl p-4 space-y-2.5">
-            <p className="text-[11px] uppercase tracking-widest text-[#D4AF37]/60 mb-3">მარადიული პაკეტი მოიცავს</p>
+            <p className="text-[11px] uppercase tracking-widest text-[#c1a362]/60 mb-3">მარადიული პაკეტი მოიცავს</p>
             {[
               'ულიმიტო აუდიო სადღეგრძელო',
               'ულიმიტო მოსაწვევი ბარათი',
@@ -61,7 +61,7 @@ function UpgradeModal({ title, description, onClose, onUpgrade, isUpgrading }) {
             ].map((f) => (
               <div key={f} className="flex items-center gap-2.5 text-xs text-gray-300">
                 <div className="w-4 h-4 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center shrink-0">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#c1a362]" />
                 </div>
                 {f}
               </div>
@@ -69,7 +69,7 @@ function UpgradeModal({ title, description, onClose, onUpgrade, isUpgrading }) {
           </div>
 
           <div className="flex items-baseline gap-1.5">
-            <span className="text-3xl font-bold text-[#D4AF37]">49.99</span>
+            <span className="text-3xl font-bold text-[#c1a362]">49.99</span>
             <span className="text-sm text-gray-500">₾</span>
             <span className="text-xs text-gray-600 ml-1">ერთჯერადი გადასახადი · სამუდამოდ</span>
           </div>
@@ -98,7 +98,7 @@ function PremiumBanner({ message, onUpgrade }) {
   return (
     <div className="flex items-center justify-between p-4 rounded-xl bg-[#1A150F]/40 border border-[#D4AF37]/20 mb-6">
       <div className="flex items-center gap-2 text-sm text-gray-400">
-        <Lock size={13} className="text-[#D4AF37]/70 shrink-0" />
+        <Lock size={13} className="text-[#c1a362]/70 shrink-0" />
         {message}
       </div>
       <button
@@ -220,11 +220,11 @@ const filteredMemorials = memorials?.filter((m) => {
       <h1 className="text-3xl font-serif text-[#FFF5D6] mb-8">სამგლოვიარო სერვისები</h1>
 
       {!selectedMemorial ? (
-        <div className="bg-[#121214]/50 p-8 border border-[#D4AF37]/20 rounded-2xl">
-          <h2 className="text-[#D4AF37] mb-4">მოძებნეთ მემორიალი:</h2>
+        <div className="bg-[#121214]/50 p-8 border border-[#c1a362]/20 rounded-2xl">
+          <h2 className="text-[#c1a362] mb-4">მოძებნეთ მემორიალი:</h2>
           <input
             type="text"
-            className="w-full bg-black border border-[#D4AF37]/30 p-3 rounded-lg text-white"
+            className="w-full bg-black border border-[#c1a362]/30 p-3 rounded-lg text-white"
             placeholder="ჩაწერეთ სახელი ან გვარი..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -245,17 +245,17 @@ const filteredMemorials = memorials?.filter((m) => {
         <>
           <button
             onClick={() => setSelectedMemorial(null)}
-            className="text-sm text-gray-500 mb-4 hover:text-[#D4AF37]"
+            className="text-sm text-gray-500 mb-4 hover:text-[#c1a362]"
           >
             ← უკან დაბრუნება
           </button>
 
-          <div className="flex items-center gap-3 mb-6 p-4 bg-[#1A150F]/60 border border-[#D4AF37]/20 rounded-xl">
-  <div className="w-9 h-9 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] font-bold text-sm shrink-0">
+          <div className="flex items-center gap-3 mb-6 p-4 bg-[#1A150F]/60 border border-[#c1a362]/20 rounded-xl">
+  <div className="w-9 h-9 rounded-full bg-[#c1a362]/10 border border-[#c1a362]/30 flex items-center justify-center text-[#c1a362] font-bold text-sm shrink-0">
     {selectedMemorial.firstName?.[0]}
   </div>
   <div className="flex-1 min-w-0">
-    <p className="text-[10px] uppercase tracking-widest text-[#D4AF37]/60 mb-0.5">სერვისები შემდეგი პირისთვის</p>
+    <p className="text-[10px] uppercase tracking-widest text-[#c1a362]/60 mb-0.5">სერვისები შემდეგი პირისთვის</p>
     <p className="text-[#FFF5D6] font-semibold text-base leading-tight">
       {selectedMemorial.firstName} {selectedMemorial.lastName}
     </p>
@@ -263,7 +263,7 @@ const filteredMemorials = memorials?.filter((m) => {
   <Link
     href={`/discover/${selectedMemorial.urlSlug}`}
     target="_blank"
-    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/5 text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/20 transition-all text-xs shrink-0"
+    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/5 text-gray-400 hover:text-[#c1a362] hover:border-[#c1a362]/20 transition-all text-xs shrink-0"
   >
     <ExternalLink size={13} />
     <span className="hidden sm:inline">მემორიალი</span>
@@ -281,18 +281,18 @@ const filteredMemorials = memorials?.filter((m) => {
                   onClick={() => handleTabClick(tab)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm transition ${
                     isActive
-                      ? 'bg-[#D4AF37] text-black font-bold'
+                      ? 'bg-[#c1a362] text-black font-bold'
                       : 'text-gray-500 hover:text-white'
                   }`}
                 >
-                  {isLocked && <Lock size={11} className="text-[#D4AF37]/60" />}
+                  {isLocked && <Lock size={11} className="text-[#c1a362]/60" />}
                   {TAB_LABELS[tab]}
                 </button>
               );
             })}
           </div>
 
-          <div className="bg-[#121214]/50 p-8 border border-[#D4AF37]/20 rounded-2xl min-h-[400px]">
+          <div className="bg-[#121214]/50 p-8 border border-[#c1a362]/20 rounded-2xl min-h-[400px]">
             <h2 className="text-xl text-[#FFF5D6] mb-6">
               {activeTab === 'record' ? 'აუდიო სადღეგრძელო' :
                activeTab === 'invite' ? 'მოსაწვევი ბარათი' :
@@ -373,7 +373,7 @@ const filteredMemorials = memorials?.filter((m) => {
 
 export default function ServicesPage() {
   return (
-    <Suspense fallback={<div className="text-[#D4AF37] p-20">იტვირთება გვერდი...</div>}>
+    <Suspense fallback={<div className="text-[#c1a362] p-20">იტვირთება გვერდი...</div>}>
       <ServicesContent />
     </Suspense>
   );

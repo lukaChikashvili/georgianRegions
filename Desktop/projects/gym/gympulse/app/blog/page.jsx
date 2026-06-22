@@ -16,7 +16,7 @@ const AllBlogs = async () => {
       
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#D4AF37]/30 pb-10 mb-16 gap-6">
           <div>
-             <div className="inline-flex items-center gap-2 text-[#D4AF37] mb-4 uppercase tracking-[0.2em] text-[10px] font-bold">
+             <div className="inline-flex items-center gap-2 text-[#c1a362] mb-4 uppercase tracking-[0.2em] text-[10px] font-bold">
                 <BookOpen size={14} />
               GoldenMemorial.ge
              </div>
@@ -30,7 +30,7 @@ const AllBlogs = async () => {
             
            <Link 
              href="/blog/create" 
-             className="bg-transparent border border-[#D4AF37] text-[#D4AF37] px-8 py-3 rounded-sm font-medium flex items-center gap-3 hover:bg-[#D4AF37] hover:text-black transition-all duration-300"
+             className="button  px-8 py-3 rounded-sm font-medium flex items-center gap-3 hover:bg-[#D4AF37] hover:text-black transition-all duration-300"
            >
               <Plus size={18} /> დაწერე ისტორია
            </Link>

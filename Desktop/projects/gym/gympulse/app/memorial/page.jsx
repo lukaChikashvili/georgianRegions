@@ -48,10 +48,10 @@ function UpgradeModal({ feature, onClose, onUpgrade, isUpgrading }) {
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
      
-      <div className="relative w-full max-w-md bg-[#0F0F11] border border-[#D4AF37]/20 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden animate-fade-in">
+      <div className="relative w-full max-w-md bg-[#0F0F11] border border-[#c1a362]/20 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden animate-fade-in">
 
         
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D4AF37]/60 to-transparent" />
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-[#c1a362]/60 to-transparent" />
 
         
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#D4AF37]/5 blur-3xl pointer-events-none" />
@@ -69,7 +69,7 @@ function UpgradeModal({ feature, onClose, onUpgrade, isUpgrading }) {
           
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-12 h-12 rounded-xl bg-[#1A150F] border border-[#D4AF37]/20 flex items-center justify-center text-2xl">
+              <div className="w-12 h-12 rounded-xl bg-[#1A150F] border border-[#c1a362]/20 flex items-center justify-center text-2xl">
                 {info.icon}
               </div>
               <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-gradient-to-br from-[#AA7C11] to-[#D4AF37] flex items-center justify-center">
@@ -146,10 +146,10 @@ function LockedField({ children, isPremium, onLockClick }) {
       <button
         type="button"
         onClick={onLockClick}
-        className="absolute inset-0 w-full h-full flex items-center justify-center gap-2 rounded-xl bg-black/20 border border-[#D4AF37]/20 hover:bg-[#1A150F]/40 hover:border-[#D4AF37]/40 transition group cursor-pointer"
+        className="absolute inset-0 w-full h-full flex items-center justify-center gap-2 rounded-xl bg-black/20 border border-[#c1a362]/20 hover:bg-[#1A150F]/40 hover:border-[#c1a362]/40 transition group cursor-pointer"
       >
-        <Lock size={13} className="text-[#D4AF37]/70 group-hover:text-[#D4AF37] transition" />
-        <span className="text-xs text-[#D4AF37]/70 group-hover:text-[#D4AF37] transition font-medium">
+        <Lock size={13} className="text-[#c1a362]/70 group-hover:text-[#c1a362] transition" />
+        <span className="text-xs text-[#c1a362]/70 group-hover:text-[#c1a362] transition font-medium">
           პრემიუმი საჭიროა
         </span>
       </button>
@@ -413,7 +413,7 @@ const CreateMemorial = () => {
         isUpgrading={isUpgrading}
       />
 
-      <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans selection:bg-[#D4AF37] selection:text-black py-20 px-6 relative overflow-hidden">
+      <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans selection:bg-[#c1a362] selection:text-black py-20 px-6 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-125 bg-linear-to-b from-[#1A150F] to-transparent opacity-40 blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto relative z-10">
@@ -421,7 +421,7 @@ const CreateMemorial = () => {
          
           {isPremium && (
             <div className="flex justify-center mb-6">
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1A150F]/60 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-medium">
+              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1A150F]/60 border border-[#c1a362]/30 text-[#c1a362] text-xs font-medium">
                 <Crown size={11} />
                 მარადიული პაკეტი აქტიურია
               </div>
@@ -434,11 +434,11 @@ const CreateMemorial = () => {
               <div key={num} className="flex items-center relative z-10">
                 <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full border flex items-center justify-center text-[10px] md:text-xs font-medium transition-all duration-500 ${
                   step >= num
-                    ? 'bg-linear-to-r from-[#AA7C11] to-[#D4AF37] border-transparent text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.2)]'
+                    ? ' bg-linear-to-r from-[#c1a362] to-[#d3aa51] border-transparent text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.2)]'
                     : 'bg-[#121214]/60 border-white/5 text-gray-500'
                 }`}>{num}</div>
                 {num < 6 && (
-                  <div className={`w-4 sm:w-8 md:w-20 h-px mx-1 md:mx-2 transition-all duration-500 ${step > num ? 'bg-[#D4AF37]/50' : 'bg-white/5'}`} />
+                  <div className={`w-4 sm:w-8 md:w-20 h-px mx-1 md:mx-2 transition-all duration-500 ${step > num ? 'bg-[#c1a362]/50' : 'bg-white/5'}`} />
                 )}
               </div>
             ))}
@@ -457,7 +457,7 @@ const CreateMemorial = () => {
               <div className="space-y-6 animate-fade-in">
                 <div className="mb-6">
                   <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-                    <User size={20} className="text-[#D4AF37]" /> ძირითადი ინფორმაცია
+                    <User size={20} className="text-[#c1a362]" /> ძირითადი ინფორმაცია
                   </h2>
                   <p className="text-xs text-gray-500 mt-1">შეიყვანეთ გარდაცვლილის პერსონალური მონაცემები.</p>
                 </div>
@@ -500,7 +500,7 @@ const CreateMemorial = () => {
                         <p className="text-xs text-gray-400 font-light">{portraitFile?.name}</p>
                         <p className="text-[11px] text-gray-600">{portraitFile && (portraitFile.size / 1024 / 1024).toFixed(2)} MB</p>
                         <div className="flex gap-2">
-                          <button type="button" onClick={() => portraitInputRef.current?.click()} className="cursor-pointer text-xs text-[#D4AF37] hover:text-[#E5C158] border border-[#D4AF37]/20 hover:border-[#D4AF37]/40 px-3 py-1.5 rounded-lg transition">შეცვლა</button>
+                          <button type="button" onClick={() => portraitInputRef.current?.click()} className="cursor-pointer text-xs text-[#c1a362] hover:text-[#efca79] border border-[#D4AF37]/20 hover:border-[#D4AF37]/40 px-3 py-1.5 rounded-lg transition">შეცვლა</button>
                           <button type="button" onClick={handleRemovePortrait} className="cursor-pointer text-xs text-gray-500 hover:text-red-400 border border-white/5 hover:border-red-500/20 px-3 py-1.5 rounded-lg transition">წაშლა</button>
                         </div>
                       </div>
@@ -521,7 +521,7 @@ const CreateMemorial = () => {
               <div className="space-y-6 animate-fade-in">
                 <div className="mb-6">
                   <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-                    <Sparkles size={20} className="text-[#D4AF37]" /> ცხოვრების ისტორია და გალერეა
+                    <Sparkles size={20} className="text-[#c1a362]" /> ცხოვრების ისტორია და გალერეა
                   </h2>
                   <p className="text-xs text-gray-500 mt-1">აღწერეთ მისი პიროვნება და ატვირთეთ სამახსოვრო ფოტოები.</p>
                 </div>
@@ -536,7 +536,7 @@ const CreateMemorial = () => {
                   <div className="flex items-center justify-between">
                     <label className="text-xs text-gray-400 font-light tracking-wide">ბიოგრაფია / მოგონებები</label>
                     {!isPremium && (
-                      <button type="button" onClick={() => setUpgradeModal('biography')} className="flex items-center gap-1 text-[11px] text-[#D4AF37]/60 hover:text-[#D4AF37] transition">
+                      <button type="button" onClick={() => setUpgradeModal('biography')} className="flex items-center gap-1 text-[11px] text-[#c1a362]/60 hover:text-[#c1a362] transition">
                         <Lock size={10} /> 1000 სიმბოლო / უფასო
                       </button>
                     )}
@@ -569,7 +569,7 @@ const CreateMemorial = () => {
                     <div className="bg-[#1A150F]/30 border border-[#D4AF37]/20 rounded-2xl p-5 flex flex-col gap-4 animate-fade-in">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Sparkles size={14} className="text-[#D4AF37]" />
+                          <Sparkles size={14} className="text-[#c1a362]" />
                           <p className="text-xs text-gray-300 font-medium">AI ბიოგრაფიის გენერატორი</p>
                         </div>
                         <button type="button" onClick={() => setAiPanelOpen(false)} className="text-gray-600 hover:text-gray-400 transition-colors"><X size={14} /></button>
@@ -592,7 +592,7 @@ const CreateMemorial = () => {
                         ))}
                       </div>
                       {aiError && <p className="text-xs text-red-400 bg-red-500/10 px-3 py-2 rounded-lg">{aiError}</p>}
-                      <button type="button" onClick={handleGenerateBiography} disabled={aiLoading} className="w-full py-2.5 bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] hover:brightness-110 text-black text-xs font-semibold rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                      <button type="button" onClick={handleGenerateBiography} disabled={aiLoading} className="w-full py-2.5 bg-gradient-to-r from-[#AA7C11] to-[#c1a362] hover:brightness-110 text-black text-xs font-semibold rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2">
                         {aiLoading ? <><Loader2 size={13} className="animate-spin" /> იწერება...</> : <><Sparkles size={13} /> ბიოგრაფიის დაწერა</>}
                       </button>
                     </div>
@@ -624,7 +624,7 @@ const CreateMemorial = () => {
                     className="cursor-pointer w-full flex items-center justify-center gap-2 py-4 rounded-xl border border-dashed border-white/10 hover:border-[#D4AF37]/30 hover:bg-[#1A150F]/20 transition text-gray-500 hover:text-[#D4AF37] text-xs font-light"
                   >
                     {!isPremium && galleryFiles.length >= 3
-                      ? <><Lock size={13} className="text-[#D4AF37]/60" /> ულიმიტო ფოტოსთვის განაახლეთ პაკეტი</>
+                      ? <><Lock size={13} className="text-[#c1a362]/60" /> ულიმიტო ფოტოსთვის განაახლეთ პაკეტი</>
                       : <><Plus size={14} /> სურათების ატვირთვა {!isPremium && `(${galleryFiles.length}/3)`}</>
                     }
                   </button>
@@ -649,7 +649,7 @@ const CreateMemorial = () => {
               <div className="space-y-6 animate-fade-in">
                 <div className="mb-6">
                   <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-                    <MapPin size={22} className="text-[#D4AF37]" /> სამძიმრისა და დაკრძალვის დეტალები
+                    <MapPin size={22} className="text-[#c1a362]" /> სამძიმრისა და დაკრძალვის დეტალები
                   </h2>
                   <p className="text-xs text-gray-500 mt-1">ეს სექცია არჩევითია.</p>
                 </div>
@@ -661,7 +661,7 @@ const CreateMemorial = () => {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer select-none">
                       <input type="checkbox" checked={formData.showFuneralDetails} onChange={(e) => setFormData((prev) => ({ ...prev, showFuneralDetails: e.target.checked }))} className="sr-only peer" />
-                      <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
+                      <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#c1a362] peer-checked:to-[#c1a362]" />
                     </label>
                   </div>
                   {formData.showFuneralDetails && (
@@ -690,15 +690,15 @@ const CreateMemorial = () => {
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer select-none">
                     <input type="checkbox" name="enableCandle" checked={formData.enableCandle} onChange={handleChange} className="sr-only peer" />
-                    <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
+                    <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#c1a362] peer-checked:to-[#c1a362]" />
                   </label>
                 </div>
                 <div className={`p-5 rounded-xl border mt-4 backdrop-blur-xs flex flex-col sm:flex-row items-center justify-between gap-4 transition-opacity ${formData.showFuneralDetails ? 'bg-[#161619]/40 border-[#D4AF37]/20 opacity-100' : 'bg-[#161619]/20 border-white/5 opacity-40 pointer-events-none'}`}>
                   <div className="space-y-1 text-center sm:text-left">
-                    <h4 className="text-sm font-medium text-gray-200 flex items-center justify-center sm:justify-start gap-2"><Mail size={16} className="text-[#D4AF37]" /> ციფრული მოსაწვევი ბარათი</h4>
+                    <h4 className="text-sm font-medium text-gray-200 flex items-center justify-center sm:justify-start gap-2"><Mail size={16} className="text-[#c1a362]" /> ციფრული მოსაწვევი ბარათი</h4>
                     <p className="text-xs text-gray-500 max-w-sm">{formData.showFuneralDetails ? 'ავტომატურად გენერირდება ტრადიციული ელექტრონული ბარათი.' : 'ხელმისაწვდომია მხოლოდ ცერემონიის ჩართვისას.'}</p>
                   </div>
-                  <button type="button" onClick={() => alert('მოსაწვევი ბარათის გენერაცია...')} className="cursor-pointer whitespace-nowrap bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black text-xs font-medium px-4 py-3 rounded-lg shadow-md transition-all">ბარათის ნახვა / გაზიარება</button>
+                  <button type="button" onClick={() => alert('მოსაწვევი ბარათის გენერაცია...')} className="cursor-pointer whitespace-nowrap bg-gradient-to-r from-[#c1a362] to-[#c1a362] text-black text-xs font-medium px-4 py-3 rounded-lg shadow-md transition-all">ბარათის ნახვა / გაზიარება</button>
                 </div>
               </div>
             )}
@@ -708,7 +708,7 @@ const CreateMemorial = () => {
               <div className="space-y-6 animate-fade-in">
                 <div className="mb-6">
                   <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-                    <CreditCard size={20} className="text-[#D4AF37]" /> ფინანსური მხარდაჭერა
+                    <CreditCard size={20} className="text-[#c1a362]" /> ფინანსური მხარდაჭერა
                   </h2>
                   <p className="text-xs text-gray-500 mt-1">ჩართეთ ოჯახის ფინანსური თანადგომის მოდული.</p>
                 </div>
@@ -719,11 +719,11 @@ const CreateMemorial = () => {
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer select-none">
                     <input type="checkbox" name="enableDonations" checked={formData.enableDonations} onChange={handleChange} className="sr-only peer" />
-                    <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
+                    <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#c1a362] peer-checked:to-[#c1a362]" />
                   </label>
                 </div>
                 {formData.enableDonations && (
-                  <div className="p-5 rounded-xl bg-[#1A150F]/20 border border-[#D4AF37]/20 space-y-5 animate-fade-in">
+                  <div className="p-5 rounded-xl bg-[#1A150F]/20 border border-[#c1a362]/20 space-y-5 animate-fade-in">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div className="flex flex-col gap-2">
                         <label className="text-xs text-gray-400 font-light tracking-wide">აირჩიეთ ბანკი</label>
@@ -748,7 +748,7 @@ const CreateMemorial = () => {
   <div className="space-y-6 animate-fade-in">
     <div className="mb-6">
       <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
-        <Shield size={20} className="text-[#D4AF37]" /> კონფიდენციალურობა და ბმული
+        <Shield size={20} className="text-[#c1a362]" /> კონფიდენციალურობა და ბმული
       </h2>
       <p className="text-xs text-gray-500 mt-1">დაარეგულირეთ გვერდის წვდომისა და უსაფრთხოების პარამეტრები.</p>
     </div>
@@ -774,7 +774,7 @@ const CreateMemorial = () => {
         {formData.urlSlug.trim().length > 2 && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
             {slugAvailable === undefined ? (
-              <div className="w-3.5 h-3.5 rounded-full border-2 border-gray-600 border-t-[#D4AF37] animate-spin" />
+              <div className="w-3.5 h-3.5 rounded-full border-2 border-gray-600 border-t-[#c1a362] animate-spin" />
             ) : isSlugTaken ? (
               <div className="w-4 h-4 rounded-full bg-red-500/20 border border-red-500/40 flex items-center justify-center">
                 <X size={9} className="text-red-400" />
@@ -795,7 +795,7 @@ const CreateMemorial = () => {
             ? '✗ ეს ბმული უკვე დაკავებულია, სცადეთ სხვა'
             : slugAvailable === undefined
             ? ''
-            : `✓ memorialy.ge/discover/${formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-')}`
+            : `✓ goldenmemorial.ge/discover/${formData.urlSlug.toLowerCase().trim().replace(/\s+/g, '-')}`
           }
         </p>
       )}
@@ -805,16 +805,16 @@ const CreateMemorial = () => {
     <div className="flex flex-col gap-3 pt-2">
       <label className="text-xs text-gray-400 font-light tracking-wide">წვდომის ტიპი</label>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'public' ? 'bg-[#1A150F]/20 border-[#D4AF37]/30' : 'bg-[#161619]/20 border-white/5'}`}>
+        <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'public' ? 'bg-[#1A150F]/20 border-[#c1a362]/30' : 'bg-[#161619]/20 border-white/5'}`}>
           <div className="flex items-center gap-2">
-            <input type="radio" name="privacyType" value="public" checked={formData.privacyType === 'public'} onChange={handleChange} className="accent-[#D4AF37]" />
+            <input type="radio" name="privacyType" value="public" checked={formData.privacyType === 'public'} onChange={handleChange} className="accent-[#c1a362]" />
             <span className="text-sm font-medium text-gray-300">საჯარო (Public)</span>
           </div>
           <span className="text-xs text-gray-500 pl-5">მემორიალი ხელმისაწვდომია ყველასთვის.</span>
         </label>
-        <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'private' ? 'bg-[#1A150F]/20 border-[#D4AF37]/30' : 'bg-[#161619]/20 border-white/5'}`}>
+        <label className={`p-4 rounded-xl border flex flex-col gap-1 cursor-pointer transition ${formData.privacyType === 'private' ? 'bg-[#1A150F]/20 border-[#c1a362]/30' : 'bg-[#161619]/20 border-white/5'}`}>
           <div className="flex items-center gap-2">
-            <input type="radio" name="privacyType" value="private" checked={formData.privacyType === 'private'} onChange={handleChange} className="accent-[#D4AF37]" />
+            <input type="radio" name="privacyType" value="private" checked={formData.privacyType === 'private'} onChange={handleChange} className="accent-[#c1a362]" />
             <span className="text-sm font-medium text-gray-300">პირადი (Private)</span>
           </div>
           <span className="text-xs text-gray-500 pl-5">ხელმისაწვდომია მხოლოდ პირდაპირი ბმულით.</span>
@@ -830,7 +830,7 @@ const CreateMemorial = () => {
       </div>
       <label className="relative inline-flex items-center cursor-pointer">
         <input type="checkbox" name="requireModeration" checked={formData.requireModeration} onChange={handleChange} className="sr-only peer" />
-        <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#AA7C11] peer-checked:to-[#D4AF37]" />
+        <div className="w-11 h-6 bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-gray-400 peer-checked:after:bg-black after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-[#c1a362] peer-checked:to-[#c1a362]" />
       </label>
     </div>
   </div>
@@ -842,7 +842,7 @@ const CreateMemorial = () => {
                 <div className="mb-6">
                   <h2 className="font-serif text-2xl lg:text-3xl text-[#FFF5D6] font-light flex items-center gap-2">
                     🎵 მუსიკალური მოგონება
-                    {!isPremium && <span className="ml-2 flex items-center gap-1 text-[11px] text-[#D4AF37]/70 border border-[#D4AF37]/20 px-2 py-0.5 rounded-full font-sans"><Crown size={9} /> პრემიუმი</span>}
+                    {!isPremium && <span className="ml-2 flex items-center gap-1 text-[11px] text-[#c1a362]/70 border border-[#c1a362]/20 px-2 py-0.5 rounded-full font-sans"><Crown size={9} /> პრემიუმი</span>}
                   </h2>
                   <p className="text-xs text-gray-500 mt-1">დაამატეთ YouTube ბმული — სიმღერა, რომელიც მის ხსოვნას უკავშირდება.</p>
                 </div>
@@ -868,7 +868,7 @@ const CreateMemorial = () => {
                       <div className="w-44 h-44 rounded-full bg-zinc-900 border-4 border-zinc-800 shadow-2xl flex items-center justify-center animate-[spin_8s_linear_infinite] group-hover:[animation-play-state:paused]">
                         <div className="w-[92%] h-[92%] rounded-full border border-zinc-700/40"></div>
                         <div className="absolute w-[70%] h-[70%] rounded-full border border-zinc-700/30"></div>
-                        <div className="absolute w-16 h-16 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
+                        <div className="absolute w-16 h-16 bg-[#c1a362] rounded-full flex items-center justify-center shadow-lg">
                           <div className="w-3 h-3 bg-black rounded-full"></div>
                         </div>
                       </div>
@@ -877,18 +877,18 @@ const CreateMemorial = () => {
                     <div className="w-full max-w-md overflow-hidden rounded-xl border border-white/10 shadow-xl">
                       <iframe className="w-full aspect-video" src={convertYouTube(formData.favoriteSongUrl)} title="მუსიკალური მოგონება" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
                     </div>
-                    <p className="text-[11px] uppercase tracking-widest text-[#D4AF37]/70 text-center">მუსიკა, რომელიც დარჩა</p>
+                    <p className="text-[11px] uppercase tracking-widest text-[#c1a362]/70 text-center">მუსიკა, რომელიც დარჩა</p>
                   </div>
                 )}
 
              
                 {!isPremium && (
-                  <div className="mt-4 p-5 rounded-xl bg-[#1A150F]/30 border border-[#D4AF37]/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="mt-4 p-5 rounded-xl bg-[#1A150F]/30 border border-[#c1a362]/20 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm font-medium text-gray-200 flex items-center gap-2"><Crown size={14} className="text-[#D4AF37]" /> განაახლეთ მარადიულ პაკეტზე</p>
+                      <p className="text-sm font-medium text-gray-200 flex items-center gap-2"><Crown size={14} className="text-[#c1a362]" /> განაახლეთ მარადიულ პაკეტზე</p>
                       <p className="text-xs text-gray-500 mt-1">მუსიკა, ულიმიტო გალერეა, 3D სასაფლაო, QR კოდი და სხვა.</p>
                     </div>
-                    <button onClick={() => setUpgradeModal('music')} className="cursor-pointer whitespace-nowrap px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#AA7C11] to-[#D4AF37] text-black text-xs font-bold transition hover:brightness-110 flex items-center gap-2">
+                    <button onClick={() => setUpgradeModal('music')} className="cursor-pointer whitespace-nowrap px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#c1a362] to-[#c1a362] text-black text-xs font-bold transition hover:brightness-110 flex items-center gap-2">
                       <Crown size={13} /> 49.99 ₾ — სამუდამოდ
                     </button>
                   </div>
@@ -902,11 +902,11 @@ const CreateMemorial = () => {
                 <ChevronLeft size={14} /> უკან
               </button>
               {step < 6 ? (
-                <button onClick={nextStep} className="px-6 py-2 rounded-xl bg-linear-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-semibold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-[0.98] hover:brightness-110 cursor-pointer shadow-lg shadow-[#D4AF37]/5">
+                <button onClick={nextStep} className="button px-6 py-2 rounded-xl   text-black font-semibold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-[0.98] hover:brightness-110 cursor-pointer shadow-lg shadow-[#D4AF37]/5">
                   გაგრძელება <ChevronRight size={14} />
                 </button>
               ) : (
-                <button onClick={handleSubmit} disabled={isSubmitting} className="px-6 py-2 rounded-xl bg-linear-to-r from-[#AA7C11] via-[#D4AF37] to-[#AA7C11] text-black font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-[0.98] hover:brightness-110 cursor-pointer shadow-lg shadow-[#D4AF37]/20 disabled:opacity-50 disabled:cursor-not-allowed">
+                <button onClick={handleSubmit} disabled={isSubmitting} className="button3 px-6 py-2 rounded-xl   text-black font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition active:scale-[0.98] hover:brightness-110 cursor-pointer shadow-lg shadow-[#D4AF37]/20 disabled:opacity-50 disabled:cursor-not-allowed">
                   {isSubmitting ? <><Loader2 size={14} className="animate-spin" /> იტვირთება...</> : 'მემორიალის გამოქვეყნება'}
                 </button>
               )}

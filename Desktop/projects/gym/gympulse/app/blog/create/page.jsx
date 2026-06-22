@@ -81,11 +81,11 @@ const CreateBlog = () => {
             <div className="min-h-screen bg-[#0A0A0A] py-20 px-6 mt-6">
                 <div className="max-w-4xl mx-auto">
 
-                    <div className="mb-12 border-b border-[#D4AF37]/30 pb-8">
+                    <div className="mb-12 border-b border-[#c1a362]/30 pb-8">
                         <h2 className="text-4xl font-serif italic text-white tracking-wide">
                             ახალი ისტორიის დამატება
                         </h2>
-                        <p className="text-[#D4AF37]/70 mt-2 font-medium tracking-widest uppercase text-xs">
+                        <p className="text-[#c1a362]/70 mt-2 font-medium tracking-widest uppercase text-xs">
                             გააზიარეთ მოგონება, რომელიც უკვდავია.
                         </p>
                     </div>
@@ -113,7 +113,7 @@ const CreateBlog = () => {
 
                         <div className="space-y-8">
 
-                            {/* Image upload */}
+                          
                             <div className="border border-white/10 p-6 rounded-2xl bg-[#121212]">
                                 <label className="text-[10px] uppercase tracking-widest text-white/50 mb-4 block">
                                     მთავარი ფოტო
@@ -146,13 +146,13 @@ const CreateBlog = () => {
                                         htmlFor="blog-image-upload"
                                         className="aspect-square bg-[#0A0A0A] border border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-[#D4AF37] transition-all rounded-xl group"
                                     >
-                                        <ImagePlus className="w-6 h-6 text-white/20 group-hover:text-[#D4AF37]" />
+                                        <ImagePlus className="w-6 h-6 text-white/20 group-hover:text-[#c1a362]" />
                                         <span className="text-[10px] text-white/30 mt-2">ატვირთვა</span>
                                     </label>
                                 )}
                             </div>
 
-                            {/* Category */}
+                     
                             <div className="bg-[#121212] border border-white/10 p-6 rounded-2xl">
                                 <label className="text-[10px] uppercase tracking-widest text-white/50 mb-2 flex items-center gap-2">
                                     <Hash size={12} /> კატეგორია
@@ -162,14 +162,14 @@ const CreateBlog = () => {
                                     placeholder="მაგ: მემუარი"
                                     value={category}
                                     onChange={(e) => setCategory(e.target.value)}
-                                    className="w-full bg-[#0A0A0A] border border-white/10 px-4 py-3 text-white focus:border-[#D4AF37] outline-none text-sm rounded-xl"
+                                    className="w-full bg-[#0A0A0A] border border-white/10 px-4 py-3 text-white focus:border-[#c1a362] outline-none text-sm rounded-xl"
                                 />
                             </div>
 
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full py-4 bg-[#D4AF37] text-black font-bold uppercase tracking-widest text-xs hover:bg-[#AA7C11] transition-all disabled:opacity-50 rounded-full flex items-center justify-center gap-2"
+                                className="button2 w-full py-4 bg-[#c1a362] text-black font-bold uppercase tracking-widest text-xs hover:bg-[#AA7C11] transition-all disabled:opacity-50 rounded-full flex items-center justify-center gap-2"
                             >
                                 {isLoading && <Loader2 size={14} className="animate-spin" />}
                                 {isUploading ? "იტვირთება..." : isPending ? "იგზავნება..." : "გამოქვეყნება"}

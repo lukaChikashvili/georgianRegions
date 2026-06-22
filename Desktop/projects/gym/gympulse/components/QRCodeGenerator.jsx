@@ -39,7 +39,7 @@ export default function QRCodeGenerator({ memorial }) {
           downloadLink.click();
           document.body.removeChild(downloadLink);
         }}
-        className="mt-6 px-6 py-2 bg-[#D4AF37] text-black text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-[#b8962d] transition"
+        className="button mt-6 px-6 py-2 bg-[#c1a362] text-black text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-[#c1a362] transition"
       >
         ჩამოტვირთვა
       </button>
