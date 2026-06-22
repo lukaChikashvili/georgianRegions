@@ -129,7 +129,7 @@ const Discover = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans py-20 px-6 relative overflow-hidden selection:bg-[#D4AF37] selection:text-black">
+    <div className="min-h-screen bg-[#0D0D0F] text-gray-300 font-sans py-20 px-6 relative overflow-hidden selection:bg-[#c1a362] selection:text-black">
 
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none blur-3xl opacity-40"
         style={{ background: 'radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%)' }}
@@ -140,11 +140,11 @@ const Discover = () => {
         
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-4">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="w-6 h-px bg-gradient-to-r from-transparent to-[#D4AF37] opacity-60" />
-            <span className="text-xs tracking-widest uppercase text-[#D4AF37]/90 font-medium">
+            <div className="w-6 h-px bg-gradient-to-r from-transparent to-[#c1a362] opacity-60" />
+            <span className="text-xs tracking-widest uppercase text-[#c1a362]/90 font-medium">
               გარდაცვლილთა ისტორიები
             </span>
-            <div className="w-6 h-px bg-gradient-to-l from-transparent to-[#D4AF37] opacity-60" />
+            <div className="w-6 h-px bg-gradient-to-l from-transparent to-[#c1a362] opacity-60" />
           </div>
           <h1 className="font-serif text-4xl md:text-5xl font-light text-[#FFF5D6] tracking-wide">
             მარადიული ხსოვნის არქივი
@@ -176,14 +176,14 @@ const Discover = () => {
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 px-4 py-3.5 rounded-xl border text-sm font-medium transition-all duration-200 shrink-0 ${
               showFilters || activeFilterCount > 0
-                ? 'bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#D4AF37]'
+                ? 'bg-[#D4AF37]/10 border-[#c1a362]/40 text-[#c1a362]'
                 : 'bg-[#121214]/40 border-white/5 text-gray-400 hover:text-white hover:border-white/10'
             }`}
           >
             <SlidersHorizontal size={15} />
             <span className="hidden sm:inline">ფილტრი</span>
             {activeFilterCount > 0 && (
-              <span className="w-5 h-5 rounded-full bg-[#D4AF37] text-black text-[10px] font-bold flex items-center justify-center">
+              <span className="w-5 h-5 rounded-full bg-[#c1a362] text-black text-[10px] font-bold flex items-center justify-center">
                 {activeFilterCount}
               </span>
             )}
@@ -197,7 +197,7 @@ const Discover = () => {
 
              
               <div>
-                <label className="text-[10px] tracking-widest uppercase text-[#D4AF37]/70 mb-2 block">
+                <label className="text-[10px] tracking-widest uppercase text-[#c1a362]/70 mb-2 block">
                   მდებარეობა
                 </label>
                 <div className="relative">
@@ -214,16 +214,16 @@ const Discover = () => {
                 </div>
               </div>
 
-              {/* Sort */}
+ 
               <div>
-                <label className="text-[10px] tracking-widest uppercase text-[#D4AF37]/70 mb-2 block">
+                <label className="text-[10px] tracking-widest uppercase text-[#c1a362]/70 mb-2 block">
                   დალაგება
                 </label>
                 <div className="relative">
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full appearance-none bg-[#0D0D0F]/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-gray-300 outline-none focus:border-[#D4AF37]/30 transition-all cursor-pointer"
+                    className="w-full appearance-none bg-[#0D0D0F]/80 border border-white/5 rounded-xl px-4 py-2.5 text-sm text-gray-300 outline-none focus:border-[#c1a362]/30 transition-all cursor-pointer"
                   >
                     <option value="newest">უახლესი</option>
                     <option value="oldest">ყველაზე ძველი</option>
@@ -236,7 +236,7 @@ const Discover = () => {
 
           
               <div>
-                <label className="text-[10px] tracking-widest uppercase text-[#D4AF37]/70 mb-2 block">
+                <label className="text-[10px] tracking-widest uppercase text-[#c1a362]/70 mb-2 block">
                   ასაკი გარდაცვალებისას
                 </label>
                 <div className="flex gap-2 flex-wrap">
@@ -246,7 +246,7 @@ const Discover = () => {
                       onClick={() => setAgeRange(range)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 ${
                         ageRange.label === range.label
-                          ? 'bg-[#D4AF37]/15 border-[#D4AF37]/50 text-[#D4AF37]'
+                          ? 'bg-[#D4AF37]/15 border-[#c1a362]/50 text-[#c1a362]'
                           : 'bg-white/[0.03] border-white/5 text-gray-500 hover:text-gray-300 hover:border-white/10'
                       }`}
                     >
@@ -258,7 +258,7 @@ const Discover = () => {
 
               
               <div>
-                <label className="text-[10px] tracking-widest uppercase text-[#D4AF37]/70 mb-2 block">
+                <label className="text-[10px] tracking-widest uppercase text-[#c1a362]/70 mb-2 block">
                   დაბადების ათწლეული
                 </label>
                 <div className="flex gap-2 flex-wrap">
@@ -268,7 +268,7 @@ const Discover = () => {
                       onClick={() => setDecadeFilter(d)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 ${
                         decadeFilter === d
-                          ? 'bg-[#D4AF37]/15 border-[#D4AF37]/50 text-[#D4AF37]'
+                          ? 'bg-[#c1a362]/15 border-[#c1a362]/50 text-[#c1a362]'
                           : 'bg-white/[0.03] border-white/5 text-gray-500 hover:text-gray-300 hover:border-white/10'
                       }`}
                     >
@@ -284,7 +284,7 @@ const Discover = () => {
               <div className="mt-4 pt-4 border-t border-white/5 flex justify-end">
                 <button
                   onClick={clearFilters}
-                  className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#D4AF37] transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#c1a362] transition-colors"
                 >
                   <X size={13} /> ფილტრების გასუფთავება
                 </button>
@@ -329,11 +329,11 @@ const Discover = () => {
                       </div>
                     </div>
                     <div>
-                      <h2 className="font-serif text-xl text-[#FFF5D6] tracking-wide group-hover:text-[#D4AF37] transition-colors duration-300">
+                      <h2 className="font-serif text-xl text-[#FFF5D6] tracking-wide group-hover:text-[#c1a362] transition-colors duration-300">
                         {memorial.firstName} {memorial.lastName}
                       </h2>
                       <div className="flex items-center gap-1.5 text-xs text-gray-500 font-light mt-0.5">
-                        <Calendar size={12} className="text-[#D4AF37]/60" />
+                        <Calendar size={12} className="text-[#c1a362]/60" />
                         <span>{memorial.birthDate?.split('-')[0]} – {memorial.deathDate?.split('-')[0]}</span>
                       </div>
                     </div>
@@ -350,7 +350,7 @@ const Discover = () => {
                   </p>
 
                   <div className="flex mt-6 items-center gap-1.5 text-xs text-gray-500">
-                    <Flame size={13} className="text-[#D4AF37]/60" />
+                    <Flame size={13} className="text-[#c1a362]/60" />
                     <span>{memorial.candleCount || 0}</span>
                   </div>
                 </div>
@@ -360,7 +360,7 @@ const Discover = () => {
                     <MapPin size={12} className="text-gray-600" />
                     <span>{memorial.location}</span>
                   </div>
-                  <span className="text-[10px] tracking-widest uppercase text-[#D4AF37]/70 font-medium flex items-center gap-1 group-hover:text-[#FFF5D6] transition-colors">
+                  <span className="text-[10px] tracking-widest uppercase text-[#c1a362]/70 font-medium flex items-center gap-1 group-hover:text-[#FFF5D6] transition-colors">
                     ისტორია <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
                   </span>
                 </div>
@@ -371,7 +371,7 @@ const Discover = () => {
           <div className="text-center py-20 bg-[#121214]/10 rounded-2xl border border-white/5 max-w-xl mx-auto">
             <p className="text-gray-500 text-sm font-light">მითითებული პარამეტრებით მემორიალი ვერ მოიძებნა.</p>
             {activeFilterCount > 0 && (
-              <button onClick={clearFilters} className="mt-4 text-xs text-[#D4AF37]/70 hover:text-[#D4AF37] transition-colors underline underline-offset-4">
+              <button onClick={clearFilters} className="mt-4 text-xs text-[#c1a362]/70 hover:text-[#c1a362] transition-colors underline underline-offset-4">
                 ფილტრების გასუფთავება
               </button>
             )}
