@@ -346,4 +346,10 @@ subscriptions: defineTable({
       .index("by_customer", ["customerUserId"])
       .index("by_memorial", ["memorialId"])
       .index("by_bookingGroupId", ["bookingGroupId"]),
+
+
+      candleLights: defineTable({
+        memorialId: v.id("memorials"),
+        identifier: v.string(), 
+      }).index("by_memorial_and_identifier", ["memorialId", "identifier"])
 });

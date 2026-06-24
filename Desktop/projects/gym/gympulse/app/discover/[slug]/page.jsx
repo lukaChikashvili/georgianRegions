@@ -11,6 +11,8 @@ import CustomAudioPlayer from '../../../components/CustomAudioPlayer';
 import ReportButton from '../../../components/ReportButton';
 import ContributePhotos from '../../../components/Contributephotos';
 import ContributeMemory from '../../../components/ContributeMemory';
+const { isSignedIn } = useUser();
+const { openSignIn } = useClerk();
 
 const MemorialPage = () => {
   const params = useParams();
@@ -70,6 +72,10 @@ const convertYouTube = (url) => {
   const galleryUrls = useQuery(
     api.services.getStorageUrls,
     memorial?.galleryUrls?.length > 0 ? { storageIds: memorial.galleryUrls } : "skip"
+  );
+
+  const hasLitCandleDB = useQuery(api.memorials.hasUserLitCandle, 
+    memorial ? { id: memorial._id } : "skip"
   );
 
 
@@ -241,7 +247,7 @@ const convertYouTube = (url) => {
     }
   };
 
-  const [hasLitCandle, setHasLitCandle] = useState(false);
+  
   const [isLighting, setIsLighting] = useState(false);
 
   const [hasRSVPed, setHasRSVPed] = useState(false);
@@ -305,18 +311,30 @@ const convertYouTube = (url) => {
     }
   };
 
+  const hasLitCandle = hasLitCandleDB || 
+  localStorage.getItem(`candle_lit_${slug}`) === 'true';
+
   const handleLightCandle = async () => {
+
+    if (!isSignedIn) {
+      openSignIn();
+      return;
+    }
+  
     if (hasLitCandle || !memorial) return;
     setIsLighting(true);
+
+  
     try {
       await lightCandleMutation({ id: memorial._id });
-      setHasLitCandle(true);
-      localStorage.setItem(`candle_lit_${slug}`, 'true');
+ 
+      localStorage.setItem(`candle_lit_${slug}`, 'true'); 
     } catch (err) {
       console.error("სანთლის ანთება ვერ მოხერხდა:", err);
     } finally {
       setIsLighting(false);
     }
+  
   };
 
   const handleAttendButtonClick = () => {

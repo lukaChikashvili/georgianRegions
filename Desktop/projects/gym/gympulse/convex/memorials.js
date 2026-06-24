@@ -151,27 +151,68 @@ export const getMemorialBySlug = query({
 
 export const lightCandle = mutation({
   args: { id: v.id("memorials") },
-  handler: async(ctx, args) => {
-    const memorial = await ctx.db.get(args.id);
-
-    if (!memorial) {
-      throw new Error("მემორიალი ვერ მოიძებნა.");
+  handler: async (ctx, args) => {
+  
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("სანთლის ასანთებად გთხოვთ გაიაროთ ავტორიზაცია.");
     }
 
+    const identifier = identity.subject;
+    
+    const existing = await ctx.db
+      .query("candleLights")
+      .withIndex("by_memorial_and_identifier", q =>
+        q.eq("memorialId", args.id).eq("identifier", identifier)
+      )
+      .first();
+
+    if (existing) {
+      throw new Error("თქვენ უკვე აანთეთ სანთელი ამ მემორიალზე.");
+    }
+
+    const memorial = await ctx.db.get(args.id);
+    if (!memorial) throw new Error("მემორიალი ვერ მოიძებნა.");
+
+    
+    await ctx.db.insert("candleLights", {
+      memorialId: args.id,
+      identifier,
+    });
+
+   
     await ctx.db.patch(args.id, {
       candleCount: (memorial.candleCount || 0) + 1,
     });
 
+  
     await ctx.db.insert("notifications", {
       userId: memorial.creatorId,
-      memorialId: args.id, 
-      message: ` თქვენს მემორიალზე აინთო სანთელი`,
+      memorialId: args.id,
+      message: `თქვენს მემორიალზე აინთო სანთელი`,
       type: "CANDLE",
       isRead: false,
       createdAt: Date.now(),
     });
 
     return true;
+  }
+});
+
+export const hasUserLitCandle = query({
+  args: { id: v.id("memorials") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return false;
+
+    const existing = await ctx.db
+      .query("candleLights")
+      .withIndex("by_memorial_and_identifier", q =>
+        q.eq("memorialId", args.id).eq("identifier", identity.subject)
+      )
+      .first();
+
+    return !!existing;
   }
 });
 
