@@ -5,19 +5,20 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from "@/convex/_generated/api";
 import { useParams } from 'next/navigation';
 import { Calendar, MapPin, Flame, Heart, CheckCircle, Users, X, Clock, CreditCard, MessageSquare, Send, Eye } from 'lucide-react';
-import { useUser } from '@clerk/nextjs';
+import { useAuth, useClerk, useUser } from '@clerk/nextjs';
 import AudioPlayer from '../../../components/AudioPlayer';
 import CustomAudioPlayer from '../../../components/CustomAudioPlayer';
 import ReportButton from '../../../components/ReportButton';
 import ContributePhotos from '../../../components/Contributephotos';
 import ContributeMemory from '../../../components/ContributeMemory';
-const { isSignedIn } = useUser();
-const { openSignIn } = useClerk();
+
 
 const MemorialPage = () => {
   const params = useParams();
   const slug = params.slug;
   const { user } = useUser();
+  const { isSignedIn } = useAuth();
+const { openSignIn } = useClerk();
 
   const visits = useMutation(api.memorials.incrementVisits);
 
@@ -268,8 +269,7 @@ const convertYouTube = (url) => {
 
   useEffect(() => {
     if (slug) {
-      const alreadyLit = localStorage.getItem(`candle_lit_${slug}`);
-      if (alreadyLit) setHasLitCandle(true);
+  
 
       const alreadyRSVPed = localStorage.getItem(`funeral_rsvp_${slug}`);
       if (alreadyRSVPed) setHasRSVPed(true);
@@ -312,7 +312,7 @@ const convertYouTube = (url) => {
   };
 
   const hasLitCandle = hasLitCandleDB || 
-  localStorage.getItem(`candle_lit_${slug}`) === 'true';
+          (typeof window !== "undefined" && localStorage.getItem(`candle_lit_${slug}`) === 'true');
 
   const handleLightCandle = async () => {
 
