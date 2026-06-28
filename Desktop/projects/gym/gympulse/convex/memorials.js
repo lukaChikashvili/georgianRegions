@@ -130,10 +130,10 @@ export const getAllPublicMemorials = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db
-      .query("memorials")
-      .filter((q) => q.eq(q.field("privacyType"), "public"))
-      .order("desc") 
-      .collect();
+    .query("memorials")
+    .withIndex("by_privacyType", (q) => q.eq("privacyType", "public"))
+    .order("desc")
+    .take(50);
   },
 });
 
