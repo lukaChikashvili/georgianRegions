@@ -1,5 +1,6 @@
 import { ConvexError, v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
+import { internal } from "./_generated/api";
 
 async function requireFuneralHomeOwner(ctx, funeralHomeId) {
     const identity = await ctx.auth.getUserIdentity();
@@ -305,23 +306,25 @@ async function requireFuneralHomeOwner(ctx, funeralHomeId) {
 
   export const sendBookingGroupNotification = internalMutation({
     args: { bookingGroupId: v.string() },
-    handler: async (ctx, args) => {
-     
-      console.log(`Sending notification for group: ${args.bookingGroupId}`);
+    handler: async (ctx, { bookingGroupId }) => {
+      await ctx.scheduler.runAfter(
+        0,
+        internal.bookingEmails.sendBookingGroupNotificationEmail,
+        { bookingGroupId }
+      );
     },
   });
-
-  export const sendStatusEmailToCustomer = internalMutation({
-    args: { 
-      bookingId: v.id("bookings"),
-      newStatus: v.string() 
-    },
-    handler: async (ctx, args) => {
-      
-      const booking = await ctx.db.get(args.bookingId);
-      if (!booking) return;
   
-      
-      console.log(`Sending email for booking ${args.bookingId} with status ${args.newStatus}`);
+  export const sendStatusEmailToCustomer = internalMutation({
+    args: {
+      bookingId: v.id("bookings"),
+      newStatus: v.string(),
+    },
+    handler: async (ctx, { bookingId, newStatus }) => {
+      await ctx.scheduler.runAfter(
+        0,
+        internal.bookingEmails.sendStatusEmailToCustomerEmail,
+        { bookingId, newStatus }
+      );
     },
   });

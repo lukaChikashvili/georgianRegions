@@ -73,6 +73,7 @@ export default defineSchema({
         creatorName: v.string(),
     }).index("by_urlSlug", ["urlSlug"]) 
     .index("by_creatorId", ["creatorId"])
+    .index("by_privacyType", ["privacyType"])
     .index("by_groupId", ["groupId"]),
 
     graveDesigns: defineTable({
