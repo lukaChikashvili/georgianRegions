@@ -5,10 +5,10 @@ const cspHeader = `
   default-src 'self';
   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://clerk.goldenmemorial.ge;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' blob: data: https://*.clerk.com https://img.clerk.com;
+  img-src 'self' blob: data: https://*.clerk.com https://img.clerk.com https://lh3.googleusercontent.com;
   font-src 'self' data:;
-  connect-src 'self' https://*.convex.cloud wss://*.convex.cloud https://*.clerk.accounts.dev https://api.bog.ge https://*.bog.ge;
-  frame-src 'self' https://*.clerk.accounts.dev https://ipay.ge https://*.bog.ge;
+  connect-src 'self' https://*.convex.cloud wss://*.convex.cloud https://*.clerk.accounts.dev https://clerk.goldenmemorial.ge https://api.bog.ge https://*.bog.ge;
+  frame-src 'self' https://*.clerk.accounts.dev https://accounts.google.com https://ipay.ge https://*.bog.ge;
   worker-src 'self' blob:;
   object-src 'none';
   base-uri 'self';
